@@ -1,10 +1,12 @@
+<p align="center"><img src="media/VSD_Logo128x128.png" width="128" alt="Vallenta Studio"></p>
+
 # Vallenta Studio
 
 A Visual Studio Code extension that provides comprehensive Delphi development support, enabling you to edit, build, and debug Delphi projects directly within VS Code.
 
 ## Features
 
-The extension is available in two tiers:
+The extension is available in two tiers. See the [full feature matrix](docs/feature-matrix.md) for a tier-by-tier comparison.
 
 ### Free (with registered account)
 

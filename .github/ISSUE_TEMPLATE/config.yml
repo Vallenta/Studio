@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: VS Code Marketplace Q&A
+    url: https://marketplace.visualstudio.com/items?itemName=Vallenta.vallenta-studio&ssr=false#qna
+    about: Browse public questions and answers on the VS Code Marketplace.
+  - name: Email Support
+    url: mailto:info@vallenta.de
+    about: Email us directly for support questions or anything that doesn't fit an issue template.

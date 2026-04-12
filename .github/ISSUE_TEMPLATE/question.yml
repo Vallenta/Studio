@@ -1,0 +1,40 @@
+name: Question
+description: Ask a question about using the extension
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking, please check the README and the feature matrix in this repo — your question may already be answered there.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you already tried?
+      description: Documentation you've read, settings you've checked, etc.
+    validations:
+      required: false
+
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension Version
+      placeholder: "0.9.0"
+    validations:
+      required: false
+
+  - type: input
+    id: delphi-version
+    attributes:
+      label: Delphi Version
+      placeholder: "Delphi 12.1"
+    validations:
+      required: false

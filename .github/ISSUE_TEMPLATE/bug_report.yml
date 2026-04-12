@@ -1,0 +1,97 @@
+name: Bug Report
+description: Report a problem with the Vallenta Studio extension
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill in the fields below so we can reproduce the issue quickly.
+
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension Version
+      description: VS Code → Extensions → Vallenta Studio
+      placeholder: "0.9.0"
+    validations:
+      required: true
+
+  - type: input
+    id: vscode-version
+    attributes:
+      label: VS Code Version
+      description: VS Code → Help → About
+      placeholder: "1.95.0"
+    validations:
+      required: true
+
+  - type: input
+    id: delphi-version
+    attributes:
+      label: Delphi Version
+      placeholder: "Delphi 12.1"
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating System
+      placeholder: "Windows 11 24H2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Subscription Tier
+      options:
+        - Not Registered
+        - Free
+        - Pro
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Numbered list of the exact steps that trigger the bug.
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: LSP Log Output
+      description: Optional. Copy from VS Code → Output → Vallenta LSP.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Screenshots, related issues, anything else that might help.
+    validations:
+      required: false
