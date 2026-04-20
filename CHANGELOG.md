@@ -4,7 +4,26 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.9.3] - 2026-04-20
+
+### Added
+- **Copy Variable as Tree** — new right-click action in the debugger **Variables** and **Watch** views. Copies the full expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes). Useful for inspecting complex records and objects without the 256-character truncation of "Copy Value".
+
+### Fixed
+- **Debug builds on older Delphi versions (XE2–XE4)** — the `DCC_DebugInformation` MSBuild parameter is now passed in the correct form per Delphi version (boolean for BDS < 12.0, integer enum for BDS ≥ 12.0). Previously, debug builds on XE2/XE3/XE4 could fail or produce no debug symbols.
+- **Go to Definition no longer jumps to unrelated local variables** — when a symbol at the cursor shared its name with a local variable in a different procedure, navigation could land on the wrong declaration. Resolution now uses the proper scoped lookup.
+
+## [0.9.2] - 2026-04-18
+
+### Notes
+
+First public beta release.
+
+## [0.9.1] - 2026-04-15
+
+### Notes
+
+Internal release.
 
 ## [0.9.0] - 2026-04-06
 

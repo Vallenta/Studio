@@ -69,6 +69,10 @@ This way you can manage multiple Delphi projects within a single workspace.
 
 On first startup, it scans the Windows Registry for installed Delphi versions and selects the latest one. To switch to a different Delphi version, open the settings dialog (top right on the Project Explorer) and select the Delphi version from the dropdown list.
 
+#### Information regarding Delphi 2005 - XE8
+
+Vallenta Studio detects Delphi installations from Delphi 2005 onwards. However, only versions 10 - 13 Florence have been officially tested. If you use Delphi 2005 - XE8, the extension may work. Please report any issues you encounter so we can improve support.
+
 ### Adding Projects
 
 1. Open the **Vallenta Studio** view in the Activity Bar (sidebar)
