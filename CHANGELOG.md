@@ -4,6 +4,22 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.5] - 2026-04-23
+
+### Fixed
+- LSP, resolve hover on type arguments inside generic type references 
+- LSP, diagnostics race condition could occure resulting in undefined symbol errors
+- missing updates on inactive regions when file is updated outside of VSCode
+- F5 shortcut (start Debugging) only on Pascal files/projects
+
+### Added
+- **Build Configuration editable** - Project editor, build configuration can be added, renamed and deleted 
+
+## [0.9.4] - 2026-04-21
+
+### Fixed
+- VallentaStudio Account RefreshToken failure
+
 ## [0.9.3] - 2026-04-20
 
 ### Added
