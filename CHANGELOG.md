@@ -2,6 +2,15 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [0.9.12] - 2026-05-17
+
+### Added
+- **LSP, redesigned hover popup** — kind badges, colored title with inheritance/return-type suffix, modifier badges, clickable `file.pas:line` link, inline **Other overloads** / **Inherited** sections, and a Go-to-Def / Find References / Peek action row. New setting `vallenta.studio.hover.colorize` (`auto` / `off`).
+
+### Fixed
+- **LSP, Find All References on a type** — clicking a parameter type identifier (e.g. `const A: TMyType`) returned only the clicked position; all uses across the project are now found.
+- **LSP, code completion inside a `uses` clause** — typing a unit prefix like `System.` or `Generics.` now lists matching units (`Classes`, `Collections`, `Defaults`, …) 
+
 ## [0.9.11] - 2026-05-12
 
 ### Added

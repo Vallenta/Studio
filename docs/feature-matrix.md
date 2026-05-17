@@ -21,6 +21,7 @@ Overview of features available at each subscription tier.
 | Project groups (.groupproj) | yes | yes | yes |
 | Project Explorer sidebar | yes | yes | yes |
 | Source Files view | yes | yes | yes |
+| DFM/FMX form indicator in Source Files | yes | yes | yes |
 | Recent projects | yes | yes | yes |
 
 ### Build System
@@ -42,6 +43,10 @@ Overview of features available at each subscription tier.
 | Hover information (types, symbols) | — | yes | yes |
 | Document Symbols (Outline & breadcrumbs) | — | yes | yes |
 | Inactive region decoration (grayed-out ifdef regions) | — | yes | yes |
+| Find Symbol (workspace picker, Ctrl+T) | — | yes | yes |
+| Find All References (Shift+F12, includes DFM/FMX) | — | yes | yes |
+| Toggle Form / Source (F12) | yes | yes | yes |
+| Overload resolution (hover & Go-to-Definition) | — | yes | yes |
 | Go to Declaration (Shift+Ctrl+Up) | — | — | yes |
 | Go to Implementation (Shift+Ctrl+Down) | — | — | yes |
 | Semantic validation & diagnostics | — | — | yes |
@@ -54,6 +59,9 @@ Overview of features available at each subscription tier.
 | Symbol conversion (TDS to PDB) | — | — | yes |
 | Natvis type visualizers | — | — | yes |
 | Breakpoint persistence (per project) | — | — | yes |
+| Delphi exception handling (break on raise, unwind Delphi stack) | — | — | yes |
+| Copy Variable as Tree (Variables / Watch) | — | — | yes |
+| Per-configuration debugger environment variables | — | — | yes |
 
 ### File Operations
 
@@ -83,5 +91,5 @@ Overview of features available at each subscription tier.
 ## Summary
 
 - **Not Registered** — Syntax highlighting, project management, and full build support. Enough to evaluate the extension with your projects.
-- **Free** — Register for a free account to unlock LSP-powered hover, outline, inactive region visualization, file creation, encoding conversion, and session persistence.
-- **Pro** — Subscribe to unlock the full IDE experience: code navigation, semantic validation, debugging with PDB conversion, breakpoint persistence, project options editor, and group builds.
+- **Free** — Register for a free account to unlock LSP-powered hover, outline, inactive region visualization, Find Symbol, Find All References, Toggle Form / Source, file creation, encoding conversion, and session persistence.
+- **Pro** — Subscribe to unlock the full IDE experience: code navigation, semantic validation, debugging with PDB conversion, breakpoint persistence, Copy Variable as Tree, per-configuration debugger environment variables, project options editor, and group builds.

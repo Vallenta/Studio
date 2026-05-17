@@ -1,5 +1,3 @@
-<p align="center"><img src="media/VSD_Logo128x128.png" width="128" alt="Vallenta Studio"></p>
-
 # Vallenta Studio
 
 A Visual Studio Code extension that provides comprehensive Delphi development support, enabling you to edit, build, and debug Delphi projects directly within VS Code.
@@ -14,6 +12,9 @@ The extension is available in two tiers. See the [full feature matrix](docs/feat
 - **Build System** - Build, clean, and rebuild projects using MSBuild with configuration/platform selection and build toolbar. Compiler errors, warnings, and hints are parsed into the Problems panel
 - **Syntax Highlighting** - Full Object Pascal TextMate grammar including keywords, types, comments, strings, and compiler directives
 - **Code Intelligence (LSP)** - Go to Definition, hover information, code completion, and document symbols/outline powered by a built-in Language Server
+- **Find Symbol** - Workspace symbol picker (`Ctrl+T` or editor right-click "Find Symbol…") for classes, records, interfaces, methods, properties, and unit-level symbols
+- **Find All References** - Semantic, scope-aware reference search (`Shift+F12`) across the project, including matches inside `.dfm`/`.fmx` form files
+- **Toggle Form / Source** - Press `F12` (or use the CodeLens at the top of the file) to swap between a `.pas` unit and its sibling `.dfm`/`.fmx` form. The Source Files view shows an inline `[DFM]`/`[FMX]` tag for units with a form
 - **Semantic Highlighting** - Context-aware syntax coloring via the LSP server
 - **Preprocessor Support** - Full `{$IFDEF}`, `{$DEFINE}`, `{$INCLUDE}` evaluation with inactive region visualization (grayed-out code)
 - **File Encoding** - Detects ANSI-encoded Pascal files and offers one-click conversion to UTF-8 with BOM
@@ -24,11 +25,13 @@ The extension is available in two tiers. See the [full feature matrix](docs/feat
 All Free features, plus:
 
 - **Source-Level Debugging** - Full source-level debugging with breakpoints, stepping, variable inspection, and call stacks. Press `F5` to start — no configuration needed.
+- **Delphi Exception Handling** - Debugger breaks on raised Delphi exceptions and unwinds the Delphi exception stack, showing the full call path back to the `raise` site merged with the native frames
 - **Natvis Type Visualization** - Version-specific natvis files for displaying Delphi types (strings, arrays, variants, objects) in the debugger
 - **Go to Declaration / Implementation** - Jump between interface declarations and implementation bodies (`Shift+Ctrl+Up` / `Shift+Ctrl+Down`)
 - **Semantic Validation** - Compiler-style diagnostics that detect undefined types, methods, and variables with configurable severity
 - **Breakpoint Persistence** - Breakpoints are saved and restored per project
-- **Project Options Editor** - Edit project configuration directly within VS Code
+- **Project Options Editor** - Edit project configuration directly within VS Code, including per-configuration build settings and per-configuration/platform debugger environment variables
+- **Copy Variable as Tree** - Right-click in the debugger **Variables** or **Watch** view to copy the expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes)
 - **Group Builds** - Build all projects in a project group at once
 
 ## Requirements
@@ -104,13 +107,18 @@ Use `Ctrl+F5` to run without debugging.
 - Local variable and parameter inspection
 - Call stacks with function names and line numbers
 - Natvis type visualization for Delphi strings, arrays, variants, and objects
+- Copy expanded variable trees to the clipboard via right-click in Variables / Watch
+- **Delphi exception handling** — the debugger automatically breaks on raised Delphi exceptions (identified by the `0x0EEDFADE` exception code), reads the exception class name and message, and unwinds the Delphi exception stack so the call stack shows the full path back to the `raise` site merged with the native C++ frames. Enabled by default via the *All Delphi Exceptions* breakpoint filter in the **Breakpoints** view; toggle *All Exceptions* there to also break on non-Delphi (SEH) exceptions
 
 ### Code Intelligence
 
 The built-in LSP server starts automatically when a project is activated and provides:
 
-- **Go to Definition** (`F12`) - Navigate to symbol declarations
+- **Go to Definition** (`Ctrl+Click`) - Navigate to symbol declarations
 - **Go to Declaration / Implementation** (`Shift+Ctrl+Up` / `Shift+Ctrl+Down`) - Jump between interface and implementation (Pro)
+- **Find Symbol** (`Ctrl+T`) - Workspace-wide symbol search
+- **Find All References** (`Shift+F12`) - Semantic reference search across the project, including matches inside `.dfm`/`.fmx` form files
+- **Overload Resolution** - Hover and `Ctrl+Click` on an overloaded routine narrow to the specific overload by matching argument types
 - **Hover** - View type information and symbol details
 - **Code Completion** - Type-aware member suggestions after the dot operator
 - **Document Symbols** - Outline view and breadcrumb navigation
@@ -185,6 +193,9 @@ The built-in LSP server starts automatically when a project is activated and pro
 | `Vallenta Studio: Restart LSP Server` | Restart the language server |
 | `Vallenta Studio: Go to Declaration` | Navigate to interface declaration (Pro) |
 | `Vallenta Studio: Go to Implementation` | Navigate to implementation body (Pro) |
+| `Vallenta Studio: Find Symbol...` | Open workspace-wide symbol picker |
+| `Vallenta Studio: Toggle Form / Source` | Swap between `.pas` and matching `.dfm`/`.fmx` form file |
+| `Vallenta Studio: Copy Variable as Tree` | Copy expanded debugger variable to clipboard (Pro, debug context only) |
 | `Vallenta Studio: Convert to UTF-8 with BOM` | Convert ANSI file to UTF-8 BOM encoding |
 
 ## Keyboard Shortcuts
@@ -193,7 +204,10 @@ The built-in LSP server starts automatically when a project is activated and pro
 |----------|--------|---------|
 | `F5` | Start debugging | Active Delphi project (Pro) |
 | `Ctrl+F5` | Run without debugging | Active Delphi project |
-| `F12` | Go to Definition | Pascal editor |
+| `F12` | Toggle Form / Source | Pascal / DFM / FMX editor |
+| `Ctrl+Click` | Go to Definition | Pascal editor |
+| `Ctrl+T` | Find Symbol | Workspace |
+| `Shift+F12` | Find All References | Pascal editor |
 | `Shift+Ctrl+Up` | Go to Declaration | Pascal editor (Pro) |
 | `Shift+Ctrl+Down` | Go to Implementation | Pascal editor (Pro) |
 | `Ctrl+Shift+B` | Build | Standard VS Code build |
@@ -215,7 +229,7 @@ The built-in LSP server starts automatically when a project is activated and pro
 
 - Form Designer is not supported — .dfm and .fmx files open as text
 - Windows only — the extension requires a local Delphi installation on Windows. Cross-compilation to other platforms (e.g., Linux) is possible, but deployment to target systems is not handled by the extension
-- LSP does not yet support: Find References, Rename, Code Actions, Code Formatting, Signature Help
+- LSP does not yet support: Rename, Code Actions, Code Formatting, Signature Help
 
 ## Feedback and Issues
 
