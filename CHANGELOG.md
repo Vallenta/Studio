@@ -2,6 +2,17 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [0.9.13] - 2026-05-19
+
+### Added
+- **`with` statement support** — Hover, Goto Definition, diagnostics, code completion, and Find All References now understand unqualified identifiers inside `with` blocks, including multi-target, nested, inherited-member, and Delphi shadowing semantics (with-target shadows routine locals; block-locals shadow the with-target).
+- **Find All References, scope picker** — `Shift+F12` now asks whether to search the project closure (recommended; only files your project transitively uses) or every indexed source, so symbols like `TSearchRec` no longer surface hits inside library units (e.g. FireDAC) the project never references.
+- **Find All References, redesigned sidebar** — results are now grouped in three levels (directory path → source file → match), with the code-line preview on the left and the line number rendered as a right-aligned pill. Path groups show file and match counts; expand/collapse state is preserved across streaming updates and re-runs.
+- **Build panel, project defaults** — a new save button next to the Platform dropdown writes the current selection back to the `.dproj` as the project default.
+
+### Fixed
+- **Build, command-line too long on large projects (MSB6002 / MSB6003)** — passes `/p:DCC_ForceExecute=true` so the Delphi compiler reads search paths from a `.cmds` file instead of the 32K-limited command line.
+
 ## [0.9.12] - 2026-05-17
 
 ### Added
