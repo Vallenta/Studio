@@ -4,18 +4,19 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 
 ## [0.9.15] - 2026-05-26
 
+**A milestone release for the debugger.** You can now inspect far more right from the **Watch panel and on hover**, call methods on your objects, read their properties (including inherited ones), drill into interface or class references, and see sets, enums and Booleans.
+
 ### Added
-- **Debugger, Watch panel — Variant returns** — calling a Delphi method that returns a `Variant` now renders the result in the Watch panel (expandable, like a local `Variant` variable) instead of risking a crash of the debugged program. This works automatically; the experimental `vallenta.studio.debug.complexReturnsEnabled` opt-in from the 0.9.14 preview has been removed (the behaviour is always on now). Methods returning an interface, a dynamic array, or a record still show a "not yet supported" message rather than crashing.
-- **Debugger, Watch panel on Win32** — evaluating Delphi method calls from the Watch panel now works on 32-bit (Win32) targets, which previously failed (e.g. *"… has no address"* / *"not supported"*). This covers methods that return numbers, strings (`string` / `AnsiString` / `WideString`) or `Variant`; methods that take `const Variant` or string parameters; and methods declared `cdecl`, `stdcall`, or `pascal` in addition to the default `register` convention.
-- **Debugger, Watch panel — property getters** — typing a property backed by a getter method (e.g. `MyObject.Count`, `Form1.ActiveControl`) in the Watch panel now resolves and calls the getter automatically, instead of failing with *"… has no member"*. Works on both Win64 and Win32, for properties returning numbers, strings, enums, sets, object references, or `Variant`. (Properties that read a field directly already worked.)
-- **Debugger, Watch panel — sets, enums and Booleans in Delphi form** — a set now displays as `[fsBold, fsItalic]` instead of a raw bitmask, an enum as its element name (e.g. `fsBold`), and a Boolean as `True` / `False` — both when read directly (a field or local) and when returned by a property getter.
+- **Debugger, Watch panel — call Delphi methods** — Calling methods directly from the Watch panel, including ones that return a `string` or a `Variant`, on both 64-bit and 32-bit targets. Calls resolve against the actual type of the variable you're inspecting, so an unrelated class that declares a same-named method can't misroute them.
+- **Debugger, Watch panel — read properties** — Properties backed by a getter method now resolve and call their getter automatically, including properties **inherited** from a base class or interface — for the common property types (numbers, strings, enums, sets, object references, `Variant`) on 64-bit and 32-bit.
+- **Debugger, Watch panel — inspect interfaces** — Interface references now show the actual object behind them (with their real fields), and you can follow a property chain through interfaces such as `WeatherReport.ShortName.Value`.
+- **Debugger — values shown in Delphi form** — Sets, enums and Booleans appear the way they look in code (`[fsBold, fsItalic]`, `fsBold`, `True` / `False`), whether read directly or returned by a getter.
 
 ### Changed
 - **Dproj Editor, option sets** — option sets are now listed above their build configurations in the tree and rendered in a smaller font.
 - **Build Toolbar, configuration dropdown** — build configurations are now listed in hierarchical (treeview) order with child configurations indented; referenced option sets are no longer listed inside the open dropdown, but are still shown in brackets on the collapsed field (e.g. `Release (OptionSet_Lib)`).
 
 ### Fixed
-- **Debugger, Watch panel — method shadowed by a same-named method on another class** — a Watch method call such as `obj.Add(2, 3)` is no longer wrongly blocked (or routed to the wrong overload) when an unrelated class declares a method of the same name; the call is now resolved against the receiver's actual type.
 - **Option Sets, base option set ignored** — search paths from a base-level option set (`'$(Base)'`, applied to all configurations) were dropped and never reached the LSP; they are now resolved and shown in the Dproj Editor tree and Configuration dropdown.
 - **Dproj Editor** — clicking an option set now opens its `.optset` file as XML; previously nothing happened.
 
