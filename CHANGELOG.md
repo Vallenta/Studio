@@ -2,6 +2,14 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [0.9.16] - 2026-05-27
+
+### Added
+- **Debugger, Watch panel — helper members & string length** — Helper members on records, classes and simple types (e.g. `IntVal.Doubled` on an `Integer`), plus `.Length` on any string kind (`string`, `AnsiString`, `WideString`, `ShortString`), now resolve from the Watch panel and on hover, on both 64-bit and 32-bit. A member the linker optimized out reports a clear "not available" message instead of a cryptic type error.
+
+### Fixed
+- **Debugger, inline `for` loop variables missing from Watch/Locals** — inline loop variables (`for var i := …`) and inline variables whose value is inferred from them were generated without a usable type, so they didn't appear while debugging. They now resolve to their real type (e.g. `Integer`).
+
 ## [0.9.15] - 2026-05-26
 
 **A milestone release for the debugger.** You can now inspect far more right from the **Watch panel and on hover**, call methods on your objects, read their properties (including inherited ones), drill into interface or class references, and see sets, enums and Booleans.
