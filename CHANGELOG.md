@@ -2,12 +2,26 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [0.9.16] - 2026-05-27
+## [0.9.17] - 2026-05-30
+
+### Added
+- **Dproj Editor, visual option-set editor** — referenced option sets are now editable directly inside the Project Options editor. Click one in the tree and its settings open in the same grid — and the same Conditional Defines / Search Path / Environment Variables / build-event dialogs — used for build configurations. Because an option set is a flat bundle of values with no platform dimension (mirroring the Delphi IDE, where the option-set **Target** dropdown is empty), it's shown as a single **Property / Value** column. A banner names the file, lists the configurations that reference it, and offers **Open raw XML**. Properties the editor doesn't surface — and any hand-authored platform-specific groups — are preserved untouched on save.
+- **LSP, Go to Definition target (interface or implementation)** — Ctrl+Click / F12 on a procedure or method can now jump straight to its **implementation body** instead of the interface declaration. Choose the behavior with the new Vallenta Studio settings page under **LSP Server**. Symbols with no implementation (types, fields, constants, abstract/external methods) always go to the declaration.
+- **Debugger, show a value as a date/time** — `TDate`, `TTime` and `TDateTime` are stored as plain floating-point numbers, and **the debugger currently can't tell them apart from an ordinary `double`**, so they show as a raw number (e.g. `37622`). When you know a number is really a date, right-click it in the **Variables** or **Watch** view and choose **Show as Date/Time** ▸ **Date** / **Time** / **Date + Time** — the row reformats in place using your Windows regional format and stays converted as you step; **Show as Raw** switches it back. Works on both 64-bit and 32-bit. ⚠️ This is a manual, temporary solution until the type can be detected automatically.
+
+### Changed
+- **Dproj Editor, clicking an option set** — now opens the inline visual editor instead of the raw `.optset` XML; the raw file is still one click away via the banner's **Open raw XML** link.
+
+## [0.9.16] - 2026-05-28
 
 ### Added
 - **Debugger, Watch panel — helper members & string length** — Helper members on records, classes and simple types (e.g. `IntVal.Doubled` on an `Integer`), plus `.Length` on any string kind (`string`, `AnsiString`, `WideString`, `ShortString`), now resolve from the Watch panel and on hover, on both 64-bit and 32-bit. A member the linker optimized out reports a clear "not available" message instead of a cryptic type error.
 
+### Changed
+- **New Delphi-File dialog, redesigned** — the **New Delphi-File** dialog now matches the Account page, with a logo header and card-based sections. The file-type choice is shown as two clearly selectable tiles (**Unit** / **Form**) with an unmistakable selected state, and a live preview shows the file(s) that will be created.
+
 ### Fixed
+- **New Delphi-File, file extension typed into the unit name** — entering a name that already ends in `.pas`, `.dfm` or `.fmx` (e.g. `Unit1.pas`) no longer creates a file with a doubled extension (`Unit1.pas.pas`); the extension is removed and the correct one is applied. Namespaced names such as `QuickLib.Forms.Types` are preserved.
 - **Debugger, inline `for` loop variables missing from Watch/Locals** — inline loop variables (`for var i := …`) and inline variables whose value is inferred from them were generated without a usable type, so they didn't appear while debugging. They now resolve to their real type (e.g. `Integer`).
 - **Debugger, inline variables sometimes missing / shown out of scope** — local variables declared with inline `var` weren't always resolved while debugging, especially ones declared after a nested `begin … end` block. They now show reliably, and the debugger takes their scope into account — a variable appears only while execution is inside the block where it's declared.
 
