@@ -2,6 +2,9 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.0] - 2026-05-31
+- **Release**
+
 ## [0.9.17] - 2026-05-30
 
 ### Added
