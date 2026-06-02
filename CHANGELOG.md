@@ -2,6 +2,16 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.1] - 2026-06-01
+
+### Changed
+- **Project explorer** — the active project and recent projects list now save to a separate `projects.local.json`, so a shared `projects.json` no longer carries per-machine state; existing files are read and migrated automatically.
+
+### Fixed
+- **LSP** — false *Unknown member* error on `TArray` static generic methods (e.g. `TArray.Contains<Int64>`, `TArray.IndexOf<…>`).
+- **LSP** — false *Syntax error* on binary integer literals (`%`), including with `_` digit separators (e.g. `%0000_0001`).
+- **Build panel** — failures from post-build steps (MSBuild `MSBxxxx` errors, e.g. a failing build event) now appear in the **Errors** tab instead of leaving it empty on a failed build.
+
 ## [1.0.0] - 2026-05-31
 - **Release**
 
