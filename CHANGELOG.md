@@ -2,6 +2,23 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.3] - 2026-06-03
+
+### Added
+- **Debugger, readable exception popup** — stopping on a Delphi exception now shows the exception class and message (e.g. `EConvertError: '12x' is not a valid integer value`) instead of the raw `0x0EEDFADE` code and parameter dump. Works on 64-bit and 32-bit.
+- **Debugger, exception ignore list** — a new **Delphi Exception Filters** view in the Run and Debug sidebar selects which exception types the debugger skips, by name or `*` pattern (e.g. `EAbort`, `E*`); when stopped, an **Ignore this type** button adds the current one and continues. `EAbort` is skipped by default.
+
+### Fixed
+- **Search paths, environment-variable overrides** — Delphi *Environment Variables* overrides (e.g. `$(WEATHERLIBS)`) used in library and project search paths are now resolved, so units in those folders are found by the LSP and included in debug symbols.
+- **Find All References, overloaded methods** — searching one overload of a method now returns only that overload's references and its descendant overrides, instead of also listing the other overloads' sites.
+- **Find All References, enums and interface delegation** — a reference to an enum value is no longer confused with a same-named value in a different enum, and method-resolution clauses (`procedure IFoo.Bar = MyBar;`) are now found from both the interface method and its implementation.
+- **Debugger, exception at the end of a procedure** — an exception raised by a procedure's last statement was shown on the procedure's closing `end`; it now points to the raising statement.
+
+## [1.0.2] - 2026-06-02
+
+### Fixed
+- **Build** — the `NoDefaultCurrentDirectoryInExePath` environment variable is no longer passed to spawned Delphi build, run, and debug processes, so it no longer reaches build events.
+
 ## [1.0.1] - 2026-06-01
 
 ### Changed
