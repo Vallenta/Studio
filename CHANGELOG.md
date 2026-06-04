@@ -2,6 +2,22 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.5] - 2026-06-04
+
+### Added
+- **Debugger, Variables/Watch — object properties in the tree** — expanding a Delphi object now shows a `[Properties]` node listing its properties backed by a getter method (numbers, strings, enums, sets, Booleans, object references and `Variant`)
+
+### Fixed
+- **Debugger, hover on a property getter (64-bit)** — hovering a method-backed property such as `widget.Count` now shows its value
+- **Project explorer, active project from a group** — a project activated from inside a project group is now restored as the active project, and revealed in its group, when you reopen the workspace.
+- **LSP** — false *Syntax error* on identifiers containing non-Latin Unicode letters (e.g. Greek `α`, Cyrillic, CJK); only Latin letters were recognized before.
+- **LSP, code completion on inline constants** — autocomplete now works after an inline `const c = …;` (typing `c.` lists the type's members), matching inline `var`.
+- **LSP, overloaded method return types** — code completion and hover now infer the return type from the overload matching the call's arguments (e.g. `obj.Make(b)` picks the overload that takes `b`'s type)
+
+## [1.0.4] - 2026-06-03
+
+### Hotfix
+
 ## [1.0.3] - 2026-06-03
 
 ### Added
@@ -13,6 +29,8 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Find All References, overloaded methods** — searching one overload of a method now returns only that overload's references and its descendant overrides, instead of also listing the other overloads' sites.
 - **Find All References, enums and interface delegation** — a reference to an enum value is no longer confused with a same-named value in a different enum, and method-resolution clauses (`procedure IFoo.Bar = MyBar;`) are now found from both the interface method and its implementation.
 - **Debugger, exception at the end of a procedure** — an exception raised by a procedure's last statement was shown on the procedure's closing `end`; it now points to the raising statement.
+- **Debugger, Watch panel — overridden property getters** — inspecting a property whose getter is overridden in a derived class now shows the derived class's value instead of the base class's, on 64-bit and 32-bit.
+- **Debugger, Watch panel — property chains through class getters** — a multi-step property chain whose links are class getters now resolves at every step (previously only interface chains did), and a plain field hop inside such a chain that used to report "not available" now reads correctly, on 64-bit and 32-bit.
 
 ## [1.0.2] - 2026-06-02
 
