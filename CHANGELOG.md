@@ -2,6 +2,15 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.6] - 2026-06-05
+
+### Added
+- **Find All References, form-file values** — searching a component or an enum value now also finds where it's used as a property value in a `.dfm`/`.fmx` form (e.g. `Action = MyAction`, `Speed = spSlow`, including set and scoped values).
+
+### Fixed
+- **Find All References, form files** — symbol references inside `.dfm`/`.fmx` forms are now found reliably; some were previously missed.
+- **LSP** — false *Syntax error* on Delphi 13 inline `if` (conditional/ternary) expressions, e.g. `X := if Cond then A else B`.
+
 ## [1.0.5] - 2026-06-04
 
 ### Added
