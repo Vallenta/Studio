@@ -2,6 +2,17 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.7] - 2026-06-08
+
+### Added
+- **Semantic source coloring** — the Delphi language server now colors identifiers by meaning: types, classes, interfaces, enum members, methods, properties, fields and parameters each get a distinct color.
+- **Structural keyword highlighting** — block keywords (begin/end, if, for, case, try, …) are tinted by nesting level, the whole construct lights up when the cursor is on one of its keywords, and control-flow keywords (exit, break, continue, raise, …) can be shown in bold.
+- **Source Highlight Enhancements settings** — a new section on the extension's settings page switches each highlight on or off and adjusts its colors. A visual color picker and further refinements are on the way.
+
+### Fixed
+- **Find All References** — references in units that use the symbol's unit from their `implementation` section (typically forms) are now found; many were previously missed.
+- **Run/Debug, working directory** — a launched program now starts in the build output folder (e.g. `Win32\Debug`), instead of the project root.
+
 ## [1.0.6] - 2026-06-05
 
 ### Added
