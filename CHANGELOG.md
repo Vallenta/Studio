@@ -2,10 +2,21 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.8] - 2026-06-09
+
+### Added
+- **Source Highlight Enhancements** — symbol-type and nesting-level colors are now edited with visual color-picker dialogs (with a live code preview) instead of JSON.
+- **Source highlighting, unit names** — dotted unit names in a `uses` clause are now fully colored, with a separate **unit** color (new picker entry) for the unit and its namespace prefix.
+
+### Fixed
+- **Semantic coloring** — fixed a language-server error when a Copilot inline suggestion is inserted while typing, which could briefly drop the semantic colors.
+- **Structural highlighting, nesting-level colors** — `begin`/`end` in an `if`/`else` branch now take the color of that `if`, and a nested or `else if` `if` steps to the next color instead of repeating its parent's.
+- **Debugger, Call Stack on an exception (32-bit)** — when the debugger stops on an exception and unwinds the Delphi stack, sometimes a frame resolved to a wrong source unit.
+
 ## [1.0.7] - 2026-06-08
 
 ### Added
-- **Semantic source coloring** — the Delphi language server now colors identifiers by meaning: types, classes, interfaces, enum members, methods, properties, fields and parameters each get a distinct color.
+- **Semantic source coloring** — the language server now colors identifiers by meaning: types, classes, interfaces, enum members, methods, properties, fields and parameters each get a distinct color.
 - **Structural keyword highlighting** — block keywords (begin/end, if, for, case, try, …) are tinted by nesting level, the whole construct lights up when the cursor is on one of its keywords, and control-flow keywords (exit, break, continue, raise, …) can be shown in bold.
 - **Source Highlight Enhancements settings** — a new section on the extension's settings page switches each highlight on or off and adjusts its colors. A visual color picker and further refinements are on the way.
 
