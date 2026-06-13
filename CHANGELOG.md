@@ -2,11 +2,26 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.9] - 2026-06-13
+
+### Added
+- **Dproj Editor, Delphi default values** — options not stored in the `.dproj` now show Delphi's built-in default (e.g. *Optimization* checked on Base), marked as `default`.
+
+### Changed
+- **Sidebar redesign** — the Vallenta Studio sidebar now has a permanent header showing the logo, version, subscription status and quick access to Settings and Account. The Projects, Build and Source Files sections below look and work as before, with individually adjustable heights.
+
+### Fixed
+- **Debugger, Delphi array indices** — static arrays with a non-zero lower bound (e.g. `array[1..8] of Char`) now show their declared Delphi indices in the **Variables** and **Watch** views — `[1]…[8]` instead of zero-based `[0]…[7]`.
+- **Build Toolbar, Cancel Build** — cancelling during the "Converting debug symbols…" phase now also stops the symbol converter; previously only the MSBuild process was cancelled.
+- **LSP, pointer member access** — member resolution (hover, completion, navigation) now works through pointer dereferences, e.g. `P[0].Field` on a pointer-to-array, `P^[0].Field`, and `PRec^.Field`.
+- **Structural highlighting, nesting-level colors** — an `else if` chain without `begin`/`end` now stays one flat color instead of stepping a color deeper at each `else if`; an `if` nested inside a `begin`/`end` block still steps to the next color.
+
 ## [1.0.8] - 2026-06-09
 
 ### Added
 - **Source Highlight Enhancements** — symbol-type and nesting-level colors are now edited with visual color-picker dialogs (with a live code preview) instead of JSON.
 - **Source highlighting, unit names** — dotted unit names in a `uses` clause are now fully colored, with a separate **unit** color (new picker entry) for the unit and its namespace prefix.
+- **Source highlighting, constants** — `const` values now get their own **constant** color (new picker entry), distinct from regular variables.
 
 ### Fixed
 - **Semantic coloring** — fixed a language-server error when a Copilot inline suggestion is inserted while typing, which could briefly drop the semantic colors.
