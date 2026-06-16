@@ -13,6 +13,8 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Debugger, Watch/hover (32-bit) — properties of your own classes** — properties backed by a getter method now resolve on 32-bit (in the `[Properties]` node, Watch, and on hover); several previously showed no value.
 - **Debugger, Watch/hover — fields of by-reference record parameters** — reading a field of a record passed as a `var`, `out` or `const` parameter (e.g. `Test.SomeField`, including nested records) now resolves instead of reporting the field as not available. On 64-bit and 32-bit.
 - **LSP, inline `var` in a program body** — hover and member resolution now work for an inline `var` declared in a `.dpr`/`.dpk` main `begin…end` block; previously this only worked inside a unit's routines.
+- **LSP, empty record constant** — a typed constant with an empty `()` value (a record with no fields, e.g. one that only has methods) no longer shows a false “missing token” error.
+- **LSP, member access through a typecast** — hover and Go to Definition now resolve an identifier inside a typecast or parenthesized expression.
 - **Dproj Editor, build events** — build events added or edited in the project editor now run reliably, including multi-command events; a command was previously truncated or dropped. 
 - **Dproj Editor, “inherit parent build events”** — turning this off now sticks: the unchecked state persists when you reopen the editor, and the configuration grid shows the level's own value instead of the inherited one.
 
