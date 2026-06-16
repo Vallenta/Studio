@@ -2,6 +2,20 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.0.10] - 2026-06-16
+
+### Added
+- **Add Existing File** — Right-click a project (**Projects** sidebar) or a unit folder (**Source Files**) to add an existing `.pas` to the `.dpr`/`.dpk`, with a project-relative path and a `{FormName}` comment when a matching `.dfm`/`.fmx` exists.
+- **Remove from Project** — Right-click a unit in the **Source Files** view to remove it from the `.dpr`/`.dpk`, fixing the surrounding comma or semicolon.
+
+### Fixed
+- **Debugger, Watch — interface properties** — a property whose value is an interface now shows the object behind it instead of `nil`, including through multi-step property chains (`a.b.c`). On 64-bit and 32-bit.
+- **Debugger, Watch/hover (32-bit) — properties of your own classes** — properties backed by a getter method now resolve on 32-bit (in the `[Properties]` node, Watch, and on hover); several previously showed no value.
+- **Debugger, Watch/hover — fields of by-reference record parameters** — reading a field of a record passed as a `var`, `out` or `const` parameter (e.g. `Test.SomeField`, including nested records) now resolves instead of reporting the field as not available. On 64-bit and 32-bit.
+- **LSP, inline `var` in a program body** — hover and member resolution now work for an inline `var` declared in a `.dpr`/`.dpk` main `begin…end` block; previously this only worked inside a unit's routines.
+- **Dproj Editor, build events** — build events added or edited in the project editor now run reliably, including multi-command events; a command was previously truncated or dropped. 
+- **Dproj Editor, “inherit parent build events”** — turning this off now sticks: the unchecked state persists when you reopen the editor, and the configuration grid shows the level's own value instead of the inherited one.
+
 ## [1.0.9] - 2026-06-13
 
 ### Added
