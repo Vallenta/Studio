@@ -2,6 +2,19 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.0] - 2026-06-19
+
+### Added
+- **Rename Symbol (key "F2")** — rename a Delphi symbol and every use of it across the project — its declaration, implementation, and all references. Covers locals and inline `var`s, unit-level types, routines, variables and constants, and type members (methods, fields, properties, constructors, destructors, helper members).
+- **Rename, clear refusals** — a rename that would clash with an existing name, or that can't be applied safely (interface methods, RTL/library overrides, or symbols declared outside your project), is blocked with a short explanation and a button that jumps to the conflicting symbol.
+- **Rename, one-time backup reminder** — the first rename shows a one-time reminder to keep your source backed up or under version control.
+- **Project explorer, add a project from its `.dpr`/`.dpk`** — you can now add a project by selecting its `.dpr`/`.dpk` source even when it has no `.dproj` yet; a default `.dproj` is created next to the source.
+
+### Fixed
+- **Debugger, object properties** — expanding the `[Properties]` node on a form or component no longer pops a “… has not been registered as a COM class” error or briefly freezes; a few properties that act on the running program when read (`ComObject`, `Handle`, `Canvas`) are no longer listed.
+- **LSP, members inside a `with` block** — hover and member resolution now work for a member reached through a `with` whose target type is declared in the unit's `implementation` section (e.g. a local type alias); previously the member couldn't be resolved.
+- **Dproj Editor, build events** — build events now run reliably for every configuration and platform, with Delphi macros such as `$(PROJECTPATH)` resolved (some previously ran empty).
+
 ## [1.0.10] - 2026-06-16
 
 ### Added
