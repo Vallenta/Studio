@@ -2,7 +2,12 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.1.0] - 2026-06-19
+## [1.1.1] - 2026-06-21
+
+### Fixed
+- **VSIX Package** — wrong deployment option triggered a LSP startup failure.
+
+## [1.1.0] - 2026-06-21
 
 ### Added
 - **Rename Symbol (key "F2")** — rename a Delphi symbol and every use of it across the project — its declaration, implementation, and all references. Covers locals and inline `var`s, unit-level types, routines, variables and constants, and type members (methods, fields, properties, constructors, destructors, helper members).
