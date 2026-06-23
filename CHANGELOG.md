@@ -2,6 +2,11 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.2] - 2026-06-23
+
+### Fixed
+- **LSP, hover shows textDocument failure** — while editing and the mouse pointer is on a symbol, an error could occure.
+
 ## [1.1.1] - 2026-06-21
 
 ### Fixed
