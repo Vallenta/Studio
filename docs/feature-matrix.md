@@ -40,6 +40,9 @@ Overview of features available at each subscription tier.
 | Feature | Not Registered | Free | Pro |
 |---------|:--------------:|:----:|:---:|
 | Syntax highlighting | yes | yes | yes |
+| Semantic highlighting (colors identifiers by meaning) | — | yes | yes |
+| Structural highlighting (nesting-level colors, matching keywords, flow-control) | yes | yes | yes |
+| Highlight color editor (custom semantic & structural colors) | — | — | yes |
 | Hover information (types, symbols) | — | yes | yes |
 | Document Symbols (Outline & breadcrumbs) | — | yes | yes |
 | Inactive region decoration (grayed-out ifdef regions) | — | yes | yes |
@@ -50,6 +53,7 @@ Overview of features available at each subscription tier.
 | Go to Declaration (Shift+Ctrl+Up) | — | — | yes |
 | Go to Implementation (Shift+Ctrl+Down) | — | — | yes |
 | Semantic validation & diagnostics | — | — | yes |
+| Rename Symbol (project-wide rename, F2) | — | — | yes |
 
 ### Debugging
 
@@ -58,8 +62,10 @@ Overview of features available at each subscription tier.
 | Debug launch (cppvsdbg) | — | — | yes |
 | Symbol conversion (TDS to PDB) | — | — | yes |
 | Natvis type visualizers | — | — | yes |
+| Watch / Hover expression evaluation (call methods, read properties incl. inherited, inspect interfaces) | — | — | yes |
 | Breakpoint persistence (per project) | — | — | yes |
 | Delphi exception handling (break on raise, unwind Delphi stack) | — | — | yes |
+| Delphi Exception Filters (skip exception types by name/pattern) | — | — | yes |
 | Copy Variable as Tree (Variables / Watch) | — | — | yes |
 | Per-configuration debugger environment variables | — | — | yes |
 
@@ -90,6 +96,6 @@ Overview of features available at each subscription tier.
 
 ## Summary
 
-- **Not Registered** — Syntax highlighting, project management, and full build support. Enough to evaluate the extension with your projects.
-- **Free** — Register for a free account to unlock LSP-powered hover, outline, inactive region visualization, Find Symbol, Find All References, Toggle Form / Source, file creation, encoding conversion, and session persistence.
-- **Pro** — Subscribe to unlock the full IDE experience: code navigation, semantic validation, debugging with PDB conversion, breakpoint persistence, Copy Variable as Tree, per-configuration debugger environment variables, project options editor, and group builds.
+- **Not Registered** — Syntax and structural highlighting, project management, and full build support. Enough to evaluate the extension with your projects.
+- **Free** — Register for a free account to unlock LSP-powered hover, outline, semantic highlighting, inactive region visualization, Find Symbol, Find All References, Toggle Form / Source, file creation, encoding conversion, and session persistence.
+- **Pro** — Subscribe to unlock the full IDE experience: code navigation, project-wide rename, semantic validation, the highlight color editor, debugging with Watch/hover evaluation and PDB conversion, breakpoint persistence, Copy Variable as Tree, per-configuration debugger environment variables, project options editor, and group builds.

@@ -2,6 +2,8 @@
 
 [![Latest release](https://badgen.net/github/release/Vallenta/Studio/stable)](https://github.com/Vallenta/Studio/releases/latest)
 
+**[Features](#features) · [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md) · [Report an issue](../../issues/new/choose)**
+
 A Visual Studio Code extension that provides comprehensive Delphi development support, enabling you to edit, build, and debug Delphi projects directly within VS Code.
 
 ## Features
@@ -17,7 +19,8 @@ The extension is available in two tiers. See the [full feature matrix](docs/feat
 - **Find Symbol** - Workspace symbol picker (`Ctrl+T` or editor right-click "Find Symbol…") for classes, records, interfaces, methods, properties, and unit-level symbols
 - **Find All References** - Semantic, scope-aware reference search (`Shift+F12`) across the project, including matches inside `.dfm`/`.fmx` form files
 - **Toggle Form / Source** - Press `F12` (or use the CodeLens at the top of the file) to swap between a `.pas` unit and its sibling `.dfm`/`.fmx` form. The Source Files view shows an inline `[DFM]`/`[FMX]` tag for units with a form
-- **Semantic Highlighting** - Context-aware syntax coloring via the LSP server
+- **Semantic Highlighting** - Resolver-driven coloring that distinguishes identifiers by meaning — types, classes, interfaces, methods, properties, fields, parameters, and enum members — plus same-identifier occurrence highlighting
+- **Structural Highlighting** - Block keywords (begin/end, if, for, case, try…) colored by nesting level; the whole construct highlights when your cursor is on one of its keywords, and control-flow keywords (exit, break, continue, raise) are emphasized
 - **Preprocessor Support** - Full `{$IFDEF}`, `{$DEFINE}`, `{$INCLUDE}` evaluation with inactive region visualization (grayed-out code)
 - **File Encoding** - Detects ANSI-encoded Pascal files and offers one-click conversion to UTF-8 with BOM
 - **Session Persistence** - Saves and restores open tabs when switching between projects
@@ -27,12 +30,15 @@ The extension is available in two tiers. See the [full feature matrix](docs/feat
 All Free features, plus:
 
 - **Source-Level Debugging** - Full source-level debugging with breakpoints, stepping, variable inspection, and call stacks. Press `F5` to start — no configuration needed.
-- **Delphi Exception Handling** - Debugger breaks on raised Delphi exceptions and unwinds the Delphi exception stack, showing the full call path back to the `raise` site merged with the native frames
+- **Watch & Hover Evaluation** - Call methods on your objects, read properties (including inherited ones), drill into interface and class references, and see sets, enums and Booleans in Delphi form — right from the Watch panel and on hover; a `[Properties]` node lists an object's getter-backed properties
+- **Delphi Exception Handling** - Debugger breaks on raised Delphi exceptions and unwinds the Delphi exception stack, showing the full call path back to the `raise` site merged with the native frames, and a **Delphi Exception Filters** view lets you skip chosen exception types by name or pattern
 - **Natvis Type Visualization** - Version-specific natvis files for displaying Delphi types (strings, arrays, variants, objects) in the debugger
 - **Go to Declaration / Implementation** - Jump between interface declarations and implementation bodies (`Shift+Ctrl+Up` / `Shift+Ctrl+Down`)
 - **Semantic Validation** - Compiler-style diagnostics that detect undefined types, methods, and variables with configurable severity
+- **Rename Symbol** - Rename a symbol with `F2` and every use updates across the project in one step — declaration, implementation, and all references, including inside `.dfm`/`.fmx` forms. Unsafe or conflicting renames are refused with a clear explanation
+- **Highlight Color Editor** - Recolor semantic and structural highlighting with visual color-picker dialogs and a live preview, instead of hand-editing JSON
 - **Breakpoint Persistence** - Breakpoints are saved and restored per project
-- **Project Options Editor** - Edit project configuration directly within VS Code, including per-configuration build settings and per-configuration/platform debugger environment variables
+- **Project Options Editor** - Edit project configuration directly within VS Code, including per-configuration build settings, per-configuration/platform debugger environment variables, and a visual editor for referenced option sets (`.optset`)
 - **Copy Variable as Tree** - Right-click in the debugger **Variables** or **Watch** view to copy the expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes)
 - **Group Builds** - Build all projects in a project group at once
 
