@@ -237,7 +237,7 @@ The built-in LSP server starts automatically when a project is activated and pro
 
 - Form Designer is not supported — .dfm and .fmx files open as text
 - Windows only — the extension requires a local Delphi installation on Windows. Cross-compilation to other platforms (e.g., Linux) is possible, but deployment to target systems is not handled by the extension
-- LSP does not yet support: Rename, Code Actions, Code Formatting, Signature Help
+- LSP does not yet support: Code Actions, Code Formatting, Signature Help
 
 ## Feedback and Issues
 

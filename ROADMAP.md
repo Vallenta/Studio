@@ -16,6 +16,8 @@ This roadmap is **subject to change** and intentionally carries **no committed d
 - **macOS (Apple Silicon)** — Editing and IntelliSense — hover, completion, go-to-definition, Find All References, diagnostics, and semantic highlighting — on Apple Silicon Macs. Building and debugging remain Windows-only.
 - **Attach to a running process** — Attach the debugger to an already-running Windows process by its process ID, with breakpoints, stepping, and Watch.
 - **MCP interface for AI assistants** — Expose Vallenta Studio's Delphi code intelligence to AI tools that speak the Model Context Protocol — symbol resolution, Find All References, and go-to-definition, plus reading the active project and its configuration, and starting a build and reading back its errors and warnings — so an AI assistant works from the IDE's real understanding of your code instead of re-parsing it.
+- **Code formatter** — Format your Pascal source with a choice of engine: a built-in formatter (the default — works offline, with no extra install, and the only one that can format just the selected lines) or an external command-line formatter you already use (pasfmt, Jedi Code Format or Free Pascal's ptop). Format the whole document or a selection, with optional format-on-save. A later update will add extensive style options — per-block indentation, one-line `begin`/`end` handling, casing, spacing, and alignment.
+- **LSP cache folder** — The offline symbol cache for your project moves into a single hidden `.vsdcache` folder, instead of placing several cache files next to each `.dproj`. 
 
 ## ✅ Recently shipped
 
