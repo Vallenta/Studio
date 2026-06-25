@@ -2,6 +2,15 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.3] - 2026-06-24
+
+### Added
+- **Find All References, units** — `Shift+F12` (or the right-click menu) on a unit name now finds every place that unit is used across the project — whether the cursor is on a `uses`-clause entry, the `unit`/`program`/`library`/`package` header, or a `.dpr`/`.dpk` `uses`/`contains`/`requires` entry. All spellings of the same unit match (e.g. `Forms` and `Vcl.Forms`), and a same-named unit on a different search path is not included.
+
+### Fixed
+- **Semantic highlighting, `uses` clause** — the final segment of a dotted unit name (e.g. `SysUtils` in `System.SysUtils`) is now colored as a unit rather than as a namespace.
+- **Indexing scope, multi-program folders** — a project no longer indexes sibling programs' `.dpr`s or third-party `.dpk` packages that happen to sit on its search path; Find All References stays scoped to the active project and indexing is leaner.
+
 ## [1.1.2] - 2026-06-23
 
 ### Fixed
