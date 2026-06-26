@@ -10,6 +10,7 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 ### Fixed
 - **Semantic highlighting, `uses` clause** — the final segment of a dotted unit name (e.g. `SysUtils` in `System.SysUtils`) is now colored as a unit rather than as a namespace.
 - **Indexing scope, multi-program folders** — a project no longer indexes sibling programs' `.dpr`s or third-party `.dpk` packages that happen to sit on its search path; Find All References stays scoped to the active project and indexing is leaner.
+- **LSP, legacy `begin` initialization** — a unit using a `begin … end.` block in place of an `initialization` section (the old Turbo Pascal form) now parses correctly; previously the whole unit failed to parse, breaking hover, navigation and highlighting.
 
 ## [1.1.2] - 2026-06-23
 
