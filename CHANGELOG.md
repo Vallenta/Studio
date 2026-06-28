@@ -2,6 +2,20 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.4] - 2026-06-27
+
+### Added
+- **Debugger, local variables in optimized builds** — local variables, parameters and `Self` now show in the **Variables** and **Watch** views when debugging optimization-compiled builds; previously many reported "An unspecified error has occurred".
+
+### Changed
+- **Project symbol cache, vsdcache folder** — the per-project cache files now sit in a single hidden `.vsdcache/` folder beside the `.dproj` instead of scattering several files into the project folder; an existing cache moves there automatically on the next start. If you track a Delphi project in git or svn, ignore `.vsdcache/`.
+
+### Removed
+- **Settings, three unused entries** — *Compiler Path*, *BPL Output Path* and *DCP Output Path* had no effect on builds and are no longer shown on the Settings page.
+
+### Fixed
+- **Source Files panel, scrollbar** — the panel's scrollbar now follows the color theme instead of staying white on dark themes, matching the other sidebar scrollbars.
+
 ## [1.1.3] - 2026-06-24
 
 ### Added
