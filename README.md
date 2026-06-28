@@ -145,9 +145,6 @@ The built-in LSP server starts automatically when a project is activated and pro
 | `vallenta.studio.msbuildPath` | string | `""` | Path to MSBuild.exe |
 | `vallenta.studio.rsvarsPath` | string | `""` | Path to rsvars.bat |
 | `vallenta.studio.libraryPath` | array | `[]` | Delphi library search paths |
-| `vallenta.studio.bplOutputPath` | string | `""` | Output directory for BPL files |
-| `vallenta.studio.dcpOutputPath` | string | `""` | Output directory for DCP files |
-| `vallenta.studio.compilerPath` | string | `""` | Path to the Delphi compiler (DCC32/DCC64) |
 
 ### Debugging
 
