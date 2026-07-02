@@ -2,6 +2,20 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.5] - 2026-07-02
+
+### Added
+- **Rename Unit** — renaming a unit now updates everything in one step: the `.pas` file and its companion `.dfm`/`.fmx`, the `unit X;` header, every `uses` reference across your `.pas`/`.dpr`/`.dpk` (including the `in '…pas'` path). Trigger it three ways: **F2** on a unit name in the editor, from the **Source Files** view (right-click → **Rename Unit…**), or by renaming the `.pas` in the Explorer. Each reference keeps its own spelling — a short `Logging` stays short, a qualified `Acme.Core.Logging` stays qualified.
+- **Dproj Editor, unit scope names** — a project's **Unit Scope Names** (namespaces) are now editable per configuration and platform in the Project Options editor, with the same list editor and parent-inheritance as Conditional Defines.
+- **Code completion, identifiers and members** — completion now suggests in-scope identifiers as you type — global routines, variables, constants, types and enum values, plus the current routine's locals and parameters and the enclosing class's members — and member suggestions open automatically after you type `.`, like the Delphi IDE. Previously only member completion after a `.`, triggered with `Ctrl+Space`, was available.
+
+### Fixed
+- **Dproj Editor, Runtime Packages dialog** — editing **Runtime Packages** now opens a correctly titled dialog instead of one labelled "Conditional Defines".
+- **New Delphi-File** — a newly created file now shows in the **Source Files** panel and is picked up by Find All References straight away, instead of only after reopening the project.
+- **LSP, anonymous methods** — a parameter of an anonymous method (an inline `procedure`/`function`) used in its body is no longer flagged as an unknown identifier, and hover and Go to Definition now resolve it.
+- **LSP, Go to Definition on a unit** — Ctrl+Click / F12 on a unit in a `uses` clause now opens its file with the correct on-disk capitalization in the editor tab, instead of an all-lowercase filename.
+- **LSP** — a few valid Delphi constructs no longer trigger a false *Syntax error*: a procedure/function-type field with a calling convention (`procedure(); cdecl;`), a variable with a hint directive and a value (`Integer platform = 2`), a `/` inside an `asm` block, and a label on an `if`/`else` branch.
+
 ## [1.1.4] - 2026-06-27
 
 ### Added
