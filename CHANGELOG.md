@@ -2,6 +2,22 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.6] - 2026-07-05
+
+### Added
+- **EurekaLog post-processing** — Vallenta Studio can now run EurekaLog's `ecc32` on the built executable after a successful build, injecting its exception tracking and compressed debug info without editing any project file. Enable it under **EurekaLog** on the Settings page, where `ecc32.exe` is auto-detected per installed Delphi version (with a manual override); only projects that have EurekaLog enabled are processed. A **Post-process now** button runs it against the current build on demand, and the `ecc32` command and output appear in the Build Output panel.
+- **Unused unit detection** — an optional diagnostic flags units in a `uses` clause (interface or implementation) that are never referenced in the file — shown faded in the editor like an unused import, and listed in the Problems panel. On by default at Information severity; change the severity, switch it off, or manage the ignore list for side-effect-only units (e.g. `FastMM4`) under **Unused Units Detection** on the Settings page.
+- **Build Output panel, auto-scroll** — the **Output**, **Warnings** and **Errors** tabs now have an **Auto-scroll** checkbox that keeps the view pinned to the newest entry as a build runs; each tab remembers its own setting.
+
+### Changed
+- **LSP, faster diagnostics on large units** — semantic diagnostics for a big unit now finish in less than half the time.
+
+### Fixed
+- **LSP, sporadic wrong diagnostics with several files open** — a file could briefly get diagnostics computed from another open file's content.
+- **LSP, `{$IFDEF}` regions used the wrong platform on auto-start** — a language server that started automatically (e.g. after switching to a project) evaluated conditional regions against the project's first-listed platform instead of the one selected in the Build toolbar, so platform-specific code could be grayed out the wrong way. It now follows the selected platform and configuration.
+- **LSP, types in the `implementation` section** — Ctrl+Click / F12 and hover now resolve a class declared in a unit's `implementation` section — on its name in a method implementation header (`procedure TFoo.Bar;`) and on members inherited from an implementation-section base class; previously these were not found.
+- **LSP, `{$IF}` with source constants** — a condition that references a constant declared in the unit or an include file (e.g. `{$IF TEST_VERSION >= 5}`) now evaluates correctly.
+
 ## [1.1.5] - 2026-07-02
 
 ### Added
