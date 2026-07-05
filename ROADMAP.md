@@ -9,24 +9,27 @@ This roadmap is **subject to change** and intentionally carries **no committed d
 ## 📋 Planned
 
 - **Delphi Breakpoints view** — A dedicated breakpoints panel that groups breakpoints by project and file, with custom labels and bulk enable / disable / delete — a clearer alternative to the generic Breakpoints list.
-- **Unused units diagnostic** — An optional hint that fades `uses`-clause units never referenced in a file, making dead unit references easy to spot and remove. Off by default, with configurable severity and an ignore list for side-effect units.
+- **Unused variables** — An optional hint that fades local variables that are declared but never used within a routine, so leftover declarations are easy to spot as you type — without waiting for a compile. Optionally extends to unused parameters, which the Delphi compiler never reports. Off by default, with configurable severity.
 - **Symbols for source-less units (DCU)** — Hover, completion, and go-to-definition for units that ship only as compiled `.dcu` — RTL/VCL/FMX without source, and closed-source third-party libraries.
+- **Parameter hints** — While filling in a function, method, or constructor call, see the callable's parameter list with the argument you are currently entering highlighted, including overloads.
+- **Generate method implementations (Ctrl+Shift+C)** — Declare a method on a class or record — or a routine in the unit's interface — then press Ctrl+Shift+C to generate its empty implementation body and jump straight to it. Write the declaration first and fill in the code after, for class methods, record methods, and global routines alike.
 - **macOS (Apple Silicon)** — Editing and IntelliSense — hover, completion, go-to-definition, Find All References, diagnostics, and semantic highlighting — on Apple Silicon Macs. Building and debugging remain Windows-only.
 - **Attach to a running process** — Attach the debugger to an already-running Windows process by its process ID, with breakpoints, stepping, and Watch.
 - **MCP interface for AI assistants** — Expose Vallenta Studio's Delphi code intelligence to AI tools that speak the Model Context Protocol — symbol resolution, Find All References, and go-to-definition, plus reading the active project and its configuration, and starting a build and reading back its errors and warnings — so an AI assistant works from the IDE's real understanding of your code instead of re-parsing it.
 - **Code formatter** — Format your Pascal source with a choice of engine: a built-in formatter (the default — works offline, with no extra install, and the only one that can format just the selected lines) or an external command-line formatter you already use (pasfmt, Jedi Code Format or Free Pascal's ptop). Format the whole document or a selection, with optional format-on-save. A later update will add extensive style options — per-block indentation, one-line `begin`/`end` handling, casing, spacing, and alignment.
-- **Rename a unit** — Rename a unit and have everything update in one step: the `.pas` file and its companion `.dfm`/`.fmx` form file, the `unit` header, every `uses` reference across your `.pas`, `.dpr` and `.dpk` files, and the project file. Works whether you rename from the editor (`F2` on the unit name) or by renaming the file itself, and it keeps each reference's existing style — a short `Forms` stays short, a qualified `Vcl.Forms` stays qualified. Builds on Find unit references.
-
 ## ✅ Recently shipped
 
 A few highlights — see the [Changelog](CHANGELOG.md) for the full history.
 
+- **EurekaLog integration** — Post-process your builds with EurekaLog automatically after every successful build, with no per-project post-build events to maintain. Vallenta Studio detects the EurekaLog compiler matching your Delphi version and runs it as part of the build, with per-version configuration and live detection status on the extension's settings page. Only projects that already have EurekaLog enabled are processed; everything else is left untouched.
+- **Unused units** — An optional hint that fades `uses`-clause units never referenced in a file — across both the interface and implementation sections — so dead unit references are easy to spot and remove. On by default at information severity, with configurable severity and an editable ignore list for side-effect units.
+- **Rename a unit** — Rename a unit and have everything update in one step: the `.pas` file and its companion `.dfm`/`.fmx` form, the `unit` header, every `uses` reference across your `.pas`, `.dpr` and `.dpk` files, and the project file — from the editor (`F2` on the unit name) or by renaming the file itself. Each reference keeps its existing style: a short `Forms` stays short, a qualified `Vcl.Forms` stays qualified.
 - **Locals in optimized builds** — Local variables, parameters and `Self` now show while debugging optimization-compiled builds, where many previously failed to display.
 - **LSP cache folder** — The offline symbol cache for your project moves into a single hidden `.vsdcache` folder, instead of placing several cache files next to each `.dproj`. 
 - **Rename Symbol** — Rename a symbol and have every reference updated across the project in a single step, using the native VS Code Rename (`F2`) command, including references inside `.dfm`/`.fmx` form files.
 - **Semantic highlighting** — Resolver-driven coloring of types, methods, properties, parameters, and enum members, plus same-identifier occurrence highlighting and structural begin/end coloring.
 - **Find All References** — Scope-aware reference search across the project, including matches inside `.dfm`/`.fmx` form files.
-- **Find unit references** — Locate every place a unit is referenced across `uses` clauses (in `.pas`, `.dpr`/`.dpk`, and the unit header), matched by physical unit identity rather than name. A first step toward renaming units.
+- **Find unit references** — Locate every place a unit is referenced across `uses` clauses (in `.pas`, `.dpr`/`.dpk`, and the unit header), matched by physical unit identity rather than name.
 - **Semantic color themes editor** — A visual editor for recoloring semantic tokens without hand-editing JSON.
 
 ## Have a request?
