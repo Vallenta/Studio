@@ -2,6 +2,24 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.7] - 2026-07-09
+
+### Added
+- **Unused variable, constant & parameter detection** — a new diagnostic flags local variables and constants that are declared but never used within a routine — shown faded in the editor and listed in the Problems panel. It can additionally report symbols that are only ever assigned and never read (flagged as *unnecessary*), and unused parameters — parameters of overrides, interface implementations and published event handlers are never flagged.
+- **Settings, Unused Variables, Constants, Parameter Detection** — a dedicated section on the Settings page controls it: on by default at Information severity, with a dropdown to change the severity or switch it off, and an **Options** dialog for the two opt-ins (report assigned-but-never-read, and check parameters).
+
+### Fixed
+- **Build Toolbar, Cancel Build** — when converting debug symbols fails after a build, the Cancel button now aborts the build immediately; previously it did nothing and the build stayed stuck until you opened the error notification and answered it.
+- **Rename, Unicode names in ANSI files** — renaming a symbol or unit to a name containing non-ASCII characters (e.g. `Prüfung`) now converts the affected ANSI-encoded files to UTF-8 with BOM, so the new name is stored intact everywhere; previously it was saved mangled (`Pr?fung`). A notification lists the converted files.
+- **Add Existing File / Remove from Project, ANSI project sources** — adding or removing a unit in an ANSI `.dpr`/`.dpk` that contains umlauts or other special characters no longer corrupts those characters.
+- **New Delphi-File, Unicode unit names** — the dialog now accepts unit names with non-ASCII letters (e.g. `единица1`, `Prüfung`); previously it rejected them as invalid. When such a unit is added to an ANSI-encoded `.dpr`/`.dpk`, that file is converted to UTF-8 with BOM so the name is stored intact.
+- **Convert to UTF-8 with BOM, special characters** — the `€` sign, typographic quotes, dashes and similar characters are now preserved during conversion; previously they were silently corrupted.
+- **Encoding warning, convert link** — the *Convert to UTF-8 with BOM* link in the hover on line 1 of an ANSI file works again.
+- **LSP, `strict private` nested types** — a type declared in a class's `strict private type` (or `strict protected type`) section is no longer flagged as an unknown type when referenced from a sibling nested type; previously it was recognized only without `strict`.
+- **LSP, conditionally-compiled routines in System.pas** — the `Set8087CW` / `Get8087CW` family and other FPU/assembler routines guarded by compiler conditionals now resolve on Ctrl+Click / F12 and hover, and System.pas is highlighted correctly; previously they couldn't be found and a large part of the unit was flagged as errors.
+- **LSP, very large units** — computing the grayed-out inactive regions of a huge unit such as System.pas is now near-instant, instead of taking many seconds.
+- **LSP, chained directives on a procedure type** — a procedural type that stacks two directives without a semicolon between them (e.g. `procedure(p: Pointer); cdecl varargs;`) no longer triggers a false *Syntax error*.
+
 ## [1.1.6] - 2026-07-05
 
 ### Added
