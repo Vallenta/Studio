@@ -2,11 +2,17 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.1.7] - 2026-07-09
+## [1.1.8] - 2026-07-10
 
 ### Added
 - **Unused variable, constant & parameter detection** — a new diagnostic flags local variables and constants that are declared but never used within a routine — shown faded in the editor and listed in the Problems panel. It can additionally report symbols that are only ever assigned and never read (flagged as *unnecessary*), and unused parameters — parameters of overrides, interface implementations and published event handlers are never flagged.
 - **Settings, Unused Variables, Constants, Parameter Detection** — a dedicated section on the Settings page controls it: on by default at Information severity, with a dropdown to change the severity or switch it off, and an **Options** dialog for the two opt-ins (report assigned-but-never-read, and check parameters).
+- **Settings, Find All References scope** — a new **Find All References Scope** dropdown in the **LSP Server** section lets you set a default scope: keep *Always ask* (the default) to show the scope picker on every search, or choose **Project** or **All indexed sources** to skip the picker and always search that scope.
+
+### Fixed
+- **LSP, Go to Definition on a qualified type alias** — Ctrl+Click / F12 on the qualified right-hand side of a type alias (e.g. `System.TTypeKind` in `TTypeKind = System.TTypeKind;`) now navigates to the referenced type; previously the unit qualifier was ignored, so it jumped to the same-named local alias instead of the real type.
+
+## [1.1.7] - 2026-07-09
 
 ### Fixed
 - **Build Toolbar, Cancel Build** — when converting debug symbols fails after a build, the Cancel button now aborts the build immediately; previously it did nothing and the build stayed stuck until you opened the error notification and answered it.
