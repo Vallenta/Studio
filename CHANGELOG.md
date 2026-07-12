@@ -2,6 +2,26 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.9] - 2026-07-12
+
+### Added
+- **Class completion (Ctrl+Shift+C)** — declare a method on a class or record — or a routine in the unit's interface — then press **Ctrl+Shift+C** (or right-click → **Complete Class at Cursor**) to generate its empty implementation body and jump straight to it. It completes every unimplemented method of the type at the cursor at once — class methods, constructors, destructors, operators, overloads and generic types included — and works for global routines too, while leaving already-implemented methods untouched.
+- **Find All Implementations (Ctrl+F12)** — place the cursor on an interface, class, interface method or virtual method and press **Ctrl+F12** (or right-click → **Find All Implementations**) to see every concrete implementer in a dedicated, keyboard-operable panel: the classes that implement an interface, a class's descendants, the methods implementing an interface method, and the overrides of a virtual or abstract method. Results are grouped by implementing type and show the unit each one lives in; a symbol with nothing to implement shows a short message.
+- **Find All References, keyboard navigation** — the results view now takes focus when a search starts, so you can drive it from the keyboard: arrow keys move through the entries, Space collapses or expands a group, and Enter jumps to the selected match.
+
+### Fixed
+- **LSP, false syntax errors in different units** — opening an unit such as `System.Rtti.pas` could show hundreds of phantom syntax errors caused by a stale cache.
+- **LSP, member resolution after a reference search** — Find All References or Rename could subtly degrade hover/completion for types declared in files the search scanned but that were not open in the editor.
+- **LSP, multi-level pointer dereference** — member access now resolves through a double pointer dereference (e.g. `AInfo^.PropType^^.Kind`); previously a pointer-to-pointer flagged a false *Unknown member* error.
+- **LSP, members of nested types** — a field, method or property of a type nested inside a class — or of a pointer to such a type — now resolves while the unit is open, clearing many false *Unknown member* / *Unknown identifier* errors in units such as `System.Rtti.pas`.
+- **LSP, members through a generic alias** — a member reached through an alias of a generic specialization (e.g. `TInts = TList<Integer>`) now resolves instead of a false *Unknown member* error.
+- **LSP, generic-qualified nested types** — a nested type referenced through a generic instantiation (e.g. `TList<THeapItem>.ParrayofT`) is no longer flagged as a false *Unknown type* error.
+
+### Changed
+- **LSP, occurrence highlighting** — placing the cursor on an identifier no longer triggers a project-wide reference scan; the gray occurrence highlights are computed from the current file only.
+- **Find All References / Rename, conditional code** — matches are now consistently found in active `{$IFDEF}` branches only; previously occurrences in inactive branches were sometimes included for files not open in the editor.
+- **Sidebar, section header buttons** — the header actions in the Projects and Source Files sections (add project, add from folder, add group, refresh) are now always visible, instead of appearing only while hovering the section header.
+
 ## [1.1.8] - 2026-07-10
 
 ### Added
