@@ -2,10 +2,22 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.1.9] - 2026-07-12
+## [1.1.10] - 2026-07-13
 
 ### Added
 - **Class completion (Ctrl+Shift+C)** — declare a method on a class or record — or a routine in the unit's interface — then press **Ctrl+Shift+C** (or right-click → **Complete Class at Cursor**) to generate its empty implementation body and jump straight to it. It completes every unimplemented method of the type at the cursor at once — class methods, constructors, destructors, operators, overloads and generic types included — and works for global routines too, while leaving already-implemented methods untouched.
+
+### Fixed
+- **LSP, helper members** — a method or constant added to a type by a `record`/`class helper` is now recognized on hover and in code completion, including helpers declared in a unit's implementation section and constants on built-in types such as `Integer.MaxValue`; previously these produced a false *Unknown member*.
+- **LSP, inline `var` from `Default(T)`** — a variable declared with inline `var` and initialized from `Default(T)` (e.g. `var LArticle := Default(TArticle);`) now infers its type, so its members are recognized on hover, in code completion, and inside a `with` block; previously they were flagged as false *Unknown member* / *Unknown identifier* errors.
+- **LSP, interface GUID from a constant** — an interface whose GUID is a named constant (e.g. `[SID_IIdentityName]`) rather than a string literal no longer triggers a false *Syntax error*.
+- **LSP, `dispinterface` properties** — a property with a `readonly` or `writeonly` directive (e.g. `property nodeName: WideString readonly dispid 2;`) no longer triggers a false *Syntax error*.
+- **LSP, record alignment directive** — a record with an `align(N)` alignment directive (e.g. `end align(16);`) no longer triggers a false *Syntax error*.
+- **LSP, comment between a method name and its parameters** — a method declaration with a comment between the name and its parameter list (e.g. `procedure Test { note } (ANumber: Integer);`, split across lines) no longer triggers a false *Syntax error*.
+
+## [1.1.9] - 2026-07-12
+
+### Added
 - **Find All Implementations (Ctrl+F12)** — place the cursor on an interface, class, interface method or virtual method and press **Ctrl+F12** (or right-click → **Find All Implementations**) to see every concrete implementer in a dedicated, keyboard-operable panel: the classes that implement an interface, a class's descendants, the methods implementing an interface method, and the overrides of a virtual or abstract method. Results are grouped by implementing type and show the unit each one lives in; a symbol with nothing to implement shows a short message.
 - **Find All References, keyboard navigation** — the results view now takes focus when a search starts, so you can drive it from the keyboard: arrow keys move through the entries, Space collapses or expands a group, and Enter jumps to the selected match.
 
