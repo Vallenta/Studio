@@ -2,6 +2,16 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.11] - 2026-07-14
+
+### Changed
+- **Unused variable detection, loop variables** — an inline loop variable (`for var i := 0 to 10 do`, or `for var x in …`) whose loop body never uses it is no longer flagged as unused by default, matching the Delphi compiler. A new **Report unused loop variables** option in the detection **Options** dialog turns it back on.
+
+### Fixed
+- **LSP, crash on self-referencing inline `var`** — a file containing an inline `var` whose initializer refers back to the declared variable (e.g. `var x := x.Trim;`, directly or via another inline `var`) crashed the language server on open; it now opens normally.
+- **LSP, inline `var` from `Result`** — a variable declared with inline `var` and initialized from a function's `Result` (e.g. `var Rec := Result;` or `var X := Result.Field;`) now infers its type, so its members are recognized on hover and in code completion; previously member access on such a variable was flagged as a false *Unknown member* error.
+- **Find All Implementations, results panel** — when the results list was long enough to scroll, the summary header overlapped the top entries; it now stays cleanly above the list.
+
 ## [1.1.10] - 2026-07-13
 
 ### Added
