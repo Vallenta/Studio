@@ -4,11 +4,16 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 
 ## [1.1.11] - 2026-07-14
 
+### Added
+- **Code completion, context-aware** — the suggestion list now fits the cursor's position: it offers the Delphi keywords valid there and, in places like a type reference or a declaration, narrows the symbols to those that belong. Entries are grouped and ordered like the Delphi IDE — by scope (locals, `Self` members, the current unit, other units, then the implicit `System` symbols) — and each is labelled with its kind (`var`, `const`, `type`, `keyword`, …) as text, not by icon alone. New **Completion** settings toggle the keyword suggestions and the context filtering, and set whether keywords lead the list or sit among the members.
+
 ### Changed
 - **Unused variable detection, loop variables** — an inline loop variable (`for var i := 0 to 10 do`, or `for var x in …`) whose loop body never uses it is no longer flagged as unused by default, matching the Delphi compiler. A new **Report unused loop variables** option in the detection **Options** dialog turns it back on.
 
 ### Fixed
-- **LSP, crash on self-referencing inline `var`** — a file containing an inline `var` whose initializer refers back to the declared variable (e.g. `var x := x.Trim;`, directly or via another inline `var`) crashed the language server on open; it now opens normally.
+- **LSP, crash on inline `var` named like a routine** — a file declaring an inline `var` whose initializer refers back to its own name — typically because it's named like the function it calls (e.g. `var signData := SignData('');`), or a plain self-reference (`var x := x.Trim;`) — crashed the language server on open; it now opens normally.
+- **LSP, inline `var` scope** — an inline `var` now follows Delphi scope rules: it is visible only after its declaration and within its enclosing block, and a name redeclared in a nested block resolves to the innermost declaration. Previously, hovering the call in `var signData := SignData('');` showed the variable instead of the function, and members of a name redeclared in sibling blocks could be flagged with false *Unknown identifier* errors.
+- **LSP, inline `var` from a routine call** — a variable initialized from a routine call (e.g. `var Data := SignData('');`, with or without parentheses) or from an unqualified method or property of the enclosing class (e.g. `var R := GetClientRect;`) now infers its type, so its members are recognized on hover and in code completion.
 - **LSP, inline `var` from `Result`** — a variable declared with inline `var` and initialized from a function's `Result` (e.g. `var Rec := Result;` or `var X := Result.Field;`) now infers its type, so its members are recognized on hover and in code completion; previously member access on such a variable was flagged as a false *Unknown member* error.
 - **Find All Implementations, results panel** — when the results list was long enough to scroll, the summary header overlapped the top entries; it now stays cleanly above the list.
 
