@@ -2,6 +2,34 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.12] - 2026-07-17
+
+### Added
+- **Unused units, quick fix** — press **Ctrl+.** on a unit flagged as unused in a `uses` clause to remove just that one, or every unused unit in the file at once; the leftover comma or line goes with it, and a clause left empty disappears. Where a comment or a compiler directive sits between the entries so that removing one would disturb it, no fix is offered and the entry is left for you to edit by hand.
+
+### Changed
+- **Class completion, placement (Ctrl+Shift+C)** — a generated method body now appears next to the bodies of its neighbours in the class, mirroring the order the methods are declared in, instead of at the end of the unit. A method whose neighbours have no bodies yet is still appended at the end of the implementation section.
+
+### Fixed
+- **Debugger, optimized Win64 local variables** — in a 64-bit build compiled with optimization, a register-held local variable (such as a `TList` or other object or pointer) could show as `nil` or a wrong value at a breakpoint; these now show their correct value. 32-bit builds were unaffected.
+- **LSP, types after an `{$IFDEF}`-split variant record** — a variant record whose fields are split across `{$IFDEF}`/`{$ELSE}` branches (e.g. `TTypeData` in `System.TypInfo`) broke the unit's indexing, so every type declared after it was missing: `PPropInfo` and friends were flagged with a false *Unknown type* error and their members did not resolve.
+- **LSP, inherited members of an implementation-section class** — a class declared in a unit's implementation section that inherits from a type imported in the implementation `uses` (e.g. `TCustomStrList = class(TStringList)`) now resolves its inherited members on hover and in code completion; previously every member (`Create`, `Add`, `Free`, …) was flagged with a false *Unknown member* error.
+- **Go to Definition and hover, `inherited` calls** — `inherited Test;` now navigates to the base class's method instead of the overriding method it is written in, and the `inherited` keyword itself — bare (`inherited;`) or qualified — now supports Go to Definition and hover for the method it calls; previously the keyword wasn't clickable at all.
+- **LSP, multiple generic constraints** — a generic type parameter with more than one constraint (e.g. `TFoo<T: class, constructor>`) no longer triggers a false *Syntax error*.
+- **LSP, generic vs non-generic type resolution** — with both `System.Classes` and `System.Generics.Collections` in the `uses` clause, a bare `TList` (e.g. `TCustomList = class(TList)`) wrongly resolved to the generic `TList<T>`. Hover, Go to Definition, code completion and inherited members now match a type reference by its type arguments, in any `uses` order: bare `TList` finds `Classes.TList`, `TList<Integer>` the generic class, and `TFunc<Integer, string>` the two-parameter `TFunc<T, TResult>`.
+- **LSP, inline `var` from a literal** — a variable declared with inline `var` and initialized from a literal (e.g. `var LInteger := 1;`, `var LText := 'abc';`, `var LFlag := True;`) now infers its type, so its members — including type-helper methods such as `Integer.ToString` — are recognized on hover and in code completion; previously the list came up empty. A `for var I := 1 to 10` loop variable infers the same way, and a single-character literal (`var LChar := 'a';`) infers `Char`, as the compiler does.
+- **Code completion, `Char` and `Currency` members** — a `Char` or `Currency` variable now offers its type-helper members (`ToUpper`, `ToString`, …); previously nothing was suggested. `TCharHelper` lives in `System.Character`, so that unit has to be in the `uses` clause.
+- **LSP, hexadecimal literals with an `E` digit** — a hex literal such as `$FE` or `$1E5` was read as a floating-point value, which could match the wrong overload of a routine on hover and Go to Definition; it is now integral.
+- **Code completion, built-in types** — a type position (e.g. `var LValue: |`) now offers Delphi's built-in simple types — `Integer`, `Double`, `Boolean`, `Char`, `Variant` and the rest. They are compiler intrinsics with no declaration in any source, so they could never be suggested before; 
+- **Unused variable detection, same-named inline variables in sibling blocks** — an uninitialized inline `var` (e.g. `var nValue: Integer;`) declared under the same name in two sibling blocks, such as separate `case` branches, is no longer flagged as *declared but never used* when each block uses its own. One that genuinely is unused is also no longer missed when a later block reuses the name. Inline `const` behaves the same.
+- **Find All References, uninitialized inline `var`** — a search from an uninitialized inline `var` now finds the uses in its own block. Previously, when the same name was declared in more than one block of a routine, every reference was attributed to the first declaration and a search from any later one found nothing.
+- **Source Files panel, Unicode filenames** — a unit whose filename is made up entirely of non-ASCII characters now appears in the **Source Files** panel, and **Remove from Project** and **Rename Unit…** work on it; previously it was missing from the panel altogether. 
+- **Outline and breadcrumbs, Unicode declarations** — a unit, class, record, interface, method, property or routine named with non-ASCII letters now appears in the Outline view and breadcrumbs; previously such declarations were missing.
+- **Add Existing File, Unicode form classes** — adding a `.pas` whose companion `.dfm`/`.fmx` declares a non-ASCII class name now keeps its `{Name: TDataModule}` comment in the `.dpr`; a `.dproj` generated for a `library` or `program` with a non-ASCII name is also no longer typed as a plain application.
+- **Class completion, shadowed routines** — a routine declared in the interface no longer misses out on its stub when another routine contains a local routine of the same name; Ctrl+Shift+C now generates its body as well.
+- **Class completion, caret in an interface** — with the caret inside an `interface` type declaration, Ctrl+Shift+C generated the missing bodies of every other type in the unit. It now does nothing there, since an interface's methods are implemented by the classes that support it.
+- **LSP, syntax errors while typing** — an unfinished routine (e.g. `begin` just typed, so the unit's closing `end.` is momentarily taken as the routine's own `end`) marked the entire file as one syntax error from the first line to the last. The errors now stay at the typing point — `';' expected but '.' found` and `'end.' expected` — hover, outline and code completion keep working for the rest of the unit.
+
 ## [1.1.11] - 2026-07-14
 
 ### Added
