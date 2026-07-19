@@ -2,6 +2,25 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.13] - 2026-07-19
+
+### Added
+- **LSP, a unit opened from outside the project** — opening a `.pas` that isn't part of the active project — one belonging to another project, or anywhere on disk — now gives it the full language features (hover, Go to Definition, code completion, outline, jumping between a routine's declaration and its body, diagnostics) under the active project's settings, where before it offered none. Other units it uses from the same folder resolve as well, and opening such a unit resolves the types it provides in the ones that use it; closing a file removes it again, leaving the project's own symbol index untouched.
+
+### Fixed
+- **Code completion, right after a routine header** — on the implementation side, with the caret just after a routine header whose body isn't written yet (`procedure Foo;` on the line above the caret, or right after its `;`), the suggestion list now leads with `begin` and the other routine declaration-area keywords (`var`, `const`, `type`, `asm`, nested routines and directives) instead of the unit's section-level keywords. A blank line directly above `implementation` no longer shifts the interface/implementation boundary by a line.
+- **LSP, compiler switch conditionals (`{$IFOPT}`)** — `{$IFOPT}` now follows the project's compiler switch settings — Optimization, Overflow and Range checking, I/O checking, and the rest — for the active configuration and platform, so the right branch is active and the other greyed out. Local switch directives (`{$Q+}`, `{$OPTIMIZATION ON}`, `{$B-,R+,Q+}`, including inside `{$I}` includes) are tracked as they change through a unit. `{$IFDEF Q+}` is now read the way the compiler reads it — the symbol `Q`, trailing `+` ignored — so `{$DEFINE Q}` makes it active; and an invalid `{$IFOPT OVERFLOWCHECKS+}` is greyed out with a hint instead of being treated as always active.
+- **LSP, RTL symbols after a nested `{$IF}`-split routine header** — a routine header split across nested `{$IF}`/`{$ELSEIF}`/`{$ELSE}` branches (`_DelphiPersonalityRoutine` in `System.pas`) silently ended the unit's indexing, so every symbol declared after it — `DynArraySize` and several hundred others in the tail of the `System` interface — was flagged with a false *Unknown identifier* and offered no hover or Go to Definition from other units. Such declarations are now indexed in every branch, each tagged with its condition.
+- **LSP, multiline string literals** — a Delphi 12+ multiline string (`'''…'''`), including one that embeds a shorter run of quotes by using a longer delimiter (e.g. `'''''`), no longer triggers a false *Syntax error*, and now colors as a single string in the editor rather than highlighting its content as code.
+- **LSP, types reached through a `{$I}` include in a `uses` clause** — a unit named inside an include file that sits in a `uses` clause (e.g. `uses {$I units.inc} Classes;`) is now recognized, so the types it provides resolve on hover, Go to Definition and code completion instead of showing a false *Unknown type*. Renaming such a unit is refused with a note naming the include file, since the reference there can't be rewritten automatically.
+- **LSP, unit search path changes** — adding or removing a project unit search path now takes effect without restarting the language server; previously the change was accepted but indexing kept using the old paths until a restart.
+- **LSP, a unit dropped from the project** — a unit removed from the project (or deleted on disk) while the editor was closed is now dropped from the symbol index on the next start, instead of lingering until a manual reindex.
+- **LSP, a type indexed after the file that uses it** — a type whose defining unit is indexed after the file referencing it now resolves as soon as that unit becomes available, instead of needing a language-server restart.
+- **LSP, `SizeOf` of a record in `{$IF}` conditions** — a conditional such as `{$IF SizeOf(Extended) <> SizeOf(TExtended80Rec)}` now resolves the record's size and shades the correct branch. Built-in and well-known RTL type sizes are evaluated for the active target platform.
+- **LSP, member of a function's result** — a member accessed directly on a function's return value (e.g. `GetObj.Value`, where `GetObj` returns a class) now resolves on hover, Go to Definition and code completion; previously the member wasn't recognized and couldn't be clicked, even when the function and its type were reachable through the `uses` clause.
+- **LSP, `goto` labels** — a label name — the `label` declaration, each `goto`, and the `name:` marker — is no longer flagged with a false *Unknown identifier*.
+- **Go to Definition and hover, `goto` labels** — Ctrl+Click / F12 on a `goto` now jumps to the `name:` marker, the marker jumps back to the `label` declaration, and hover shows the label; previously a label name was neither clickable nor hoverable.
+
 ## [1.1.12] - 2026-07-17
 
 ### Added
