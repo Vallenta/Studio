@@ -2,10 +2,17 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.1.13] - 2026-07-19
+## [1.1.14] - 2026-07-20
 
 ### Added
 - **LSP, a unit opened from outside the project** — opening a `.pas` that isn't part of the active project — one belonging to another project, or anywhere on disk — now gives it the full language features (hover, Go to Definition, code completion, outline, jumping between a routine's declaration and its body, diagnostics) under the active project's settings, where before it offered none. Other units it uses from the same folder resolve as well, and opening such a unit resolves the types it provides in the ones that use it; closing a file removes it again, leaving the project's own symbol index untouched.
+
+### Fixed
+- **LSP, members of an element of a generic collection** — a member accessed on an indexed element of a generic collection (e.g. `FGroups[I].Active`, where `FGroups` is a `TObjectList<TRegGroup>`) now resolves on hover, Go to Definition and code completion; previously the element's type was not worked out, so nothing was offered and a misspelled member went unreported as well. Collections that take their index from a base such as `TList<T>` are covered, as is the explicit form (`FGroups.Items[I].Active`).
+- **LSP, indexed properties** — a property whose index takes more than one parameter (e.g. `Cells[Row: Integer; Col: Integer]`) now resolves the members of its element type, and a class declaring several indexed properties uses the one marked `default` instead of whichever was declared first.
+- **Code completion, enum variables and implementation-section types** — typing a dot after a variable of an enum type now offers the enum's values and the methods a `record helper` adds to it; previously the list showed only an *unresolved* placeholder. A variable whose type is declared in the unit's implementation section resolves for completion as well.
+
+## [1.1.13] - 2026-07-19
 
 ### Fixed
 - **Code completion, right after a routine header** — on the implementation side, with the caret just after a routine header whose body isn't written yet (`procedure Foo;` on the line above the caret, or right after its `;`), the suggestion list now leads with `begin` and the other routine declaration-area keywords (`var`, `const`, `type`, `asm`, nested routines and directives) instead of the unit's section-level keywords. A blank line directly above `implementation` no longer shifts the interface/implementation boundary by a line.
