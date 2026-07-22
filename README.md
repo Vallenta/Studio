@@ -49,7 +49,7 @@ All Free features, plus:
 
 ## Installation
 
-1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Vallenta.vallenta-studio)
+1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=VallentaStudio.vallenta-studio)
 2. Open a folder in VS Code to use as your workspace (see [Workspace Setup](#workspace-setup) below)
 3. The extension auto-detects your Delphi installation and configures paths automatically
 
