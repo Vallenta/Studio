@@ -2,6 +2,23 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.15] - 2026-07-22
+
+### Added
+- **Dproj Editor, package & DCP output paths** — the Paths section now has **Package Output Directory** and **DCP Output Directory** fields, editable per configuration and platform.
+- **Dproj Editor, Search Paths filter** — a filter box with `*`/`?` wildcards at the top of the Search Paths dialog narrows long path lists; clear it with the ✕ button.
+
+### Changed
+- **Dproj Editor, editable output paths** — the output-directory fields can now be typed directly — so you can enter a macro path such as `..\..\$(Platform)` — with a folder button beside each for the pick-a-folder dialog.
+
+### Fixed
+- **Build Toolbar, Cancel Build** — dismissing the symbol-conversion failure notification with its close (✕) button now cancels the debug launch and returns the toolbar to Ready, instead of leaving it stuck on "Converting debug symbols…" with a Cancel Build button that did nothing. Choose **Continue** on that notification to debug without symbols.
+- **LSP, member of a type from an indirectly used unit** — a member reached through a function result, property or field whose type is declared in a unit the calling unit doesn't itself use (e.g. `ExceptionLog7.CurrentEurekaLogOptions.ActivateEurekaLog`, where the options class lives in another EurekaLog unit) now resolves on hover, Go to Definition and code completion; previously nothing was offered and completion showed an *unresolved* placeholder.
+- **LSP, `uses` entries split by `{$IFDEF}`** — a `uses` clause with compiler directives between or inside its entries (as in EurekaLog's `ExceptionLog7.pas`) no longer loses or garbles unit names during indexing; the units of every branch are recorded, so the types they provide resolve. Symbol caches rebuild once on the next start.
+- **LSP, same-named types from different units** — a member accessed through a function result or property now resolves against the type copy visible to the unit declaring that function or property — as the compiler does — instead of whichever same-named type the calling unit could see. This also removes false *Unknown member* errors on `TMonitor` members inside `Vcl.Forms`, and a nonexistent member on an inline `var` typed via `Default(T)` is flagged again.
+- **LSP, inline `var` from an inherited member** — a variable initialized from an unqualified member of the enclosing class (e.g. `var o2 := Owner;`, an inherited `property Owner: TObject`) now infers that member's type, even when a unit in the `uses` clause declares an unrelated member of the same name (e.g. `TComponent.Owner` from `Classes`); previously the unrelated one could win and the variable took the wrong type.
+- **LSP, republished properties** — a property republished without a type (`property Style;`) on a class from another unit now finds its type through the ancestor, so hover, Go to Definition and completion work on members reached through it — including a protected ancestor property republished public.
+
 ## [1.1.14] - 2026-07-20
 
 ### Added
