@@ -2,6 +2,18 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.16] - 2026-07-23
+
+### Added
+- **Missing units, quick fix** — press **Ctrl+.** on an *Unknown type* or *Unknown identifier* to add the unit declaring it to the `uses` clause: **Add 'Vcl.Forms' to interface uses** or **Add 'Vcl.Dialogs' to implementation uses**, depending on where the symbol is used. When several units declare a symbol of that name (`TBitmap` in `Vcl.Graphics` and `FMX.Graphics`), one action per unit is offered, project units first and ordered by the project's unit scope names; `TList<Integer>` finds the generic `TList<T>`'s unit, a bare `TList` the non-generic one. Constants, enum values and global variables are covered too (`mrOk` → `System.UITypes`), and a section without a `uses` clause gets one created. Where a comment or a compiler directive sits at the end of the clause, no fix is offered and the clause is left for you to edit by hand.
+- **Settings, write launch.json** — a new **Debugger** section on the Settings page toggles whether Vallenta Studio writes or updates a launch configuration in `.vscode/launch.json` when you start debugging (on by default). Turn it off to leave your `launch.json` untouched; debugging still works.
+- **Debugger, symbol conversion timeout is now configurable** — the timeout for converting debug symbols now defaults to 5 minutes (up from a fixed 60 seconds) and can be changed with the new `vallenta.studio.symbolConverterTimeout` setting, giving large executables time to finish.
+
+### Fixed
+- **LSP, a bare type name shared with a generic** — a type reference with no type arguments (e.g. `TList` in `type MyList = TList`) no longer resolves to a same-named generic such as `TList<T>` when no non-generic `TList` is in scope; the compiler treats the two as distinct names, so hover, Go to Definition and completion no longer point at the wrong type. A generic type's own bare name used inside its own declaration (`function Clone: TMyStack` within `TMyStack<T>`) still resolves to itself.
+- **LSP, `MANAGED_RECORD` and `WEAKREF` conditionals** — `{$IFDEF MANAGED_RECORD}` and `{$IFDEF WEAKREF}` now follow the Delphi version's predefined compiler symbols.
+- **Debugger, timed-out symbol conversion** — a conversion that hit the timeout could leave a partial PDB behind, causing the next debug start to skip re-converting and run without symbols; the incomplete file is now discarded so conversion runs again.
+
 ## [1.1.15] - 2026-07-22
 
 ### Added
