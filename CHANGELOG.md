@@ -2,6 +2,27 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.17] - 2026-07-26
+
+### Added
+- **Insert GUID (Ctrl+Shift+G)** — press **Ctrl+Shift+G** in a Delphi file (or right-click → **Insert GUID**) to drop a fresh interface GUID — `['{…}']` — at the cursor.
+- **Apply Signature (Ctrl+Shift+Alt+C)** — press **Ctrl+Shift+Alt+C** (or **Ctrl+.** → **Apply signature to declaration** / **to implementation**) to apply the routine signature at the cursor to its counterpart: the declaration when you are in the body, the implementation header when you are on the declaration. Parameter defaults, visibility and `virtual`/`override` are preserved; overloads are paired rather than guessed, and you are asked when more than one counterpart fits. A counterpart that does not exist yet is created.
+- **Signature mismatch, hint** — a routine whose implementation header no longer matches its declaration is flagged as you type, instead of at the next build. On by default at information severity, configurable on the Settings page.
+
+### Changed
+- **Debugger, faster symbol conversion** — converting debug symbols is now several times faster on large executables. The generated PDB is unchanged, and the accompanying `.meta.json` is about a third smaller.
+
+### Fixed
+- **Debugger, macros in the Host Application path** — a Host Application or working directory written with a macro — an environment variable such as `$(FINE_ROOT)`, a Delphi *Environment Variables* override, or `$(BDS)` — now resolves when you debug a library or package, instead of failing with *Host application not found*. Output and search paths follow the same rules; previously only `$(Platform)` and `$(Config)` were expanded.
+- **Debugger, garbled function results in Variables** — stepping over a line that calls a function returning a `string`, `Variant`, interface or dynamic array listed those functions in the **Variables** view as *&lt;name&gt; returned*, showing nonsense text or *Error reading characters of string* — three such rows appeared for a single line like `IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))`. Delphi hands a result of that kind back through a hidden pointer rather than the register the debugger reads, which the generated debug symbols now describe correctly. Results that really are register-returned — numbers, Booleans, enums, object references — are unaffected.
+- **Editor colors, multiline strings** — Delphi keywords inside a Delphi 12+ multiline string (`record`, `begin`, `end`) are no longer highlighted as code by the block-nesting colors. A string whose content starts a line with a run of quotes, or whose delimiter uses an even number of quotes (`''''`), is no longer cut short either.
+- **Exception handler variables** — the variable an `on E: Exception do` handler declares is now a local like any other: code completion offers it and its members, and hover and Go to Definition work on it.
+- **Editor colors, exception handlers** — `on` is now highlighted as a keyword in `on E: Exception do`. A property named `On` stays an identifier.
+- **Editor colors, members named after a directive** — `E.Message` is colored as the property it is, instead of in the keyword color; `.Register`, `.Read`, `.Write` and `.Default` are likewise colored as the members they are.
+- **Structural highlight, exception handlers** — putting the cursor on an `on` highlights it together with its `do`, and the other way round, the way `for`, `while` and `with` already pair with theirs. A variable or property named `On` is left alone.
+- **Hover, units on the Delphi library path** — a third-party unit reached through the Delphi *Library Path* (e.g. `SuperObject`) no longer hovers as *Delphi RTL/VCL library*; it now reads *third-party library*, while Delphi's own RTL/VCL units keep the RTL label.
+- **LSP, conditional inside a type alias** — a type alias whose target is switched by a directive inside the declaration (`TFoo = {$IFDEF X} TThreadList {$ELSE} TList {$ENDIF};`) now resolves to the active branch from other units; previously the first branch always won unless the declaring unit was open in the editor.
+
 ## [1.1.16] - 2026-07-23
 
 ### Added
