@@ -2,6 +2,27 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.18] - 2026-07-27
+
+### Added
+- **Parameter hints** — typing a call's `(` or `,` now shows the routine's parameters, with the one you are filling in in bold. Every overload is listed — step through them with ↑/↓, and the one matching the arguments you have typed so far is preselected. Methods, constructors, `inherited` and calls inside a `with` block are covered; **Ctrl+Shift+Space** brings the hint back at any time.
+
+### Added
+- **Go to Definition switches between declaration and implementation** — Ctrl+Click or F12 on a routine's own name now jumps to its counterpart: from the declaration — in the `interface` section or inside a class — to the body, and from the body header back to the declaration. Overloads land on the matching signature. Clicking the class part of `TFoo.Bar` still goes to the class, and every other position — call sites, parameter types, variables — keeps following the **Go to Definition target** setting.
+
+### Changed
+- **LSP, faster diagnostics on large units** — the unused-variable analysis is many times faster on large `with`-heavy units (Vcl.Forms: 36 s → ~1 s), and errors and warnings now appear as soon as they are found instead of waiting for the slower hint analyzers to finish.
+
+### Fixed
+- **Missing units, quick fix on a qualified type** — **Ctrl+.** on an *Unknown type* written as `TOuter.TNested` now offers the unit declaring `TOuter`, instead of no fix at all. A unit-qualified name (`Vcl.Forms.TForm`) is still not covered.
+- **Editor colors, escaped quote at the end of a line** — a line ending in an escaped quote (`quotechar := ''''`) no longer colors the rest of the unit as one long string. 
+- **LSP, `Destroy` on a class from another unit** — `LVar.Destroy` no longer reports *Unknown member* when the class is declared in a different unit; it resolves, hovers and appears in code completion like any other inherited member. Symbol caches are rebuilt once on the first start after updating.
+- **LSP, members through a unit-qualified type alias** — an alias whose target names its unit (`PExceptionRecord = System.PExceptionRecord`) now resolves through to the type it names, so members reached through it no longer report *Unknown member*.
+- **LSP, `Create` on a dynamic array** — a dynamic array's implicit constructor (`TBytes.Create($EF, $BB, $BF)`) no longer reports *Unknown member*. Covers `array of T`, `packed array of T` and `TArray<T>`; a fixed-length array still has none.
+- **LSP, signature mismatch on aliased parameter types** — a routine declared with one type name and implemented with an alias of it (`PAnsiChar` against `MarshaledAString`, or your own `TMyChar = PAnsiChar`) no longer reports *Signature differs from the declaration*.
+- **LSP, signature mismatch on class constructors and destructors** — a `class destructor Destroy` declared beside an instance `destructor Destroy` no longer reports *Signature differs from the declaration*, and **Apply Signature** no longer offers to rewrite the one into the other.
+- **LSP, unused-parameter hint on procedural types** — the parameters of a procedural type (`TCompareProc = function(const S1, S2: string): Boolean`) are no longer flagged as *never used*; they name the type's call shape and have no body to be used in.
+
 ## [1.1.17] - 2026-07-26
 
 ### Added
