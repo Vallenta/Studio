@@ -2,6 +2,23 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.19] - 2026-07-30
+
+### Added
+- **Missing units, choose where the quick fix adds them** — a new **Add Missing Unit To** setting (settings page → *Editor Options*, or `vallenta.studio.lsp.semanticValidation.addMissingUnitTarget`) can put a unit used in the implementation part into the `interface` uses clause instead. The implementation variant stays available as a second **Ctrl+.** action. Default is unchanged: the usage location decides.
+- **Debugger, switch off local variables** — a new **Evaluate local variables** checkbox in the **Delphi Debug** view (Run and Debug sidebar, formerly *Delphi Exception Filters*) lets you switch off the evaluation of locals: the **Variables** view stays empty and nothing is evaluated while stepping — useful when large object graphs make stepping slow. Hover and Watch still evaluate on demand, and toggling takes effect immediately, even mid-session. Also available as the `vallenta.studio.debug.evaluateLocals` setting.
+- **Debugger, Watch ignores identifier case** — **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals; symbols need to be regenerated once (delete the `.pdb` next to your executable or rebuild). Can be switched off with `vallenta.studio.debug.caseInsensitiveIdentifiers`.
+
+### Fixed
+- **Debugger, Win64 variables reported as optimized away** — in an optimized Win64 build, a local or parameter the compiler keeps in a register showed *Variable is optimized away and not available.* in **Variables** and **Watch** instead of its value. Affected `Integer`, `Boolean`, `Char`, enums and other values smaller than a pointer; object references, strings and `Int64` were unaffected, as was Win32 throughout.
+- **Debugger, Watch ignores identifier case** — **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals.
+- **LSP, array of an inline record** — a declaration such as `array [0..2] of record … end` no longer breaks the unit it appears in. Everything below it was lost, leaving the rest of the unit without code completion, hover, Go to Definition and document outline. `array of record … end` and `file of record … end` are covered too.
+- **LSP, `AnsiString` with a named codepage** — a codepage written as a constant, `type TAscii = type AnsiString(CP_ASCII)`, no longer breaks the unit it appears in the same way; only a numeric codepage (`AnsiString(20127)`) parsed before. A qualified name such as `System.CP_UTF8` is covered as well.
+- **LSP, parameter hints with a long routine name** — the hint popup no longer scrolls sideways when the class and method name are long; the signature wraps onto the next line instead.
+- **LSP, types declared inside a routine** — a type declared in a procedure's local `type` section now shadows same-named types elsewhere, the way the compiler scopes it. FMX.Layouts' local `TState` reported *Unknown member* on every value because a same-named type nested in another class won the lookup. Fields, globals and parameters keep the type their own declaring scope sees.
+- **LSP, `&`-escaped members** — `TState.&End` now resolves like its unescaped spelling; the `&` is ignored when matching the member name.
+- **Editor, reserved words as member names** — a reserved word after a dot (`TState.End`) now parses without the `&` escape, as the compiler reads it; FMX.Layouts and several other RTL units no longer show syntax errors. A dangling `obj.` before `end` or `else` while typing is still reported as incomplete member access.
+
 ## [1.1.18] - 2026-07-27
 
 ### Added
