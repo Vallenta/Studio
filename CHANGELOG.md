@@ -2,6 +2,26 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.20] - 2026-08-02
+
+### Added
+- **Attach to a running process** — debug a Delphi program that is already running instead of starting it from the editor. Reach it from the arrow beside the **Debug** button on the build toolbar, from the command palette (**Attach to Process**), or with an `attach` entry in `launch.json`. The process list puts your projects' running executables first and shows each one's platform and whether its debug symbols are ready; system processes stay hidden until you switch them on in the list's title bar. Once attached you get the same session as a normal launch — breakpoints, stepping, call stacks, locals, and the Watch evaluator with property getters and interface chains. Stopping the session detaches and leaves the program running. You can attach with no project open, as long as the `.pdb` sits beside the executable.
+- **Attach, targets that cannot be debugged are flagged before you pick them** — debug symbols cannot be added to a program that is already running, so a program that was never converted is marked in the list and warned about before attaching, with the option to attach anyway. A program running elevated is marked as well, together with the note that VS Code has to run as administrator to attach to it.
+- **Keyboard mappings editor** — a new **Keyboard Mappings** card on the settings page opens an editor for the extension's shortcuts, grouped by function. **Set to Delphi defaults** applies the Delphi IDE keys — F9 Run, F5 Toggle Breakpoint, F8 Step Over, F7 Trace Into, Ctrl+F9 Compile, Shift+F9 Build — covering the IDE's Run and Project menus. Click a shortcut to record a new one; conflicts are flagged as you type. **Apply only in Delphi context** keeps the keys to Pascal files, forms, the Vallenta Studio sidebar and Delphi debug sessions, so your other projects keep the standard VS Code behaviour. A fresh installation gets the Delphi keymap automatically; updating never changes keys you already have.
+- **Rename Unit and Remove Unit from Project in the command palette** — both were reachable only from the Source Files menu, so neither could be given a keyboard shortcut. They now act on the open unit when invoked without one.
+
+### Changed
+- **Build toolbar shows your actual shortcuts** — the Run, Debug, Build, Rebuild and Clean tooltips read the keys you have mapped instead of fixed text; Build, Rebuild and Clean showed none at all before.
+- **Convert Debug Symbols, running target** — converting the symbols of a program that is currently running now stops with a note to close it first, instead of leaving the program and its symbols out of step.
+
+### Fixed
+- **LSP, server stopped shortly after a project finished indexing** — the language server could shut down without notice and did not restart, leaving code completion, hover, Go to Definition and diagnostics dead until the window was reloaded. Most likely when a file was edited while a large project was still indexing.
+- **LSP, missing editor colors while indexing** — semantic highlighting could silently fail for a file that was open while a project was still indexing, leaving it in the plain editor colors until it was reopened.
+- **LSP, hover on an overloaded routine** — hovering the declaration of a second or later overload showed the first overload instead of its own signature. Affected routine overloads in an open file; class method overloads were unaffected.
+- **LSP, comment inside a declaration shown in hover** — a comment written inside a declaration (`TEnum = (Enum1, // note`) no longer appears in the hover popup. Covers `//`, `{…}` and `(*…*)` in types, routines, properties, fields, variables and constants; symbol caches are rebuilt once on the first start after updating.
+- **LSP, loop variable of a `for … in` loop** — a variable declared in the loop itself (`for var item in dic.Values do`) had no type, so code completion, hover and Go to Definition did nothing on it. Covers generic containers (`TList<T>`, `TObjectList<T>`, `TDictionary<K,V>.Values`), dynamic arrays, sets, strings and any type with a `GetEnumerator`. A collection put into a variable first (`var vc := dic.Values;`) is not covered yet.
+- **Editor colors, comment inside brackets** — a comment written inside an array index (`LArray[0 {note}]`) is colored as a comment again, instead of taking the attribute color.
+
 ## [1.1.19] - 2026-07-30
 
 ### Added
