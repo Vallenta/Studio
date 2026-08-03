@@ -2,6 +2,21 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.21] - 2026-08-03
+
+### Changed
+- **LSP, crash notification** — the notification shown when the language server stops unexpectedly has a new **Show LSP Log** button that opens the Output panel on the *Vallenta Studio LSP* channel.
+
+### Fixed
+- **LSP, class completion in a nested class** — **Ctrl+Shift+C** on a method of a class nested inside another type now writes the full path (`function TIntList.TTest.GetCurrent`). It named only the inner class before, so the generated body did not compile. A nested method that is already implemented is recognised again as well, so a second press no longer adds a duplicate body. **Apply Signature** writes the same header. Covers types nested in classes, records and generics, at any depth.
+- **LSP, labels reported as a syntax error** — a label inside a `case` branch (`tt1:` followed by `myLabel:`) no longer reports *Syntax error*. Numeric labels (`label 10;` … `10:` … `goto 10`) are recognised as well; they were rejected everywhere before.
+- **LSP, values of a `set of (…)` declared in a class** — a nested type such as `test = set of (test1, test2, test3)` no longer reports *Unknown identifier* on its values, in the declaring unit and in any unit that uses it. The same declaration outside a class was unaffected.
+- **LSP, names in a file that is not saved as UTF-8** — a class or type whose name contains non-English characters now resolves in a unit stored in a legacy encoding (GBK, Shift-JIS, a Windows ANSI codepage). Go to Definition, hover and code completion found nothing for those names before, and hover spelled them garbled. A file without a byte order mark is now read the way the Delphi compiler reads it, in the system codepage for non-Unicode programs; symbol caches are rebuilt once on the first start after updating.
+- **LSP, names written with their full unit prefix** — hover, Go to Definition, code completion and parameter hints work again on a name qualified with its unit (`System.Classes.TStringList`, `System.Types.TDuplicates`). They found nothing whenever the leading part was a unit in its own right, which covers everything under `System`.
+- **LSP, an enum value of another unit reported as an unknown type** — a declaration naming an enum value through its type and unit (`System.Types.TDuplicates.dupIgnore`, the spelling System.Classes itself uses) no longer reports *Unknown type*.
+- **Missing units, quick fix on a unit-qualified name** — **Ctrl+.** on an *Unknown type* that already names its unit no longer offers unrelated units to add. `System.Types.TDuplicates.dupIgnore` suggested `Word2000` and `WordXP`, which happen to declare a type called `System`.
+- **Build, editor focus** — the build output panel no longer takes the keyboard focus when a build ends, so the caret stays in the editor after **Ctrl+F9** / **Shift+F9**. The panel is still revealed.
+
 ## [1.1.20] - 2026-08-02
 
 ### Added
