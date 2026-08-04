@@ -2,7 +2,7 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.1.21] - 2026-08-03
+## [1.1.21] - 2026-08-04
 
 ### Changed
 - **LSP, crash notification** — the notification shown when the language server stops unexpectedly has a new **Show LSP Log** button that opens the Output panel on the *Vallenta Studio LSP* channel.
@@ -16,6 +16,9 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **LSP, an enum value of another unit reported as an unknown type** — a declaration naming an enum value through its type and unit (`System.Types.TDuplicates.dupIgnore`, the spelling System.Classes itself uses) no longer reports *Unknown type*.
 - **Missing units, quick fix on a unit-qualified name** — **Ctrl+.** on an *Unknown type* that already names its unit no longer offers unrelated units to add. `System.Types.TDuplicates.dupIgnore` suggested `Word2000` and `WordXP`, which happen to declare a type called `System`.
 - **Build, editor focus** — the build output panel no longer takes the keyboard focus when a build ends, so the caret stays in the editor after **Ctrl+F9** / **Shift+F9**. The panel is still revealed.
+- **Debugger, one very large class made variables undefined across the project** — a single class with a few thousand fields or methods (a large form, a big generated class) corrupted the debug symbols from that class on, so the damage was not limited to that class: breakpoints and stepping kept working, but **Watch**, hover and **Variables** reported *identifier is undefined* for locals, `Self` and object fields, also in units unrelated to the class — while plain numeric variables still resolved. Classes of any size are written correctly now; regenerate the symbols once (delete the `.pdb` next to your executable or rebuild).
+- **Debugger, fields missing on very large classes** — a class with several thousand fields showed only the first part of them in the debugger; all fields are visible again. Fields located beyond 32 KB inside a large object and enum values of 32768 and above (`…_FORCE_DWORD` style) also showed wrong values and cut off the members after them.
+- **Debugger, symbol files of very large projects** — the generated `.pdb` of a project with far over a million types could make symbol tools crash when looking up types; the affected lookup table is now written correctly.
 
 ## [1.1.20] - 2026-08-02
 
