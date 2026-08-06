@@ -2,6 +2,20 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.1.22] - 2026-08-05
+
+### Added
+- **New Delphi Project** — create a project without the Delphi IDE: VCL Forms Application, FMX Application, Console Application, Empty Program, DLL or Package. The wizard asks for the name, the location, the main form unit and its form class, and the platforms (Win32 / Win64), and lists the files it will write; a file that already exists is flagged there and never overwritten. The finished project is added to the Projects list, made active, and its main unit opened. Reach it from the new-project button in the Projects sidebar, the command palette, or the Explorer context menu.
+- **Save modified files before a build** — a build now saves every modified file before it starts, so the **Ctrl+F9** / **Shift+F9** shortcuts and the palette commands compile what is on screen; only the toolbar buttons and F5 / Ctrl+F5 did so before. On by default, switchable under **Build** on the settings page.
+- **Go to Interface Section / Go to Implementation Section** — two commands that jump the caret to the unit's `interface` or `implementation` keyword. They ship without a key; assign one in the **Keyboard Mappings** editor on the settings page.
+- **Open File in Delphi IDE** — a new command opens the current file in the Delphi IDE, for editing a form in the visual designer. A `.dfm` / `.fmx` opens its unit, so the form is one **F12** away inside Delphi. A running IDE takes the file over and comes to the front, instead of a second instance starting. Ships without a key; assign one in the **Keyboard Mappings** editor on the settings page.
+
+### Fixed
+- **Toggle Form / Source on a file with an upper-case extension** — **F12** and the *Open …* link at the top of the file now find the companion of a unit written as `MainForm.PAS` or a form written as `MainForm.DFM`; neither found anything before.
+- **LSP, loop variable of a `for … in` loop** — the variable now gets its type in three cases that were still missing: an element that is a simple type (`list: TList<Integer>`), a container reached through a type alias (`TInt64Set = THashSet<Int64>`), and a container held in a field. It could also come out as the *wrong* type — with `System.SysUtils` in the uses clause the variable was typed `Char`, and an enumerator of the same name declared in another unit won over the container's own. Covers `TList<T>`, `TObjectList<T>`, `THashSet<T>`, `TStack<T>`, `TQueue<T>`, `TDictionary<K,V>` and `TOrderedDictionary<K,V>`.
+- **Generated project files, targeted platforms** — the platform list written into a `.dproj` generated for a `.dpr` / `.dpk` was wrong beyond Win32, Win64 and Android: macOS ARM64 and the iOS ARM simulator were swapped, and Linux, macOS Intel, Win64 Modern and Windows ARM64EC were not recorded at all. Windows-only projects were unaffected.
+- **Convert to UTF-8 with BOM, applied twice** — the ANSI warning and its popup now disappear the moment the file is converted. The action stayed clickable before, and a second click converted the already converted file again and garbled every non-English character in it. Converting a file that is not ANSI is refused now, and unsaved changes are written before the conversion instead of being discarded.
+
 ## [1.1.21] - 2026-08-04
 
 ### Changed
