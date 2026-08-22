@@ -1,6 +1,25 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
+
+## [1.2.1] - 2026-08-17
+
+### Added
+- **Build Output, jump to the first error** — the **Errors** tab has a new **Jump to error** checkbox: with it on, a failed build opens the first error's source file at its line, exactly as clicking that entry does. Off by default, and also settable as `vallenta.studio.build.jumpToFirstError`.
+- **Code completion for Delphi's intrinsic routines** — `Length`, `SetLength`, `Inc`, `Assigned`, `SizeOf` and the rest of the compiler's built-in routines are now offered in code completion, ranked alongside your own unit's symbols. None of them appeared before, since the compiler supplies them and there is no declaration anywhere in `System.pas` to index.
+
+### Fixed
+- **LSP, the compiler-only math routines reported as unknown** — `BuiltInSqrt`, `BuiltInSin`, `BuiltInLog2` and the rest of the `BuiltIn…` family, plus `MemoryBarrier` and `MulDivInt64`, no longer report *Unknown identifier*, and hover shows a signature for them.
+- **LSP, `raise` without a trailing semicolon in an `except … else` branch** — an `else raise` written without a `;` before `end` no longer reports *';' expected but '.' found* at the bottom of the unit. The semicolon is optional there, and `else raise EMyError.Create('…')` was affected the same way.
+- **LSP, members a generic type inherits from its same-named base** — `Reset` and `MoveNext` on a parameter typed `IEnumerator<string>` no longer report *Unknown member*. `IEnumerator<T>` inherits both from the plain `IEnumerator`, and a generic sharing its base's name lost everything it inherited; generic classes written the same way are covered too.
+- **LSP, a nested type named through its owner below `implementation`** — a parameter, variable or field typed `TOuter.TNested` no longer reports *Unknown type* when `TOuter` is declared in the implementation section. The same declaration in the `interface` section was unaffected. Nested records, classes and pointer types are all covered.
+- **LSP, a member reached through a nested pointer type** — a variable typed `TOuter.PNested`, where the nested type points to a record, now offers the record's fields after the dot instead of reporting *Unknown member*. Both spellings are covered, the explicit `Rec^.Field` and the implicit `Rec.Field`.
+- **LSP, a class helper member with the same name as one on the helped class** — `Obj.Value` now resolves to the helper's `Value` rather than the class's own, so a chain such as `Obj.Value.DoSomething` no longer reports *Unknown member*. An in-scope helper is searched first, exactly as the compiler does; a helper member marked `overload` still merges with the class's instead of hiding it.
+- **LSP, protected members of the helped class inside a helper method** — a `protected` or `strict protected` field, property or method of the helped class no longer reports *Unknown identifier* in a class or record helper's method body. `private` members stay out of reach, as in the compiler.
+- **LSP, an inline variable assigned a local constant** — `var V := MyConst;`, where `MyConst` is declared in the routine's own `const` section without a type, now shows the constant's type on hover instead of showing no type at all. A constant declared in the unit's `const` section, or one written with an explicit type, was unaffected.
+- **LSP, a search path built from your own MSBuild property** — a `DCC_UnitSearchPath` entry written as `$(MyLibraryPaths)`, declared in the `.dproj` or in an imported `.optset`, now expands to the real directories. Units found only on those paths were unknown to the editor.
+- **MCP server port applied to every workspace** — a fixed port set on the **MCP Server** card is now saved to the current workspace instead of your user settings. Each window binds its own port, so one shared value let only the first window start.
+- **Build toolbar, emptying a field in Configuration Settings** — clearing **Output Directory**, **Host Application** or **Run Parameters** and pressing **Save** now removes the value from the `.dproj`, instead of reporting *No changes were needed* and keeping it. Changing a value to a different one always worked. A value inherited from the configuration level is cleared for the selected platform only, and an **Output Directory** that is not set now shows as empty rather than as `.\`.
 
 ## [1.2.0] - 2026-08-15
 
