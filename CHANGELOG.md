@@ -2,6 +2,27 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.2.2] - 2026-08-28
+
+### Added
+- **Convert Debug Symbols without picking the executable** — the active project's symbols now convert straight from the build toolbar's Debug menu and from the command palette, with no file dialog. **Convert Debug Symbols After Build**, in the new **Vallenta Studio** section of the project options editor, runs the same conversion after every successful build of that configuration, so a Windows service or any other attach target has matching symbols before it starts.
+- **Go to Line Number in the Keyboard Mappings editor** — the editor now lists **Go to Line Number**, and **Set to Delphi defaults** puts it on Delphi's **Alt+G**. An existing keymap keeps its keys, so click **Set to Delphi defaults** once to pick the new shortcut up.
+
+### Fixed
+- **LSP, the compiler-injected intrinsics reported as unknown** — `CompilerVersion`, `AtomicCmpExchange128`, `VarArgStart`, `VarArgEnd`, `VarArgGetValue` and `VarArgCopy` no longer report *Unknown identifier*, and hover shows a signature for them. The compiler supplies all six, so `System.pas` carries them only inside comments or not at all and there was no declaration anywhere to index.
+- **LSP, a declaration under `{$IFDEF}` in a heavily conditional unit reported as unknown** — a type such as `TVarArgList` from `System.pas` no longer reports *Unknown type*. The `{$IFDEF}` branches your target actually compiles are now always indexed; a unit with several hundred conditional blocks could previously have the branch you build left out.
+- **LSP, `varargs` on a procedural-type variable or field reported as a syntax error** — a declaration such as `curl_formadd` in `System.Curl.pas`, written as `function (…): CURLFORMcode; cdecl varargs;`, no longer reports *Syntax error near 'varargs'*. Variables and record fields were affected in every spelling, with or without a semicolon between the calling convention and `varargs`.
+- **LSP, a member reached through the result of calling a procedural-type value** — `FLibrary.FFromObject(…).AsType<T>` in `System.JSON.pas` no longer reports *Unknown member* on `AsType`. Every field, variable or parameter holding a callable was affected, and nothing after the call resolved — no hover, no completion, no Go to Definition.
+- **LSP, a parameter of an anonymous method read from a routine nested inside it** — `Path` in `System.IOUtils.pas`, read inside the `StuffPath` function nested in `TDirectory.Copy`'s anonymous method, no longer reports *Unknown identifier*. The parameters of every anonymous method were affected wherever a nested routine read them, and they had no hover and no Go to Definition there.
+- **LSP, an inline variable reusing a name from an earlier block** — `var list := TObjectList.Create;` declared in an `else` branch no longer reports *Unknown member* on `list.FindInstanceOf(nil)` when the `then` branch declares its own `list := TList.Create;`. Members were checked against the routine's first declaration of the name, and hover and code completion after the dot showed the wrong type wherever a later block reused a name.
+- **LSP, Find All References missing a member reached through another unit's variable** — `G_Obj.C1`, where `G_Obj: TTestObj` is declared in a unit the calling unit uses while `TTestObj` itself lives in a unit it does not, is now found. Every call that reached the member through a value declared in an intermediate unit was missing from the results.
+- **LSP, `Self` inside a helper method** — `Self.SomeMethod`, calling a method of the helped type from inside a class or record helper method, no longer reports *Unknown member* on the helper's own type. The bare `SomeMethod` already resolved; the `Self`-qualified form had no hover, no code completion and no Go to Definition there.
+- **LSP, a helper declared for a unit-qualified type** — `MyRec.MyHelperMethod` no longer reports *Unknown member* on `TMyRecord` when the helper is declared as `record helper for MyUnit.TMyRecord`, with the unit name in front of the helped type. Every helper whose helped type was written that way was ignored entirely, and its members were missing from hover and code completion as well.
+- **LSP, Find All References on a member of a type declared below `implementation`** — `TestProc1` of a class declared in the implementation section now lists its calls instead of reporting no references. Every member of a type declared below `implementation` was affected, including calls in the same file.
+- **LSP, Delphi 13's `not in` operator reported as a syntax error** — a condition such as `if MyValue not in MySet then` no longer reports *Missing token*. Every use of the operator was affected, and the left operand resolved as a member access — no hover, no completion, no Go to Definition on it.
+- **LSP, a window opened while another window is still indexing** — a window that starts while another one is still filling the shared symbol cache now picks the finished index up on its own. RTL types such as `TStringList` and inherited members such as `ClassName` stayed *Unknown* in that window until the language server was restarted.
+- **Debugger, 64-bit, a property whose getter is a virtual method** — a property such as `MyObject.Items` now shows its value when you expand **[Properties]**, instead of ending the debug session. On 64-bit targets these properties showed a wrong value or terminated the debugged program.
+
 ## [1.2.1] - 2026-08-17
 
 ### Added
