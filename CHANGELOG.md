@@ -2,6 +2,35 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+
+## [1.2.3] - 2026-08-29
+
+### Added
+- **The hover card on the highlighted completion entry** — the details pane beside the completion list now shows what hovering the symbol in source shows: signature, visibility, declaring file, inherited-from, overloads and any `///` documentation. Highlighting an entry previously showed a bare signature line, and nothing at all for a symbol without documentation; press **Ctrl+Space** with the list open to expand the pane the first time.
+- **XML documentation comments in hover, code completion and parameter hints** — a `///` block written above a declaration now shows in the hover popup under the signature, on the highlighted item in code completion, and in the parameter hint while you type an argument list. The descriptions Embarcadero ships across the RTL, VCL and FMX, and any your own code carries, appeared nowhere before; `vallenta.studio.documentation.enabled` turns the display off.
+- **Debugger, expressions in Delphi syntax (beta)** — Watch, hover, the Debug Console and breakpoint conditions now read Delphi expressions such as `Counter.Value = 7` and `s = 'text'`. C++ syntax was the only form accepted, and `x == 5` and `->` were required throughout; the evaluator is on by default, and `vallenta.studio.debug.delphiExpressionEvaluator` turns it off.
+- **Debugger, the Variables view in Delphi form** — every value in the Variables view now reads the way Delphi writes it. The view showed the underlying C++ debugger's spelling, such as `L"cherry"` for a string.
+- **Debugger, an interface variable names the class behind it** — a variable declared as an interface now shows the class implementing it and expands into that object. Such a variable showed a bare reference, and reaching the object needed a cast typed into the Watch window.
+- **Debugger, an object's fields under [Fields]** — expanding an object now offers a **[Fields]** entry listing its own and inherited fields, beside **[Properties]**. Those fields sat under the C++ debugger's **[Raw View]** entry.
+- **Debugger, a Watch call the evaluator previously declined** — Watch now runs a call such as `Settings.FindByName('alpha')` and shows what it returns. A call whose argument or result was a string, a floating-point value or a record, or that took more than four arguments, reported that the evaluator would not run it.
+- **Debugger, a property that reads a field directly** — a property such as `Config.Default` now shows under **[Properties]** and reads in Watch. A property declared as `read FValue` appeared nowhere in the Variables view and reported that its storage was not described.
+
+### Fixed
+- **LSP, the repeated `-- protected --` header in code completion** — the member list after a dot now carries a single `-- protected --` header. A class mixing `strict protected` with `protected` members showed one header per member, pushing the members below a block of identical rows.
+- **LSP, code completion after a dereferenced pointer** — the member list now opens on the dot behind a dereferenced pointer, such as `MyRecPtr^.`. Every pointer variable was affected, and the dot opened no list at all.
+- **LSP, Rename Symbol changing only a name's case** — **F2** on an identifier, changing only its case such as `AValue` to `aValue`, now rewrites every occurrence. Every identifier and unit name was affected, and the rename dialog closed leaving the source unchanged.
+- **LSP, a generic method declared with a space before its type parameter list** — a call such as `MyObject.Process<Integer>` no longer reports *Unknown member* when the method is declared as `procedure Process <T>;`. Every generic method, function and class method written that way was affected, whatever the spacing at the call site.
+- **LSP, a helper declared in an indirectly used unit** — `MyRecord.Field.AsText` no longer reports *Unknown member* when the helper's unit is named in the interface `uses` clause of a used unit rather than in the calling unit's own. Every class and record helper reached that way was ignored, and its members were missing from hover, code completion and Go to Definition as well.
+- **LSP, the previous project's units reported as unknown identifiers after a project switch** — making another project active now leaves the units of the previous one alone. Every unit still open from the previous project was re-reported against the new project's settings, filling the Problems panel with *Unknown identifier* and *Unknown type* entries for it.
+- **Problems panel, the previous project's encoding warnings** — the ANSI-encoding warnings now follow the active project, and the warning on a file outside it goes when its editor closes. Warnings for the units of a project you switched away from, and for files whose tab was closed minutes earlier, stayed in the panel.
+- **Build, the compiler error hidden behind *Could not compile used unit*** — a failing build now lists the error that actually stopped the compiler, such as `E2511 Type parameter 'T' must be a class type`, and points it at the unit carrying it. The Errors tab showed only `F2063` against `CodeGear.Delphi.Targets`, with the real error missing.
+- **Debugger, 64-bit, a local showing a neighbouring variable's value** — a local in a routine that keeps floating-point values in registers now shows its own value. Every local in such a routine showed the contents of a neighbouring one.
+- **Debugger, a Currency value shown as a scaled integer** — a `Currency` local now shows `12.34`, typed `Currency`. The value showed as `123400` and the type as `Int64`.
+- **Editor colors, a class's nested type section** — a header such as `private type` now takes one color, the one the theme gives every other reserved word. Pascal files on the Dark 2026 and Light 2026 themes were affected.
+- **Editor colors, the word operators** — `and`, `or`, `not` and the other word operators now take the reserved-word color, and `Self` and `Result` take the language-variable color. Those words took the color of a number on every theme.
+- **Editor colors, a unit's section headers** — `initialization` and `finalization` now take the color `implementation` and `interface` take. They took the color of a declaration section on every theme.
+
+
 ## [1.2.2] - 2026-08-28
 
 ### Added
