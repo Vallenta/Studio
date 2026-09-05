@@ -41,6 +41,7 @@ All Free features, plus:
 - **Project Options Editor** - Edit project configuration directly within VS Code, including per-configuration build settings, per-configuration/platform debugger environment variables, and a visual editor for referenced option sets (`.optset`)
 - **Copy Variable as Tree** - Right-click in the debugger **Variables** or **Watch** view to copy the expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes)
 - **Group Builds** - Build all projects in a project group at once
+- **Linux Remote Debugging** - Build `Linux64` on Windows, deploy to a Linux machine and debug it there with breakpoints, stepping and watch evaluation. Machines are paired once and referenced by name; per build configuration you choose the target, the working directory and the files deployed alongside the program
 
 ## Requirements
 
@@ -118,6 +119,76 @@ Use `Ctrl+F5` to run without debugging.
 - Copy expanded variable trees to the clipboard via right-click in Variables / Watch
 - **Delphi exception handling** — the debugger automatically breaks on raised Delphi exceptions (identified by the `0x0EEDFADE` exception code), reads the exception class name and message, and unwinds the Delphi exception stack so the call stack shows the full path back to the `raise` site merged with the native C++ frames. Enabled by default via the *All Delphi Exceptions* breakpoint filter in the **Breakpoints** view; toggle *All Exceptions* there to also break on non-Delphi (SEH) exceptions
 
+### Linux Development (Pro)
+
+A project with the `Linux64` platform is compiled on Windows by Delphi's Linux compiler, then
+deployed to and debugged on a Linux machine. Three things are set up once; after that `F5`
+behaves as it does on Windows.
+
+**1. Run the agent on the Linux machine.** Remote debugging is driven by **VallentaAgent**, one
+static binary that needs no root and installs nothing outside the user's home directory:
+
+```
+curl -fsSL https://github.com/vallenta/VallentaAgent/releases/latest/download/install.sh | sh
+```
+
+*Vallenta Studio: Copy Linux Agent Install Command* puts that line on the clipboard. The agent
+prints a pairing token when it starts. `lldb-server` is not bundled — the distribution supplies
+it, and the agent names the package to install for the distribution it detects.
+
+**2. Register the machine.** *Vallenta Studio: Add Linux Target* takes the host, port and printed
+token and pairs once. Registered machines are listed in the **Linux Targets** panel with what each
+one reported: agent version, `lldb-server` version, distribution and glibc. Targets belong to the
+workspace and are referenced by name, so no host names or ports are written into project files.
+
+**3. Provide a sysroot.** A `Linux64` link needs the target distribution's libraries. The **Linux
+Distributions** panel downloads and prepares them per distribution, and the target's distribution
+decides which one a build links against. A project that carries its own `DCC_SysLibRoot`, or a
+machine with a registered Delphi Linux SDK, uses that instead.
+
+The debug engine is fetched on demand: the extension matches `lldb-dap` to the `lldb-server`
+version the target reports, so both ends speak the same protocol.
+
+#### Deployment Options
+
+Open **Deployment Options** from a project's context menu in the Projects view. The editor is
+scoped by build configuration: pick a configuration on the left, and the settings on the right
+apply to it. *All configurations* holds the values every configuration inherits, and a
+configuration that sets nothing of its own shows the inherited value greyed out.
+
+Per configuration you set:
+
+- **Linux target** — the machine to deploy to. It also supplies the sysroot the `Linux64` build
+  links against, so changing it changes what the project compiles against. The indicator beside
+  it shows whether the target answered; the check runs when you open the editor, switch
+  configuration or pick a target.
+- **Working directory** — where the program is placed and run, relative to the agent's scratch
+  root. It defaults to the project name.
+- **Deployed files** — files copied to the target before the program starts. Add single files, a
+  folder, or a pattern such as `data/**`; a folder or pattern keeps its structure relative to the
+  project directory. Per entry you can set a subfolder, a different remote name, whether an
+  existing file is overwritten, and whether the file is made executable.
+
+The **Live Target View** at the bottom shows the resulting layout on the target, including the
+program itself, which the debugger uploads without an entry. A file that cannot be deployed — a
+path matching nothing, or one outside the project directory — is reported there and stops the
+session before the target is contacted.
+
+Projects that already carry Delphi's own deployment entries can take them over with **Import from
+Delphi**. The import is one-time and additive, covers the `Linux64` entries only, and reports
+anything it skipped.
+
+#### Debugging on Linux
+
+`F5` builds the project if needed, deploys it, and starts the session. Breakpoints, stepping,
+call stacks and variable inspection work as they do on Windows, including Delphi strings, dynamic
+arrays, sets, records, classes and interfaces. Delphi exceptions break at the raise site with the
+class name and message. Program output goes to an integrated terminal, so a program that reads
+from standard input can be driven from it.
+
+Source files stay on Windows — nothing but the program and the files you list is copied to the
+target.
+
 ### Code Intelligence
 
 The built-in LSP server starts automatically when a project is activated and provides:
@@ -151,6 +222,17 @@ The built-in LSP server starts automatically when a project is activated and pro
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `vallenta.studio.debug.enableNatvis` | boolean | `true` | Generate natvis visualizer for Delphi types during debugging |
+
+### Linux (Pro)
+
+Targets and distributions are managed by their panels rather than edited by hand.
+
+| Setting | Type | Scope | Description |
+|---------|------|-------|-------------|
+| `vallenta.studio.linux.targets` | array | workspace | Paired Linux machines, referenced by name from a project |
+| `vallenta.studio.linux.distros` | array | machine | Sysroots a `Linux64` build can link against |
+| `vallenta.studio.linux.lldbDapPath` | string | — | Use a specific `lldb-dap` instead of the one matched to the target |
+| `vallenta.studio.linux.trace` | boolean | — | Log the Linux debug adapter's traffic to the *Delphi Linux Debug* output channel |
 
 ### Editor
 
@@ -187,6 +269,12 @@ The built-in LSP server starts automatically when a project is activated and pro
 | `Vallenta Studio: Open Recent Project...` | Open a recently used project |
 | `Vallenta Studio: New Delphi-File...` | Create a new Pascal unit file |
 | `Vallenta Studio: Project Options...` | Open project configuration (Pro) |
+| `Vallenta Studio: Deployment Options` | Open the Linux deployment editor for the active project (Pro) |
+| `Vallenta Studio: Add Linux Target` | Pair a Linux machine running VallentaAgent (Pro) |
+| `Vallenta Studio: Linux Targets` | Manage the paired Linux machines (Pro) |
+| `Vallenta Studio: Linux Distributions` | Manage the sysroots a `Linux64` build links against (Pro) |
+| `Vallenta Studio: Copy Linux Agent Install Command` | Copy the agent install command to the clipboard (Pro) |
+| `Vallenta Studio: Download Linux Debug Engine` | Fetch the `lldb-dap` matching a target's `lldb-server` (Pro) |
 | `Vallenta Studio: Build` | Build the active project |
 | `Vallenta Studio: Clean` | Clean the active project |
 | `Vallenta Studio: Rebuild` | Rebuild the active project |
@@ -233,7 +321,7 @@ The built-in LSP server starts automatically when a project is activated and pro
 ## Known Limitations
 
 - Form Designer is not supported — .dfm and .fmx files open as text
-- Windows only — the extension requires a local Delphi installation on Windows. Cross-compilation to other platforms (e.g., Linux) is possible, but deployment to target systems is not handled by the extension
+- Windows only — the extension requires a local Delphi installation on Windows. `Linux64` projects are deployed to and debugged on a Linux machine running VallentaAgent; other target platforms can be cross-compiled, but deployment to them is not handled by the extension
 - LSP does not yet support: Code Actions, Code Formatting, Signature Help
 
 ## Feedback and Issues
