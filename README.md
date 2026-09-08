@@ -6,6 +6,8 @@
 
 A Visual Studio Code extension that provides comprehensive Delphi development support, enabling you to edit, build, and debug Delphi projects directly within VS Code.
 
+> **Vallenta Designer is now available** — the visual form designer for VCL `.dfm` files, published as source under the MIT license at **[github.com/Vallenta/Designer](https://github.com/Vallenta/Designer)**. It is a separate Delphi application, built with each Delphi version it is used with; the path to the built `VallentaDesigner.exe` is entered per version under **Form Designer** in the Vallenta Studio settings. Free during the beta — no Pro subscription required.
+
 ## Features
 
 The extension is available in two tiers. See the [full feature matrix](docs/feature-matrix.md) for a tier-by-tier comparison.
@@ -129,7 +131,7 @@ behaves as it does on Windows.
 static binary that needs no root and installs nothing outside the user's home directory:
 
 ```
-curl -fsSL https://github.com/vallenta/VallentaAgent/releases/latest/download/install.sh | sh
+curl -fsSL https://github.com/Vallenta/VallentaAgent/releases/latest/download/install.sh | sh
 ```
 
 *Vallenta Studio: Copy Linux Agent Install Command* puts that line on the clipboard. The agent
@@ -143,11 +145,24 @@ workspace and are referenced by name, so no host names or ports are written into
 
 **3. Provide a sysroot.** A `Linux64` link needs the target distribution's libraries. The **Linux
 Distributions** panel downloads and prepares them per distribution, and the target's distribution
-decides which one a build links against. A project that carries its own `DCC_SysLibRoot`, or a
-machine with a registered Delphi Linux SDK, uses that instead.
+decides which one a build links against; a target without one stops the build before the compiler
+starts. The build links against that sysroot alone — a Linux SDK registered in the IDE takes no part
+in it. A library the project links against that the catalogue does not carry is named under
+**Additional packages** on the distribution, as its runtime package and its `-dev` package
+(`libxml2 libxml2-dev` on Ubuntu 24.04, `libxml2-16 libxml2-dev` on 26.04), and is downloaded with
+the next *Prepare*. A name the release does not carry is reported with the names it does have.
 
 The debug engine is fetched on demand: the extension matches `lldb-dap` to the `lldb-server`
 version the target reports, so both ends speak the same protocol.
+
+The program starts with the environment of the agent process, so a variable exported in the shell
+the agent was started from reaches it; `env` in the launch configuration adds to that and overrides
+variables of the same name.
+
+Each session writes its startup to the **Vallenta Linux Debug** output channel, which opens with it:
+debug metadata, source locations, the agent connection and session, deploy and launch, and the
+transfer check — each with the time it took, and a total. `vallenta.studio.linux.trace` adds the
+DAP and agent traffic to the same channel.
 
 #### Deployment Options
 
@@ -163,7 +178,7 @@ Per configuration you set:
   it shows whether the target answered; the check runs when you open the editor, switch
   configuration or pick a target.
 - **Working directory** — where the program is placed and run, relative to the agent's scratch
-  root. It defaults to the project name.
+  root. Left empty, the program runs in the scratch root itself.
 - **Deployed files** — files copied to the target before the program starts. Add single files, a
   folder, or a pattern such as `data/**`; a folder or pattern keeps its structure relative to the
   project directory. Per entry you can set a subfolder, a different remote name, whether an
@@ -173,6 +188,13 @@ The **Live Target View** at the bottom shows the resulting layout on the target,
 program itself, which the debugger uploads without an entry. A file that cannot be deployed — a
 path matching nothing, or one outside the project directory — is reported there and stops the
 session before the target is contacted.
+
+**Deploy Files** in the Debug button's menu sends the same files without starting the program:
+the configuration's deployment entries plus the built executable. The Debug menu follows the
+selected platform — on `Linux64` it offers this instead of *Attach to Process…*, and
+*Convert Debug Symbols* becomes *Regenerate Debug Metadata*, which rebuilds the type information
+the Linux debugger reads from the executable. A debug session rebuilds that information by
+itself whenever the program is newer, so this is for repeating a generation that failed.
 
 Projects that already carry Delphi's own deployment entries can take them over with **Import from
 Delphi**. The import is one-time and additive, covers the `Linux64` entries only, and reports
@@ -197,6 +219,7 @@ The built-in LSP server starts automatically when a project is activated and pro
 - **Go to Declaration / Implementation** (`Shift+Ctrl+Up` / `Shift+Ctrl+Down`) - Jump between interface and implementation (Pro)
 - **Find Symbol** (`Ctrl+T`) - Workspace-wide symbol search
 - **Find All References** (`Shift+F12`) - Semantic reference search across the project, including matches inside `.dfm`/`.fmx` form files
+- **Rename Symbol** (`F2`) - Rename a symbol and every reference to it across the project, including type members (Pro)
 - **Overload Resolution** - Hover and `Ctrl+Click` on an overloaded routine narrow to the specific overload by matching argument types
 - **Hover** - View type information and symbol details
 - **Code Completion** - Type-aware member suggestions after the dot operator
@@ -232,7 +255,7 @@ Targets and distributions are managed by their panels rather than edited by hand
 | `vallenta.studio.linux.targets` | array | workspace | Paired Linux machines, referenced by name from a project |
 | `vallenta.studio.linux.distros` | array | machine | Sysroots a `Linux64` build can link against |
 | `vallenta.studio.linux.lldbDapPath` | string | — | Use a specific `lldb-dap` instead of the one matched to the target |
-| `vallenta.studio.linux.trace` | boolean | — | Log the Linux debug adapter's traffic to the *Delphi Linux Debug* output channel |
+| `vallenta.studio.linux.trace` | boolean | — | Log the Linux debug adapter's traffic to the *Vallenta Linux Debug* output channel |
 
 ### Editor
 
@@ -256,6 +279,43 @@ Targets and distributions are managed by their panels rather than edited by hand
 | `vallenta.studio.lsp.semanticValidation.severity` | string | `"hint"` | Severity for semantic diagnostics: `error`, `warning`, `hint`, `information` |
 | `vallenta.studio.lsp.indexing.workerThreads` | number | `0` | Background indexing threads (0 = auto) |
 | `vallenta.studio.lsp.indexing.batchSize` | number | `8` | Files per batch per worker thread |
+
+### MCP Server
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `vallenta.studio.mcp.enabled` | boolean | `true` | Start the MCP server for AI agents (Pro) |
+| `vallenta.studio.mcp.port` | number | `0` | MCP server port on `127.0.0.1` (0 = automatic; the assigned port is kept per workspace) |
+
+## MCP Server for AI Agents (Pro)
+
+Vallenta Studio can host a local [MCP](https://modelcontextprotocol.io) server so AI agents work with your
+Delphi code through the same engine the IDE uses — instead of grepping raw text and guessing at Delphi
+semantics (uses-clause visibility, case insensitivity, `{$IFDEF}` regions).
+
+**Tools (16):** `find_symbol`, `find_references`, `find_implementations`, `go_to`
+(definition/implementation/declaration), `get_symbol_info`, `get_completions`, `get_document_symbols`,
+`get_diagnostics`, `get_inactive_regions`, `get_projects`, `get_project_info`, `set_build_config`, `build`,
+`cancel_build`, `get_build_output`, `ping`.
+
+The server also advertises usage instructions over the protocol, so a connecting agent is told which tool
+answers which question — and that Pascal is case-insensitive, that visibility follows the uses clause, and
+that an inactive `{$IFDEF}` branch is not dead text — rather than falling back on text search.
+
+**On by default** for a Pro subscription; clear `vallenta.studio.mcp.enabled` to stop hosting it. The server
+listens on `127.0.0.1` only and requires a bearer token; nothing is reachable from the network and no
+credential is written into your workspace.
+
+**GitHub Copilot (agent mode):** on VS Code 1.102 or newer the server is discovered automatically — the
+Vallenta Studio tools appear in agent mode once the server is running. Older VS Code versions can still use
+external agents via the connect command below.
+
+**Claude Code:** the **MCP Server** card on the settings page registers it in one click — **Register with
+Claude Code** adds the server for the current workspace, and **Remove registration** takes it out again.
+Re-run it after changing the port. Registration drives your own `claude` CLI when it is on `PATH`, and
+otherwise the copy bundled with the Claude Code VS Code extension, so having either one installed is enough.
+If you have neither, **Copy connect command** gives you the `claude mcp add …` line to run where the CLI is. Either way the access token lands in Claude's user-private
+configuration, outside your repository. **MCP: Show Server Status** shows the current URL.
 
 ## Commands
 
@@ -290,6 +350,10 @@ Targets and distributions are managed by their panels rather than edited by hand
 | `Vallenta Studio: Toggle Form / Source` | Swap between `.pas` and matching `.dfm`/`.fmx` form file |
 | `Vallenta Studio: Copy Variable as Tree` | Copy expanded debugger variable to clipboard (Pro, debug context only) |
 | `Vallenta Studio: Convert to UTF-8 with BOM` | Convert ANSI file to UTF-8 BOM encoding |
+| `Vallenta Studio: MCP: Show Server Status` | Show the MCP server state and URL |
+| `Vallenta Studio: MCP: Copy Claude Code Connect Command` | Copy the `claude mcp add` line including the access token |
+| `Vallenta Studio: MCP: Register With Claude Code` | Register the server with the Claude Code CLI for this workspace (Pro) |
+| `Vallenta Studio: MCP: Remove Claude Code Registration` | Remove the Claude Code registration |
 
 ## Keyboard Shortcuts
 
@@ -301,6 +365,7 @@ Targets and distributions are managed by their panels rather than edited by hand
 | `Ctrl+Click` | Go to Definition | Pascal editor |
 | `Ctrl+T` | Find Symbol | Workspace |
 | `Shift+F12` | Find All References | Pascal editor |
+| `F2` | Rename Symbol | Pascal editor (Pro) |
 | `Shift+Ctrl+Up` | Go to Declaration | Pascal editor (Pro) |
 | `Shift+Ctrl+Down` | Go to Implementation | Pascal editor (Pro) |
 | `Ctrl+Shift+B` | Build | Standard VS Code build |
@@ -320,9 +385,9 @@ Targets and distributions are managed by their panels rather than edited by hand
 
 ## Known Limitations
 
-- Form Designer is not supported — .dfm and .fmx files open as text
+- Form Designer: VCL `.dfm` forms open visually in the external designer (Pro plan; *Open in Form Designer* on a `.dfm`/`.pas`, with event/field/rename coupling into the unit) — `.fmx` files still open as text; the FMX host is a later phase
 - Windows only — the extension requires a local Delphi installation on Windows. `Linux64` projects are deployed to and debugged on a Linux machine running VallentaAgent; other target platforms can be cross-compiled, but deployment to them is not handled by the extension
-- LSP does not yet support: Code Actions, Code Formatting, Signature Help
+- LSP does not yet support: Code Actions, Code Formatting
 
 ## Feedback and Issues
 
