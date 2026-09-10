@@ -3,7 +3,7 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
-## [1.2.4] - 2026-09-09
+## [1.2.4] - 2026-09-10
 
 ### Added
 - **Reordering in the Projects view** — a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
@@ -27,11 +27,14 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Linux debugging, lldb's notifications about Delphi types** — the notifications naming `DW_TAG_BORLAND_Delphi_string`, `DW_TAG_BORLAND_Delphi_dynamic_array` and `DW_TAG_BORLAND_Delphi_set` tags and members "unable to be parsed" no longer appear. Expanding a class in the debugger's own tree or hovering a global showed one per string, array and set field.
 - **Linux debugging, Add to Watch from the Variables view** — a row of the Variables view now carries its Delphi expression, so Add to Watch and Copy as Expression put `Station.Location.Lat` into the Watch view. The rows carried no expression, and the Add to Watch command was absent from their context menu.
 - **Linux debugging, the `[Fields]` node** — a class instance in the Variables view now expands into `[Fields]` and `[Properties]` nodes, as on Windows. Its fields were listed directly under the object.
+- **Linux debugging, a field hovered inside its own class** — a member of the enclosing class now shows its value on hover and in the Watch view when it is written without `Self.`. Hover showed the declaration alone, and Watch reported *use of undeclared identifier*.
 - **LSP, an inline variable initialised from a list element** — `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
+- **LSP, the value of a constant declared inside a routine** — hovering `MAX_ITEMS` in a routine that declares `const MAX_ITEMS = 99;` now shows `const MAX_ITEMS: Integer = 99`. The hover named the inferred type alone, so reading the value meant opening the declaration.
+- **LSP, the value of a constant written as an expression** — hovering `MAX_BYTES`, declared as `const MAX_BYTES = KB * 64;`, now shows `= 65536` under the declaration, in the hover and in the code completion details. The hover showed the expression as written, so arriving at the value meant opening every constant it named.
 - **Debugger, Add to Watch on an object member** — a field or property added to the Watch view from the Variables view, such as `list.FCount` or `list.Count`, now evaluates in Delphi syntax. The Watch view showed *Unexpected '>'* for the spelling it received, and the same expression typed in Delphi form was refused as a call.
 - **Debugger, a property read through an abstract getter** — a property whose getter is declared `virtual; abstract;`, such as `Count` of a `TStringList`, now evaluates in Watch, hover and the `[Properties]` node on Win32, Win64 and Linux64. The property was refused as not described by the debug information, on Linux in Watch and hover.
-- **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** — a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. The rows had no expression, and the Add to Watch command was absent for them.
-- **Debugger, a local the compiler keeps in a register** — a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. Watch and the Debug Console refused it with *The debugger returned no address for 'Item'*, and the Variables view showed it as the C++ debugger writes it.
+- **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** — a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. 
+- **Debugger, a local the compiler keeps in a register** — a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. 
 - **Debugger, `[Fields]` and `[Properties]` in name order** — the two nodes now list their entries sorted by name, case-insensitively and with numbers compared by value. They followed the declaration order.
 
 
