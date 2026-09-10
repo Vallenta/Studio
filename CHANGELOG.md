@@ -3,17 +3,63 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
-## [1.2.3] - 2026-08-29
+## [1.2.4] - 2026-09-09
 
 ### Added
-- **The hover card on the highlighted completion entry** — the details pane beside the completion list now shows what hovering the symbol in source shows: signature, visibility, declaring file, inherited-from, overloads and any `///` documentation. Highlighting an entry previously showed a bare signature line, and nothing at all for a symbol without documentation; press **Ctrl+Space** with the list open to expand the pane the first time.
+- **Reordering in the Projects view** — a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
+- **Debugging over MCP (Pro)** — an AI agent now launches or attaches to a Delphi program, sets breakpoints, steps through it, and reads the stopped program in Delphi form, sharing the session the Run and Debug view shows. An agent could read code and start builds, and everything about a running program had to be relayed to it by hand.
+- **The active project over MCP (Pro)** — an AI agent now makes a registered project the active one, and the build toolbar, the project inspector and the remembered breakpoints follow it. Choosing the project an agent builds or debugs was a step in the Projects sidebar.
+- **Linux debugging, Rocky Linux 9 and 10 in the distribution catalogue** — *New Distribution* now prepares a Rocky Linux 9 or 10 sysroot from the distribution's own package repositories, which a Linux64 build links against for a Rocky, RHEL or Alma target of that major. 
+- **Linux debugging, Debian 12 and 13 in the distribution catalogue** — *New Distribution* now prepares a Debian 12 or 13 sysroot from Debian's snapshot archive, and a Linux64 build links against it. 
+- **Linux debugging, openSUSE Leap 16.0 in the distribution catalogue** — *New Distribution* now prepares a Leap 16.0 sysroot from the release repository, and a Linux64 build links against it. 
+
+### Fixed
+- **Build, the Build Output view stuck on an earlier build** — every build now appears in the Build Output view with its errors and warnings. After a build that ended before the compiler ran, every later build in that window was refused with *A build is already in progress* and the view kept showing the earlier build.
+- **Build, the Build Output view switching to an empty Errors tab** — a build started after a failed one now stays on the tab already selected while it runs. The view switched to the Errors tab as that build started, so its output arrived on a tab no longer shown.
+- **Build, an error from the resource compiler** — the Errors tab now lists an error the resource compiler reported, with the file and line it names. A build that failed there showed *Failed* with *Errors: 0* and an empty Errors tab.
+- **Build, a failure in no recognised format** — the Errors tab of a failed build now carries the exit code and the last lines of the build output. A failure that matched no compiler or tool format left the tab empty.
+- **Linux debugging, a target with lldb 21** — Linux debugging now works on a target whose lldb-server is version 21 or newer, such as Rocky Linux 9.7, with VallentaAgent 0.2.3. Every session on such a target failed with *lldb-server exited before it was ready (code Some(0))*.
+- **Linux debugging, a sysroot imported from an rpm-based target** — *New Distribution, From target* now imports from a target with the rpm layout, such as Rocky Linux 9, and a Linux64 build links against that sysroot. The import stopped with *No libgcc.a under /usr/lib/gcc/x86_64-linux-gnu*.
+- **Linux debugging, an import from a target without tar** — *New Distribution, From target* now names the missing tar or gzip command and the install command for the target's distribution. The import ended with *Packing the collected files failed* and no cause.
+- **Linux debugging, a sysroot imported from an Arch, Void or Gentoo target** — *New Distribution, From target* now imports from such a target, and a Linux64 build links against that sysroot. The import stopped with *Neither dpkg nor rpm is present*.
+- **Linux debugging, an import from a Void target without ICU or from a musl target** — *New Distribution, From target* now stops before collecting anything on a Void target without the ICU library, naming the install command, and on a musl-based target such as Alpine.
+- **Linux debugging, an exception inside a property getter** — a Delphi exception raised while the debugger evaluates a property getter or a Watch call now shows as that value's text, and the session stays at the stopped line. 
+- **Linux debugging, lldb's notifications about Delphi types** — the notifications naming `DW_TAG_BORLAND_Delphi_string`, `DW_TAG_BORLAND_Delphi_dynamic_array` and `DW_TAG_BORLAND_Delphi_set` tags and members "unable to be parsed" no longer appear. Expanding a class in the debugger's own tree or hovering a global showed one per string, array and set field.
+- **Linux debugging, Add to Watch from the Variables view** — a row of the Variables view now carries its Delphi expression, so Add to Watch and Copy as Expression put `Station.Location.Lat` into the Watch view. The rows carried no expression, and the Add to Watch command was absent from their context menu.
+- **Linux debugging, the `[Fields]` node** — a class instance in the Variables view now expands into `[Fields]` and `[Properties]` nodes, as on Windows. Its fields were listed directly under the object.
+- **LSP, an inline variable initialised from a list element** — `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
+- **Debugger, Add to Watch on an object member** — a field or property added to the Watch view from the Variables view, such as `list.FCount` or `list.Count`, now evaluates in Delphi syntax. The Watch view showed *Unexpected '>'* for the spelling it received, and the same expression typed in Delphi form was refused as a call.
+- **Debugger, a property read through an abstract getter** — a property whose getter is declared `virtual; abstract;`, such as `Count` of a `TStringList`, now evaluates in Watch, hover and the `[Properties]` node on Win32, Win64 and Linux64. The property was refused as not described by the debug information, on Linux in Watch and hover.
+- **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** — a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. The rows had no expression, and the Add to Watch command was absent for them.
+- **Debugger, a local the compiler keeps in a register** — a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. Watch and the Debug Console refused it with *The debugger returned no address for 'Item'*, and the Variables view showed it as the C++ debugger writes it.
+- **Debugger, `[Fields]` and `[Properties]` in name order** — the two nodes now list their entries sorted by name, case-insensitively and with numbers compared by value. They followed the declaration order.
+
+
+## [1.2.3] - 2026-09-05
+
+### Added
+- **Form Designer (beta)** — a `.dfm` form now opens in the Vallenta Form Designer instead of the text editor, where controls are placed from a palette built from the packages installed in your Delphi, edited in an object inspector backed by the IDE's own property editors, and wired to event handlers that Vallenta Studio creates, renames and removes in the unit for you. The unit follows the form throughout: a component added or deleted on the form gains or loses its field, renaming a component renames its field and its handlers, and saving the form saves the unit with it. 
+The designer is a separate application built from MIT-licensed source with each Delphi version you use; its repository is published shortly, and until then the button on the **Form Designer** card of the settings page leads to the Vallenta Studio repository, where the release will be announced. 
+Free during the beta
+
+- **Linux64 debugging (beta, Pro)** — Linux64 projects can now be deployed to and debugged on a Linux machine directly from VS Code. 
+Supports breakpoints, stepping, call stack, locals, Watch evaluation in Delphi syntax (including method calls), exceptions, and program output in a dedicated terminal session.
+
+The new **Platform Manager** card on the Settings page features:
+**Linux Targets** panel: Pairs a machine with **VallentaAgent** - the binary that listens to VallentaStudio and coordinates debug communication.
+**Linux Distributions panel**: Fetches the Ubuntu system libraries your build links against, eliminating the need for an SDK on the Linux target.
+**Debug Engine**: Downloaded automatically on request.
+
+On the Linux side, you run a single static binary: **VallentaAgent**, installed with a single command. The binary, install script, and instructions are hosted on its GitHub page, linked directly from the card.
+Additional files required by your program can be deployed per build configuration using the new projects **Deployment Settings**.
+
 - **XML documentation comments in hover, code completion and parameter hints** — a `///` block written above a declaration now shows in the hover popup under the signature, on the highlighted item in code completion, and in the parameter hint while you type an argument list. The descriptions Embarcadero ships across the RTL, VCL and FMX, and any your own code carries, appeared nowhere before; `vallenta.studio.documentation.enabled` turns the display off.
+- **The hover card on the highlighted completion entry** — the details pane beside the completion list now shows what hovering the symbol in source shows: signature, visibility, declaring file, inherited-from, overloads and any `///` documentation. Highlighting an entry previously showed a bare signature line, and nothing at all for a symbol without documentation; press **Ctrl+Space** with the list open to expand the pane the first time.
 - **Debugger, expressions in Delphi syntax (beta)** — Watch, hover, the Debug Console and breakpoint conditions now read Delphi expressions such as `Counter.Value = 7` and `s = 'text'`. C++ syntax was the only form accepted, and `x == 5` and `->` were required throughout; the evaluator is on by default, and `vallenta.studio.debug.delphiExpressionEvaluator` turns it off.
-- **Debugger, the Variables view in Delphi form** — every value in the Variables view now reads the way Delphi writes it. The view showed the underlying C++ debugger's spelling, such as `L"cherry"` for a string.
+- **Debugger, the Variables view in Delphi form** — every value in the Variables view now reads the way Delphi writes it. 
 - **Debugger, an interface variable names the class behind it** — a variable declared as an interface now shows the class implementing it and expands into that object. Such a variable showed a bare reference, and reaching the object needed a cast typed into the Watch window.
 - **Debugger, an object's fields under [Fields]** — expanding an object now offers a **[Fields]** entry listing its own and inherited fields, beside **[Properties]**. Those fields sat under the C++ debugger's **[Raw View]** entry.
-- **Debugger, a Watch call the evaluator previously declined** — Watch now runs a call such as `Settings.FindByName('alpha')` and shows what it returns. A call whose argument or result was a string, a floating-point value or a record, or that took more than four arguments, reported that the evaluator would not run it.
-- **Debugger, a property that reads a field directly** — a property such as `Config.Default` now shows under **[Properties]** and reads in Watch. A property declared as `read FValue` appeared nowhere in the Variables view and reported that its storage was not described.
+- **Debugger, a Watch call the evaluator previously declined** — Watch now runs a call such as `Settings.FindByName('alpha')` and shows what it returns. 
 
 ### Fixed
 - **LSP, the repeated `-- protected --` header in code completion** — the member list after a dot now carries a single `-- protected --` header. A class mixing `strict protected` with `protected` members showed one header per member, pushing the members below a block of identical rows.
