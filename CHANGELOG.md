@@ -3,7 +3,7 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
-## [1.2.4] - 2026-09-10
+## [1.2.4] - 2026-09-11
 
 ### Added
 - **Reordering in the Projects view** — a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
@@ -18,6 +18,8 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Build, the Build Output view switching to an empty Errors tab** — a build started after a failed one now stays on the tab already selected while it runs. The view switched to the Errors tab as that build started, so its output arrived on a tab no longer shown.
 - **Build, an error from the resource compiler** — the Errors tab now lists an error the resource compiler reported, with the file and line it names. A build that failed there showed *Failed* with *Errors: 0* and an empty Errors tab.
 - **Build, a failure in no recognised format** — the Errors tab of a failed build now carries the exit code and the last lines of the build output. A failure that matched no compiler or tool format left the tab empty.
+- **Build, EurekaLog post-processing on a non-Windows platform** — EurekaLog post-processing now runs for Win32 and Win64 builds only.
+- **Build, an error line after the file is edited** — an entry in the Errors and Warnings tabs now points at the line its statement has moved to.
 - **Linux debugging, a target with lldb 21** — Linux debugging now works on a target whose lldb-server is version 21 or newer, such as Rocky Linux 9.7, with VallentaAgent 0.2.3. Every session on such a target failed with *lldb-server exited before it was ready (code Some(0))*.
 - **Linux debugging, a sysroot imported from an rpm-based target** — *New Distribution, From target* now imports from a target with the rpm layout, such as Rocky Linux 9, and a Linux64 build links against that sysroot. The import stopped with *No libgcc.a under /usr/lib/gcc/x86_64-linux-gnu*.
 - **Linux debugging, an import from a target without tar** — *New Distribution, From target* now names the missing tar or gzip command and the install command for the target's distribution. The import ended with *Packing the collected files failed* and no cause.
@@ -28,14 +30,14 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Linux debugging, Add to Watch from the Variables view** — a row of the Variables view now carries its Delphi expression, so Add to Watch and Copy as Expression put `Station.Location.Lat` into the Watch view. The rows carried no expression, and the Add to Watch command was absent from their context menu.
 - **Linux debugging, the `[Fields]` node** — a class instance in the Variables view now expands into `[Fields]` and `[Properties]` nodes, as on Windows. Its fields were listed directly under the object.
 - **Linux debugging, a field hovered inside its own class** — a member of the enclosing class now shows its value on hover and in the Watch view when it is written without `Self.`. Hover showed the declaration alone, and Watch reported *use of undeclared identifier*.
-- **LSP, an inline variable initialised from a list element** — `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
-- **LSP, the value of a constant declared inside a routine** — hovering `MAX_ITEMS` in a routine that declares `const MAX_ITEMS = 99;` now shows `const MAX_ITEMS: Integer = 99`. The hover named the inferred type alone, so reading the value meant opening the declaration.
-- **LSP, the value of a constant written as an expression** — hovering `MAX_BYTES`, declared as `const MAX_BYTES = KB * 64;`, now shows `= 65536` under the declaration, in the hover and in the code completion details. The hover showed the expression as written, so arriving at the value meant opening every constant it named.
 - **Debugger, Add to Watch on an object member** — a field or property added to the Watch view from the Variables view, such as `list.FCount` or `list.Count`, now evaluates in Delphi syntax. The Watch view showed *Unexpected '>'* for the spelling it received, and the same expression typed in Delphi form was refused as a call.
 - **Debugger, a property read through an abstract getter** — a property whose getter is declared `virtual; abstract;`, such as `Count` of a `TStringList`, now evaluates in Watch, hover and the `[Properties]` node on Win32, Win64 and Linux64. The property was refused as not described by the debug information, on Linux in Watch and hover.
 - **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** — a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. 
 - **Debugger, a local the compiler keeps in a register** — a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. 
 - **Debugger, `[Fields]` and `[Properties]` in name order** — the two nodes now list their entries sorted by name, case-insensitively and with numbers compared by value. They followed the declaration order.
+- **LSP, an inline variable initialised from a list element** — `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
+- **LSP, the value of a constant declared inside a routine** — hovering `MAX_ITEMS` in a routine that declares `const MAX_ITEMS = 99;` now shows `const MAX_ITEMS: Integer = 99`. The hover named the inferred type alone, so reading the value meant opening the declaration.
+- **LSP, the value of a constant written as an expression** — hovering `MAX_BYTES`, declared as `const MAX_BYTES = KB * 64;`, now shows `= 65536` under the declaration, in the hover and in the code completion details. The hover showed the expression as written, so arriving at the value meant opening every constant it named.
 
 
 ## [1.2.3] - 2026-09-05
