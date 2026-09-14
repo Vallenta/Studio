@@ -3,9 +3,26 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
+## [1.2.5] - 2026-09-14
+
+### Added
+- **Debugging, Copy Address** — the context menu of a class, record or array row in the Variables and Watch views copies the address of its storage.
+- **Projects, remembered open files** — a scope setting on the settings page remembers open editor tabs and breakpoints per project, per project group, or not at all.
+
+### Changed
+- **Debugging, the Variables view** — a method's receiver is listed as `Self`, and an object's children are `[Raw View]`, `[Fields]` and `[Properties]`.
+
+### Fixed
+- **Debugging on Win32, locals below a raised exception** — a caller frame of a raised exception now shows its locals and answers expressions over them.
+- **Debugging, Show as Date/Time in the Watch view** — the submenu is offered on a numeric row only.
+- **Complete Class** — only the member a method resolution clause names receives an implementation.
+
+
 ## [1.2.4] - 2026-09-11
 
 ### Added
+- **Find All References (Base Declaration)** — a new command lists every reference to the declarations the member at the caret implements or overrides.
+- **Find All References over MCP (Pro)** — the `find_references` tool now also searches the declarations a member implements or overrides.
 - **Reordering in the Projects view** — a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
 - **Debugging over MCP (Pro)** — an AI agent now launches or attaches to a Delphi program, sets breakpoints, steps through it, and reads the stopped program in Delphi form, sharing the session the Run and Debug view shows. An agent could read code and start builds, and everything about a running program had to be relayed to it by hand.
 - **The active project over MCP (Pro)** — an AI agent now makes a registered project the active one, and the build toolbar, the project inspector and the remembered breakpoints follow it. Choosing the project an agent builds or debugs was a step in the Projects sidebar.
