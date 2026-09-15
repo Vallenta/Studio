@@ -262,7 +262,7 @@ Targets and distributions are managed by their panels rather than edited by hand
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `vallenta.studio.encodingCheck` | boolean | `true` | Warn about ANSI-encoded Pascal files and offer conversion |
-| `vallenta.studio.rememberOpenFiles` | boolean | `true` | Save/restore open tabs when switching projects |
+| `vallenta.studio.project.sessionScope` | `project` \| `group` \| `off` | `project` | Scope that open tabs and breakpoints are remembered under when switching projects. `group` shares one set across all projects of a project group |
 | `vallenta.studio.inactiveRegions.enabled` | boolean | `true` | Show inactive preprocessor regions with reduced opacity |
 
 ### LSP Server
