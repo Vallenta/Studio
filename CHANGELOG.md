@@ -3,7 +3,30 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
-## [1.2.5] - 2026-09-14
+## [1.2.6] (not released, new entries here)
+
+### Added
+- **Convert Debug Symbols After Build, as a setting** — `vallenta.studio.build.convertSymbolsAfterBuild` converts the debug symbols after every successful Win32 or Win64 build of any project.
+
+### Changed
+- **Parameter hints, overloads** — only the overloads that accept the arguments already typed are listed.
+
+### Fixed
+- **A variable declared with `absolute`** — the variable resolves to its declared type for hover, completion and Go to Definition.
+- **An inline variable declared from an operator expression** — the variable shows its type on hover and offers its members in completion.
+- **An inferred type that depends on the target platform** — the type follows the platform the project has selected.
+- **Unused unit detection, a unit required for inline expansion** — a unit that a call needs only so the compiler can expand an `inline` method is not reported as unused.
+- **Build Output, compiler hints** — a hint the compiler reports appears on the Hints tab of the Build Output view, in every interface language.
+- **Type of a bare identifier** — a field, property or parameter of another class or routine no longer supplies the type.
+- **Debugging, a class cast of an interface variable** — `TMyClass(MyIntf)` shows the implementing object's fields and properties.
+- **Debugging, `Result` of a function returning a record** — the Watch and Variables views show the record's fields.
+- **Debugging on Linux, a value the debug info declares as a reference** — the Watch and Variables views show its value.
+- **Debugging on Linux, a record with a variant part** — `TRect` and every other `case` record show their fields in the Watch and Variables views.
+- **Debugging on Linux, a global variable** — a unit-level variable resolves in the Watch view, on hover and in the Debug Console.
+- **Debugging on Linux, a Watch expression calling a routine a breakpoint sits in** — the call returns its value.
+
+
+## [1.2.5] - 2026-09-15
 
 ### Added
 - **Debugging, Copy Address** — the context menu of a class, record or array row in the Variables and Watch views copies the address of its storage.
@@ -13,9 +36,11 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Debugging, the Variables view** — a method's receiver is listed as `Self`, and an object's children are `[Raw View]`, `[Fields]` and `[Properties]`.
 
 ### Fixed
+- **Debugging, an interface method named without parentheses** — `MyIntf.GetNumber` evaluates in the Watch view, on hover and in the Debug Console.
 - **Debugging on Win32, locals below a raised exception** — a caller frame of a raised exception now shows its locals and answers expressions over them.
 - **Debugging, Show as Date/Time in the Watch view** — the submenu is offered on a numeric row only.
 - **Complete Class** — only the member a method resolution clause names receives an implementation.
+- **Debugging, symbol conversion after a build** — the debug-information conversion of a large project finishes in seconds again.
 
 
 ## [1.2.4] - 2026-09-11
