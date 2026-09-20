@@ -286,17 +286,31 @@ Targets and distributions are managed by their panels rather than edited by hand
 |---------|------|---------|-------------|
 | `vallenta.studio.mcp.enabled` | boolean | `true` | Start the MCP server for AI agents (Pro) |
 | `vallenta.studio.mcp.port` | number | `0` | MCP server port on `127.0.0.1` (0 = automatic; the assigned port is kept per workspace) |
+| `vallenta.studio.mcp.debugWaitSeconds` | number | `30` | How long a debugging tool waits for the program to stop before returning with the session still running |
 
 ## MCP Server for AI Agents (Pro)
 
 Vallenta Studio can host a local [MCP](https://modelcontextprotocol.io) server so AI agents work with your
-Delphi code through the same engine the IDE uses — instead of grepping raw text and guessing at Delphi
-semantics (uses-clause visibility, case insensitivity, `{$IFDEF}` regions).
+Delphi code — and debug it — through the same engine the IDE uses, instead of grepping raw text and guessing
+at Delphi semantics (uses-clause visibility, case insensitivity, `{$IFDEF}` regions).
 
-**Tools (16):** `find_symbol`, `find_references`, `find_implementations`, `go_to`
+**Code intelligence and build (17):** `find_symbol`, `find_references`, `find_implementations`, `go_to`
 (definition/implementation/declaration), `get_symbol_info`, `get_completions`, `get_document_symbols`,
-`get_diagnostics`, `get_inactive_regions`, `get_projects`, `get_project_info`, `set_build_config`, `build`,
-`cancel_build`, `get_build_output`, `ping`.
+`get_diagnostics`, `get_inactive_regions`, `get_projects`, `get_project_info`, `set_active_project`,
+`set_build_config`, `build`, `cancel_build`, `get_build_output`, `ping`.
+
+**Debugging (23):** `start_debugging`, `attach_debugger`, `list_processes`, `end_debug_session`,
+`get_debug_state`, `add_breakpoints`, `remove_breakpoints`, `get_breakpoints`, `set_exception_rules`, `step`,
+`pause`, `run_to_line`, `run_until_stop`, `wait_for_stop`, `get_stop_snapshot`, `get_stack`, `get_threads`,
+`get_variables`, `expand_value`, `evaluate`, `get_exception`, `get_modules`, `get_debug_output`.
+
+An agent launches the active project or attaches to a running process, sets breakpoints with Delphi-syntax
+conditions, hit counts and logpoints, and reads the stopped program in Delphi form — stack frames named
+`Unit.TClass.Method`, locals and expression values rendered the way the Variables and Watch views render
+them. It drives the same session the Run and Debug view shows, so every stop is visible in the IDE and the
+session can be paused or ended there at any time. A debugging tool waits up to
+`vallenta.studio.mcp.debugWaitSeconds` for the program to stop before it returns with the session still
+running.
 
 The server also advertises usage instructions over the protocol, so a connecting agent is told which tool
 answers which question — and that Pascal is case-insensitive, that visibility follows the uses clause, and
