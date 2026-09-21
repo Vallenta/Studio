@@ -3,15 +3,36 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
-## [1.2.6] (not released, new entries here)
+## [1.2.7] 
+
+### Added
+- **Debugging on Linux, Show Text** — a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
+- **Debugging on Linux, Show as Date/Time** — a numeric row in the Variables and Watch views can be shown as a date, a time or both.
+
+### Changed
+- **Debugging on Linux, deployment** — with VallentaAgent 0.2.4, a file the target already holds is not sent again.
+- **Linux debugging, what the agent records** — VallentaAgent 0.2.4 logs a deployment: every file it stored with its size and the rate it arrived at, the reason a file or a connection was refused, and the `lldb-server` command line and ports each session was started with. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
+
+### Fixed
+- **Debugging on Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
+- **Debugging on Linux, the debug engine download** — the downloaded engine holds every DLL `lldb-dap` loads.
+- **Platform Manager, the debug engine buttons** — Download Engine and Update are drawn as primary buttons.
+
+## [1.2.6] 
 
 ### Added
 - **Convert Debug Symbols After Build, as a setting** — `vallenta.studio.build.convertSymbolsAfterBuild` converts the debug symbols after every successful Win32 or Win64 build of any project.
+- **Build Output, Hints tab** — compiler hints are listed on their own tab of the Build Output view.
 
 ### Changed
 - **Parameter hints, overloads** — only the overloads that accept the arguments already typed are listed.
 
 ### Fixed
+- **Debugging, an indexed property** — the Watch and Variables views show the value of an indexed property, including the one its class declares `default`.
+- **Debugging, a property declared with `index`** — the Watch and Variables views show its value.
+- **Debugging, a member of a generic class** — the value shown is the one the instantiation being inspected holds.
+- **Debugging, expanding a generic collection in the Watch view** — the fields, elements and properties of a `TList<T>` or any other generic instantiation are shown, on Win32 and Win64.
+- **Debugging, the name of a generic collection** — an instance of `TList<T>` or any other generic class is named `TList<System.Integer>` in the Watch and Variables views, on Win32 and Win64.
 - **A variable declared with `absolute`** — the variable resolves to its declared type for hover, completion and Go to Definition.
 - **An inline variable declared from an operator expression** — the variable shows its type on hover and offers its members in completion.
 - **An inferred type that depends on the target platform** — the type follows the platform the project has selected.
@@ -20,10 +41,14 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Type of a bare identifier** — a field, property or parameter of another class or routine no longer supplies the type.
 - **Debugging, a class cast of an interface variable** — `TMyClass(MyIntf)` shows the implementing object's fields and properties.
 - **Debugging, `Result` of a function returning a record** — the Watch and Variables views show the record's fields.
+- **Debugging, `Result` of a function returning a string** — the Watch and Variables views show its value.
+- **Debugging, a routine nested in another** — the enclosing routine's locals, parameters and `Self` resolve in the Watch and Variables views, on hover and in the Debug Console.
 - **Debugging on Linux, a value the debug info declares as a reference** — the Watch and Variables views show its value.
 - **Debugging on Linux, a record with a variant part** — `TRect` and every other `case` record show their fields in the Watch and Variables views.
 - **Debugging on Linux, a global variable** — a unit-level variable resolves in the Watch view, on hover and in the Debug Console.
 - **Debugging on Linux, a Watch expression calling a routine a breakpoint sits in** — the call returns its value.
+- **Build status, a clean or rebuild** — the status line names that operation while it runs and when it ends.
+- **EurekaLog, cleaning a project** — a clean of a project with EurekaLog enabled succeeds.
 
 
 ## [1.2.5] - 2026-09-15
