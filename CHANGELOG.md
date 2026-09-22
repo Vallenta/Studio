@@ -8,15 +8,25 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 ### Added
 - **Debugging on Linux, Show Text** — a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
 - **Debugging on Linux, Show as Date/Time** — a numeric row in the Variables and Watch views can be shown as a date, a time or both.
+- **Class completion, properties** — Ctrl+Shift+C completes a property that lacks a backing field or accessors.
+- **Class completion, Finish incomplete properties** — a setting under LSP Server on the settings page decides whether Ctrl+Shift+C completes properties as well as methods.
+- **Class completion, Ctrl+. on a property** — completes that property on its own, or every incomplete property of its type.
 
 ### Changed
 - **Debugging on Linux, deployment** — with VallentaAgent 0.2.4, a file the target already holds is not sent again.
 - **Linux debugging, what the agent records** — VallentaAgent 0.2.4 logs a deployment: every file it stored with its size and the rate it arrived at, the reason a file or a connection was refused, and the `lldb-server` command line and ports each session was started with. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
 
 ### Fixed
+- **A class helper declared in the implementation section** — a member of the helped class resolves inside the helper's methods.
+- **Code completion inside a class or record helper method** — the helped type's members are offered alongside the helper's own.
+- **A class whose base class is named through a type alias** — the members it inherits resolve.
+- **Code completion after a type alias** — the members of the type the alias names are offered.
+- **Deployment on Linux, runtime packages** — a package project deploys the `.so` its Linux64 build writes.
+- **Build for Linux, symbol cleanup** — the cleanup a Build or Rebuild runs first removes the project's PDB only.
+- **Run and debug, packages** — a package project's output is found under its LIB suffix in the package output directory.
 - **Debugging on Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
 - **Debugging on Linux, the debug engine download** — the downloaded engine holds every DLL `lldb-dap` loads.
-- **Platform Manager, the debug engine buttons** — Download Engine and Update are drawn as primary buttons.
+
 
 ## [1.2.6] 
 
