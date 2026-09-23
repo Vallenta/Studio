@@ -11,8 +11,14 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Class completion, properties** — Ctrl+Shift+C completes a property that lacks a backing field or accessors.
 - **Class completion, Finish incomplete properties** — a setting under LSP Server on the settings page decides whether Ctrl+Shift+C completes properties as well as methods.
 - **Class completion, Ctrl+. on a property** — completes that property on its own, or every incomplete property of its type.
+- **Deployment on Linux, files outside the project** — a deployment entry can name a file outside the project directory, such as `..\..\Bin\Linux64\bplShared.so`.
+- **Deployment on Linux, macros in a deployment entry** — a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
+- **Deployment Options, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
+- **Deployment Options, where an entry resolves to** — each deployment entry shows the file it resolves to in every build configuration and whether it is there.
 
 ### Changed
+- **Deployment Options, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
+- **Deployment Options, picking a file** — a picked file is stored through the macro of the folder it lies in, such as `$(BDSCOMMONDIR)`.
 - **Debugging on Linux, deployment** — with VallentaAgent 0.2.4, a file the target already holds is not sent again.
 - **Linux debugging, what the agent records** — VallentaAgent 0.2.4 logs a deployment: every file it stored with its size and the rate it arrived at, the reason a file or a connection was refused, and the `lldb-server` command line and ports each session was started with. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
 
@@ -21,11 +27,21 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Code completion inside a class or record helper method** — the helped type's members are offered alongside the helper's own.
 - **A class whose base class is named through a type alias** — the members it inherits resolve.
 - **Code completion after a type alias** — the members of the type the alias names are offered.
+- **A record's last field followed by `end` on the same line** — `TPoint = record X, Y: Integer end;` no longer reports *Syntax error near 'end'*.
+- **A typed constant of an inline record type** — `const Origin: record X, Y: Integer; end = (X: 0; Y: 0);` no longer reports *Syntax error*.
+- **A field of an inline record type** — `Box.Width` resolves when `Box` is declared as `record Width, Height: Integer; end`.
+- **A member of a typed constant** — `Origin.X` resolves for a record constant such as `const Origin: TPoint = (X: 0; Y: 0);`.
+- **A class section that follows a comment or compiler directive** — its members keep their declared visibility.
 - **Deployment on Linux, runtime packages** — a package project deploys the `.so` its Linux64 build writes.
 - **Build for Linux, symbol cleanup** — the cleanup a Build or Rebuild runs first removes the project's PDB only.
 - **Run and debug, packages** — a package project's output is found under its LIB suffix in the package output directory.
 - **Debugging on Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
 - **Debugging on Linux, the debug engine download** — the downloaded engine holds every DLL `lldb-dap` loads.
+- **Debugging, a static method called through its type** — `TMyRecord.FromValue(5).AsText` evaluates in the Watch view and no longer reports *'TMyRecord' is a type, not a value*.
+- **Debugging, a method of a record** — `MyRecord.AsText` evaluates in the Watch view and no longer reports *'AsText' is not a member of TMyRecord*.
+- **Projects in a project group over MCP (Pro)** — `set_active_project` and the other MCP tools accept a project that belongs to a project group and no longer report *is not registered*.
+- **Unit rename, projects in a project group** — renaming `Unit1.pas` to `Customers.pas` updates the unit's reference in the `.dproj` of a project that belongs to a project group.
+- **Attach to Process, projects in a project group** — the running executable of a project in a project group is listed with the project executables at the top of the process list.
 
 
 ## [1.2.6] 
