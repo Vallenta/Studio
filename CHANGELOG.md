@@ -15,14 +15,17 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Deployment on Linux, macros in a deployment entry** — a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
 - **Deployment Options, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
 - **Deployment Options, where an entry resolves to** — each deployment entry shows the file it resolves to in every build configuration and whether it is there.
+- **Windows ANSI code page for Pascal files** — Pascal files that are not UTF-8 open and save in the Windows ANSI code page, switched by Windows ANSI Code Page on the Editor Options card of the settings page.
 
 ### Changed
 - **Deployment Options, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
 - **Deployment Options, picking a file** — a picked file is stored through the macro of the folder it lies in, such as `$(BDSCOMMONDIR)`.
 - **Debugging on Linux, deployment** — with VallentaAgent 0.2.4, a file the target already holds is not sent again.
+- **Debugging on Linux, Delphi exceptions switched off** — with *All Delphi Exceptions* cleared, a raise in the running program no longer stops it on the target and waits for the debugger to resume it, which slowed stepping over code that raises and handles exceptions.
 - **Linux debugging, what the agent records** — VallentaAgent 0.2.4 logs a deployment: every file it stored with its size and the rate it arrived at, the reason a file or a connection was refused, and the `lldb-server` command line and ports each session was started with. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
 
 ### Fixed
+- **Debugging on Linux, stepping while values are evaluated** — a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
 - **A class helper declared in the implementation section** — a member of the helped class resolves inside the helper's methods.
 - **Code completion inside a class or record helper method** — the helped type's members are offered alongside the helper's own.
 - **A class whose base class is named through a type alias** — the members it inherits resolve.
@@ -42,6 +45,9 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Projects in a project group over MCP (Pro)** — `set_active_project` and the other MCP tools accept a project that belongs to a project group and no longer report *is not registered*.
 - **Unit rename, projects in a project group** — renaming `Unit1.pas` to `Customers.pas` updates the unit's reference in the `.dproj` of a project that belongs to a project group.
 - **Attach to Process, projects in a project group** — the running executable of a project in a project group is listed with the project executables at the top of the process list.
+- **Convert to UTF-8 with BOM, ANSI files outside Windows-1252** — a file in another system code page, such as Windows-1251, keeps its characters.
+- **UTF-8 files without BOM** — the encoding warning reports them, and Convert to UTF-8 with BOM keeps their characters.
+- **Convert to UTF-8 with BOM, unsaved changes** — a file whose save would replace its special characters is not saved, and a message names the file.
 
 
 ## [1.2.6] 
