@@ -6,40 +6,52 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 ## [1.2.7] 
 
 ### Added
-- **Debugging on Linux, Show Text** — a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
-- **Debugging on Linux, Show as Date/Time** — a numeric row in the Variables and Watch views can be shown as a date, a time or both.
+- **Delphi 2007** — Delphi 2007 is detected, and its projects build, index, run and debug from the extension.
+- **Project Options, a Delphi 2007 project** — the project opens in the editor read-only.
+- **Windows ANSI code page for Pascal files** — Pascal files that are not UTF-8 open and save in the Windows ANSI code page, switched by Windows ANSI Code Page on the Editor Options card of the settings page.
 - **Class completion, properties** — Ctrl+Shift+C completes a property that lacks a backing field or accessors.
 - **Class completion, Finish incomplete properties** — a setting under LSP Server on the settings page decides whether Ctrl+Shift+C completes properties as well as methods.
 - **Class completion, Ctrl+. on a property** — completes that property on its own, or every incomplete property of its type.
-- **Deployment on Linux, files outside the project** — a deployment entry can name a file outside the project directory, such as `..\..\Bin\Linux64\bplShared.so`.
-- **Deployment on Linux, macros in a deployment entry** — a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
-- **Deployment Options, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
-- **Deployment Options, where an entry resolves to** — each deployment entry shows the file it resolves to in every build configuration and whether it is there.
-- **Windows ANSI code page for Pascal files** — Pascal files that are not UTF-8 open and save in the Windows ANSI code page, switched by Windows ANSI Code Page on the Editor Options card of the settings page.
+- **Debugging Linux, Show Text** — a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
+- **Debugging Linux, Show as Date/Time** — a numeric row in the Variables and Watch views can be shown as a date, a time or both.
+- **Deployment Linux, files outside the project** — a deployment entry can name a file outside the project directory, such as `..\..\Bin\Linux64\bplShared.so`.
+- **Deployment Linux, macros in a deployment entry** — a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
+- **Deployment Linux, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
+- **Deployment Linux, where an entry resolves to** — each deployment entry shows its resolved file path in every build configuration and whether that file exists.
+- **Projects, display name** — a project in the Projects list can be given a display name, shown above its project file name.
+- **Build All Projects with Debug/Win64** — a project group's context menu builds every project for the configuration and platform selected in the build toolbar and skips a project that lacks either.
 
 ### Changed
-- **Deployment Options, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
-- **Deployment Options, picking a file** — a picked file is stored through the macro of the folder it lies in, such as `$(BDSCOMMONDIR)`.
-- **Debugging on Linux, deployment** — with VallentaAgent 0.2.4, a file the target already holds is not sent again.
-- **Debugging on Linux, Delphi exceptions switched off** — with *All Delphi Exceptions* cleared, a raise in the running program no longer stops it on the target and waits for the debugger to resume it, which slowed stepping over code that raises and handles exceptions.
-- **Linux debugging, what the agent records** — VallentaAgent 0.2.4 logs a deployment: every file it stored with its size and the rate it arrived at, the reason a file or a connection was refused, and the `lldb-server` command line and ports each session was started with. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
+- **Deployment Linux, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
+- **Deployment Linux, picking a file** — a picked file is stored through the macro of the folder containing it, such as `$(BDSCOMMONDIR)`.
+- **Debugging Linux, deployment** — with VallentaAgent 0.2.4, a file already present on the target is not sent again.
+- **Debugging Linux, Delphi exceptions switched off** — with *All Delphi Exceptions* cleared, a raise in the running program no longer stops it on the target and waits for the debugger to resume it, which slowed stepping over code that raises and handles exceptions.
+- **Debugging Linux, Logging** — VallentaAgent 0.2.4 logs a deployment: every stored file with its size and transfer rate, the reason for every refused file or connection, and the `lldb-server` command line and ports used to start each session. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
+- **Form Designer settings** — a Delphi release below 11.3 is listed as not supported and has no designer path field.
 
 ### Fixed
-- **Debugging on Linux, stepping while values are evaluated** — a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
 - **A class helper declared in the implementation section** — a member of the helped class resolves inside the helper's methods.
 - **Code completion inside a class or record helper method** — the helped type's members are offered alongside the helper's own.
-- **A class whose base class is named through a type alias** — the members it inherits resolve.
-- **Code completion after a type alias** — the members of the type the alias names are offered.
+- **A class whose base class is named through a type alias** — its inherited members resolve.
+- **Code completion after a type alias** — the members of the aliased type are offered.
 - **A record's last field followed by `end` on the same line** — `TPoint = record X, Y: Integer end;` no longer reports *Syntax error near 'end'*.
+- **An escaped identifier as the first field of a record or class** — `TMyRecord = record &File: Integer; end;` no longer reports *Syntax error near '&File: Integer'*.
 - **A typed constant of an inline record type** — `const Origin: record X, Y: Integer; end = (X: 0; Y: 0);` no longer reports *Syntax error*.
 - **A field of an inline record type** — `Box.Width` resolves when `Box` is declared as `record Width, Height: Integer; end`.
 - **A member of a typed constant** — `Origin.X` resolves for a record constant such as `const Origin: TPoint = (X: 0; Y: 0);`.
 - **A class section that follows a comment or compiler directive** — its members keep their declared visibility.
-- **Deployment on Linux, runtime packages** — a package project deploys the `.so` its Linux64 build writes.
-- **Build for Linux, symbol cleanup** — the cleanup a Build or Rebuild runs first removes the project's PDB only.
+- **Unused-parameter hints on form event handlers** — a handler declared by the IDE in a form, such as `Button1Click(Sender: TObject)`, no longer reports *Parameter 'Sender' is never used*.
+- **A comma-separated index on an array of arrays** — `Grid[0, 1].Caption` resolves when `Grid` is a `TArray<TArray<TMyRecord>>` and no longer reports *Unknown member 'Caption'*.
+- **An inline variable initialized from an array element** — after `var Item := Grid[0, 1];`, `Item.Caption` resolves and no longer reports *Unknown member 'Caption'*.
+- **A member reached through an indexed property** — `MyObject.Lines[0].Add` resolves when `Lines` is declared as `property Lines[Index: Integer]: TStrings`.
+- **A character read from a string** — `S[1].IsDigit` resolves when `S` is a string.
+- **An unknown member of a built-in type** — `S.Trimm` on a `string` reports *Unknown member 'Trimm' on type 'string'*.
+- **A field of a `with` target that shares a routine's name** — inside `with Message do`, `Pos.X` resolves to the `Pos` field of `Message`.
+- **A nested class used inside its generic owner** — `TEnumerator.Create(Self)` in a method of `TList<T>` resolves to the nested `TEnumerator`.
+- **A helper declared for a type alias** — a helper for `UInt32` applies to a `Cardinal` value.
+- **Go to Definition on a call of an overloaded routine** — Ctrl+Click on `CreateEx` in `TMyFrame.CreateEx(Editor, Self)` goes straight to the overload selected by the arguments.
+- **Build for Linux, symbol cleanup** — the cleanup performed at the start of a Build or Rebuild removes the project's PDB only.
 - **Run and debug, packages** — a package project's output is found under its LIB suffix in the package output directory.
-- **Debugging on Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
-- **Debugging on Linux, the debug engine download** — the downloaded engine holds every DLL `lldb-dap` loads.
 - **Debugging, a static method called through its type** — `TMyRecord.FromValue(5).AsText` evaluates in the Watch view and no longer reports *'TMyRecord' is a type, not a value*.
 - **Debugging, a method of a record** — `MyRecord.AsText` evaluates in the Watch view and no longer reports *'AsText' is not a member of TMyRecord*.
 - **Projects in a project group over MCP (Pro)** — `set_active_project` and the other MCP tools accept a project that belongs to a project group and no longer report *is not registered*.
@@ -48,6 +60,15 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Convert to UTF-8 with BOM, ANSI files outside Windows-1252** — a file in another system code page, such as Windows-1251, keeps its characters.
 - **UTF-8 files without BOM** — the encoding warning reports them, and Convert to UTF-8 with BOM keeps their characters.
 - **Convert to UTF-8 with BOM, unsaved changes** — a file whose save would replace its special characters is not saved, and a message names the file.
+- **`{$IF CompilerVersion …}` and `{$IF RTLVersion …}` blocks** — a block that compares either constant is evaluated with the value of the selected Delphi release.
+- **A project that states no application type** — the project type is detected.
+- **Deployment on Linux, runtime packages** — a package project deploys the `.so` file generated during its Linux64 build.
+- **Debugging Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
+- **Debugging Linux, the debug engine download** — the downloaded engine holds every DLL loaded by `lldb-dap`.
+- **Debugging Linux, stepping while values are evaluated** — a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
+- **Debugging Linux, Restart** — Restart on the debug toolbar starts the program again on the target.
+- **Projects view, adding a project that is already listed** — the selected project becomes the active project.
+- **Build All Projects with their default buildconfig** — each project of the group builds with its own configuration and platform.
 
 
 ## [1.2.6] 
