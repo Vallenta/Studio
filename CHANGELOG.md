@@ -19,7 +19,7 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Deployment Linux, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
 - **Deployment Linux, where an entry resolves to** — each deployment entry shows its resolved file path in every build configuration and whether that file exists.
 - **Projects, display name** — a project in the Projects list can be given a display name, shown above its project file name.
-- **Build All Projects with Debug/Win64** — a project group's context menu builds every project for the configuration and platform selected in the build toolbar and skips a project that lacks either.
+- **Project groups, build entries of the context menu** — *Build All Projects with their default buildconfig* builds each project with its own configuration and platform, and *Build All Projects with {BuildConfig}/{Platform}* builds every project with the configuration and platform selected in the build toolbar and skips a project that lacks either.
 
 ### Changed
 - **Deployment Linux, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
@@ -68,7 +68,6 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Debugging Linux, stepping while values are evaluated** — a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
 - **Debugging Linux, Restart** — Restart on the debug toolbar starts the program again on the target.
 - **Projects view, adding a project that is already listed** — the selected project becomes the active project.
-- **Build All Projects with their default buildconfig** — each project of the group builds with its own configuration and platform.
 
 
 ## [1.2.6] 
