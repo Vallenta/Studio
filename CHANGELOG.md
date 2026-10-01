@@ -3,6 +3,29 @@
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
 
+## [1.2.8] 
+
+### Added
+- **Debugging Linux, Delphi 13.2** — programs built with Delphi 13.2 show their variables and evaluate Watch expressions.
+- **Debugging Linux, optimized Delphi 13.2 code** — variables of optimized code show their values in the Variables and Watch views.
+- **Debugging Linux, debug engine version** — starting a debug session warns when the debug engine is too old to show the program's variables.
+
+### Changed
+- **Debugging Linux, session start** — LLDB's index of the program's debug information is stored on disk and reused when an unchanged executable is debugged again.
+
+### Fixed
+- **Debugging Linux, Delphi 12, interface variables** — an interface variable shows the object that implements it.
+- **Debugging Linux, own debug engine** — Use my own… on the Platform Manager card accepts an lldb-dap older than 21.1.0.
+- **Debugging, a `var` parameter** — hover and the Watch and Variables views show the value of the referenced variable.
+- **Debugging, a `const` record parameter** — hover and the Watch and Variables views show the record's fields.
+- **Debugging, a pointer to a record** — the pointer expands into the record's fields on hover and in the Watch view.
+- **An anonymous method parameter that shares its name with a variable of the enclosing routine** — inside the anonymous method, `Item.Caption` resolves on the parameter's type.
+- **A variable declared in the var section of an anonymous method** — outside the anonymous method, the same name resolves to the enclosing routine's declaration.
+- **A type declared in both System and a unit in the uses clause** — the name resolves to the used unit's declaration, such as `TMonitor` with `Vcl.Forms` in the uses clause.
+- **A type declared in an include file of a used unit** — a same-named type in a unit listed later in the uses clause takes precedence over it.
+- **A unit named through an include file in the uses clause** — a same-named type in a unit listed after the include takes precedence over that unit's type.
+
+
 ## [1.2.7] 
 
 ### Added
