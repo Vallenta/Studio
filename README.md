@@ -269,12 +269,10 @@ Targets and distributions are managed by their panels rather than edited by hand
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `vallenta.studio.lsp.serverPath` | string | `""` | Path to Vallenta_LSP.exe (empty = bundled server) |
 | `vallenta.studio.lsp.autostart` | string | `"exclusive"` | Auto-start mode: `disabled`, `exclusive`, or `enabled` |
 | `vallenta.studio.lsp.trace.server` | string | `"off"` | LSP communication trace level: `off`, `messages`, `verbose` |
 | `vallenta.studio.lsp.logLevel` | string | `"info"` | Server log verbosity: `trace`, `debug`, `info`, `warning`, `error` |
 | `vallenta.studio.lsp.idleTimeout` | number | `10` | Minutes before stopping idle background LSP servers (0 = disabled) |
-| `vallenta.studio.lsp.preprocessorAwareParsing` | boolean | `true` | Ignore inactive `{$IFDEF}` regions during syntax checking |
 | `vallenta.studio.lsp.semanticValidation.enabled` | boolean | `true` | Detect undefined types, methods, and variables |
 | `vallenta.studio.lsp.semanticValidation.severity` | string | `"hint"` | Severity for semantic diagnostics: `error`, `warning`, `hint`, `information` |
 | `vallenta.studio.lsp.indexing.workerThreads` | number | `0` | Background indexing threads (0 = auto) |
