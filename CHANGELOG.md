@@ -9,21 +9,42 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Debugging Linux, Delphi 13.2** — programs built with Delphi 13.2 show their variables and evaluate Watch expressions.
 - **Debugging Linux, optimized Delphi 13.2 code** — variables of optimized code show their values in the Variables and Watch views.
 - **Debugging Linux, debug engine version** — starting a debug session warns when the debug engine is too old to show the program's variables.
+- **Colors for var and out parameters** — var and out parameters can be given their own colors in **Edit symbol colors…** on the Settings page (*Source Highlight Enhancements*).
+- **Form Designer settings, designer version** — the Form Designer card shows a hint for each designer build that is older than the latest VallentaDesigner release.
+- **Form Designer settings, latest designer release** — the Form Designer card shows the version of the latest VallentaDesigner release.
+- **Code folding** — Pascal code folds by its syntax.
+- **Code folding, `{$IFDEF}` branches** — each branch of an `{$IFDEF}` block folds.
+- **Code folding, `{$REGION}`** — `{$REGION}` … `{$ENDREGION}` blocks fold.
+- **Code folding, folded region caption** — a folded `{$REGION}` block shows its caption highlighted, styled by Folded Region Caption on the Editor Options card of the settings page.
+- **Minimap, region captions** — Region Captions in the Minimap on the Editor Options card of the settings page shows `{$REGION}` captions as minimap labels.
+- **Outline, `{$REGION}` blocks** — Regions in the Outline on the Editor Options card of the settings page shows `{$REGION}` blocks as groups in the outline.
+- **Debugging, Source Path** — the folders listed in Source Path on the Debugger page of Project Options are searched for the source files of the debugged program, and Source Path can be edited there.
+- **Debugging, source files not found** — when debug symbols are converted after a build, the Warnings tab of the build output names the source files that the debugger cannot open.
 
 ### Changed
 - **Debugging Linux, session start** — LLDB's index of the program's debug information is stored on disk and reused when an unchanged executable is debugged again.
+- **Debugging Linux, Debug Console at session start** — the source locations of the session are set up without being listed in the Debug Console.
 
 ### Fixed
+- **Debugging Linux, F10 while the Watch or Variables view is still evaluating** — the step stops on the next line.
+- **Debugging Linux, a step after a Watch getter raised an exception** — the step stops on the next line.
+- **Debugging Linux, breakpoints while the Watch and Variables views call getters** — breakpoints keep their state in the editor.
 - **Debugging Linux, Delphi 12, interface variables** — an interface variable shows the object that implements it.
 - **Debugging Linux, own debug engine** — Use my own… on the Platform Manager card accepts an lldb-dap older than 21.1.0.
 - **Debugging, a `var` parameter** — hover and the Watch and Variables views show the value of the referenced variable.
 - **Debugging, a `const` record parameter** — hover and the Watch and Variables views show the record's fields.
 - **Debugging, a pointer to a record** — the pointer expands into the record's fields on hover and in the Watch view.
+- **Debugging, an `Extended` variable in optimized Win32 code** — the Watch and Variables views show its value.
+- **Project Options, Inherit parent with an empty list** — unchecking Inherit parent and pressing OK now removes the Runtime Packages inherited from Base from that configuration or platform.
+- **Project Options, a value set for one configuration and platform** — the build now uses the value shown in the editor, also where the project had no settings for that combination yet.
 - **An anonymous method parameter that shares its name with a variable of the enclosing routine** — inside the anonymous method, `Item.Caption` resolves on the parameter's type.
 - **A variable declared in the var section of an anonymous method** — outside the anonymous method, the same name resolves to the enclosing routine's declaration.
 - **A type declared in both System and a unit in the uses clause** — the name resolves to the used unit's declaration, such as `TMonitor` with `Vcl.Forms` in the uses clause.
 - **A type declared in an include file of a used unit** — a same-named type in a unit listed later in the uses clause takes precedence over it.
 - **A unit named through an include file in the uses clause** — a same-named type in a unit listed after the include takes precedence over that unit's type.
+- **Unused unit detection, a unit required by the body of an inline routine** — a unit needed only so the compiler can expand the body of a called `inline` function or method is not reported as unused.
+- **A comment holding an older copy of the unit** — the unit's declarations resolve.
+- **Debugging, units of a package in the project group** — a stop in a unit of a package from the same project group opens that unit's source file.
 
 
 ## [1.2.7] 
