@@ -2,6 +2,50 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.2.10] 
+
+### Fixed
+- **Unused unit detection, a helper's inline routine** — a unit is not reported as unused when the file calls an `inline` routine of a helper for one of its types, such as the accessor of a helper property read on a descendant class.
+- **Unused unit detection, a member typed from another unit** — a unit is not reported as unused when a called `inline` routine names a member or routine declared with one of its types, such as an inherited field or a `TList` property of another class.
+- **Account, signing in through the browser after a sign-out** — the Account page shows the profile and the subscription plan, and the plan's features are available.
+- **Semantic validation, a class-reference type declared in the implementation section** — a constructor or member called through it is not reported as unknown, such as `TMyClassRef(Source.ClassType).Create`.
+- **A variable initialized by a constructor called through a class reference** — the variable has the type of the referenced class, such as `TMyClass` for `var Obj := TMyClassRef(Source.ClassType).Create`.
+
+## [1.2.9] 
+
+### Added
+- **Declare Variable** — the identifier at the caret is declared as a local variable of its routine, with its type entered in a picker.
+- **Declare Inline Variable** — the identifier at the caret is declared as an inline variable before its first use.
+- **Declare Field** — the identifier at the caret is declared as a field of its class, in the section chosen.
+- **Declare Method** — the routine whose implementation holds the caret is declared in the class section chosen, and a stub written without a body gets one.
+- **Toggle Inline Variable** — the local variable at the caret moves between the `var` section and an inline declaration.
+- **New method placement, a setting under Navigation & Code Actions** — Apply Signature and Declare Method place a new method declaration in the section it names.
+- **Debugging, anonymous methods in units** — the parameters and local variables of an anonymous method declared in a unit show in the debugger, also in optimized builds.
+- **Debugging, `absolute` variables in units** — a variable declared `absolute` in a unit or one of its routines shows the value of its overlaid variable.
+- **Debugging, variables captured by an anonymous method** — Watch and hover resolve a captured variable in the routine declaring the anonymous method and inside its body, and `Self` inside the body is the instance of the declaring method.
+- **Debugging, date and time variables** — a variable declared as a date or time type shows its date or time, such as `05.10.2026 14:30:00`.
+
+### Changed
+- **Settings page, redesign** — the settings page shows Setup steps that mark what still needs attention, features as tiles with their own switch and options, and preferences in one card per category.
+- **Debugging, Show as Raw** — **Show as Raw (number)** on a date or time value shows its number for the rest of the session.
+- **Vallenta Studio LSP output, protocol messages** — the output lists the messages exchanged with the language server while the LSP Debug panel is enabled, one line per message.
+- **LSP Debug panel, large messages** — a message larger than 256 KB shows its size and the first 4 KB of its text.
+
+### Fixed
+- **Run and debug, library and package file names** — a library or package is found under the file name its project sets, such as a module built as `.elm`, and its breakpoints are hit.
+- **Extension log, Delphi registry settings** — an optional registry key or value that does not exist is not logged as an error, such as the IDE's Environment Variables key when no variable is defined.
+- **Semantic validation, a method overload implemented without a declaration** — the implementation is reported as not declared in its class.
+- **Unused unit detection, a value of a nested enumeration** — a unit is not reported as unused when the file names a value of an enumeration type declared inside one of its types.
+- **A variable or parameter named after `absolute`** — inside the routine, its name resolves to its own declaration, and it is not reported as unused when the variable aliasing it is read.
+- **A constant used as the value of an inline `const`** — its name resolves to its own declaration, and it is not reported as unused, such as `A` in `const B = A;`.
+- **Unused unit detection, a `for .. in` loop** — a unit needed by a `for .. in` loop is not reported as unused.
+- **Unused unit detection, a type used by an inline routine** — a unit is not reported as unused when a called `inline` routine uses one of its types.
+- **Unused unit detection, a property with an inline accessor** — a unit is not reported as unused when the file uses a property whose accessor is an `inline` routine, such as `Items` of a `TObjectList`.
+- **Class completion, overloaded and inline routines** — Ctrl+Shift+C writes an implementation header without `overload` or `inline`.
+- **Scoped enumerations** — a value of an enumeration declared under `{$SCOPEDENUMS ON}` resolves only qualified by its type name, and a type of the same name resolves to the type, such as `Int64` in a unit using `System.JSON.Serializers`.
+- **Responsiveness, large language server messages** — the Vallenta Studio views and editor features stay responsive while a large message is exchanged with the language server, such as the symbols of a large unit.
+- **LSP Debug panel, messages with non-ASCII text** — a message containing non-ASCII characters, such as `ä` in a file's text, shows in the LSP Debug panel.
+
 
 ## [1.2.8] 
 
