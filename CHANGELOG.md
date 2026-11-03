@@ -4,11 +4,23 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 
 ## [1.2.14] 
 
+### Added
+- **Adding a project over MCP (Pro)** - an AI agent adds a project or project group to the Projects sidebar with the `add_project` tool, such as a test project outside the workspace, and the other MCP tools accept its files.
+- **Reindexing over MCP (Pro)** - an AI agent rebuilds the index of a project from the files on disk with the `reindex_project` tool, as Reindex in the LSP menu of the build output panel does.
+- **Projects sidebar, new project group** - New Project Group in the Add menu of the Projects section creates an empty `.groupproj` and lists it, with a choice of standalone projects to move into it.
+- **Projects sidebar, projects between groups** - dragging a project onto a project group or out of one moves it there and updates the `.groupproj` files; with Ctrl held, the project is copied.
+
 ### Changed
 - **New language server** - the LSP server is a new implementation written in Rust, highly optimized for faster indexing and faster responses in code completion, navigation and hover.
 
 ### Fixed
 - **Indexing, Delphi sources in the Browsing Path** - a Delphi source directory listed in the Browsing Path, such as `$(BDS)\source\rtl\common`, is indexed with the Delphi sources only, and the library index holds the other directories, such as those of third-party components.
+- **Projects sidebar, removing a group member** - the context menu of a project inside a group offers Remove from Group, which removes the project from the `.groupproj`.
+- **Units changed by another program** - the language server and the MCP tools read the content on disk after another program rewrites a unit, also when the project folder lies outside the workspace folders.
+- **Go to Symbol in Workspace after a rename** - once the unit is saved or changed on disk, the symbol list and the find_symbol MCP tool show the new name of a renamed declaration and omit the old one.
+- **Record helpers for generic instantiations** - a record helper for `TArray<TMyItem>` applies to `TArray<TMyItem>` only, and code completion lists its members after a value of that type.
+- **Generic methods with explicit type arguments** - a call such as `Log.FindItems<TMyItem>` binds to the generic overload, and its result type has the type argument in place of `T`, such as `TArray<TMyItem>` for `TArray<T>`.
+- **Nested types of record helpers** - a type declared in a record helper resolves through the helped type, such as `TMyKind.TGroup.First`.
 
 ## [1.2.13] 
 
