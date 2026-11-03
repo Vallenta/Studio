@@ -2,259 +2,341 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
-## [1.2.10] 
+## [1.2.14] 
+
+### Changed
+- **New language server** - the LSP server is a new implementation written in Rust, highly optimized for faster indexing and faster responses in code completion, navigation and hover.
 
 ### Fixed
-- **Unused unit detection, a helper's inline routine** — a unit is not reported as unused when the file calls an `inline` routine of a helper for one of its types, such as the accessor of a helper property read on a descendant class.
-- **Unused unit detection, a member typed from another unit** — a unit is not reported as unused when a called `inline` routine names a member or routine declared with one of its types, such as an inherited field or a `TList` property of another class.
-- **Account, signing in through the browser after a sign-out** — the Account page shows the profile and the subscription plan, and the plan's features are available.
-- **Semantic validation, a class-reference type declared in the implementation section** — a constructor or member called through it is not reported as unknown, such as `TMyClassRef(Source.ClassType).Create`.
-- **A variable initialized by a constructor called through a class reference** — the variable has the type of the referenced class, such as `TMyClass` for `var Obj := TMyClassRef(Source.ClassType).Create`.
+- **Indexing, Delphi sources in the Browsing Path** - a Delphi source directory listed in the Browsing Path, such as `$(BDS)\source\rtl\common`, is indexed with the Delphi sources only, and the library index holds the other directories, such as those of third-party components.
+
+## [1.2.13] 
+
+### Added
+- **Delphi installation per workspace** - with This workspace chosen in the Delphi installation step of the settings page, the selected installation applies to the open workspace only, such as Delphi 11 in one window and Delphi 12 in another.
+
+## [1.2.12] 
+
+### Added
+- **Find in Active Project** - the Text tab of the search panel lists the matches of the typed text in the files of the active project, the units reached through its search path included.
+- **Hover, enumeration members** - the hover on an enumeration member shows its ordinal value, such as `= 3` for `B` in `(A = 2, B)`.
+- **Code editor, block completion** - Enter inside a block without its `end`, such as after a new `begin`, inserts the `end` on the line below the cursor, aligned with the line that opens the block, set by Block completion in the Editor group of the settings page.
+- **Code editor, indentation** - Enter at the end of a line opening a block, such as `begin` or `TMyClass = class`, indents the new line by one level.
+
+### Changed
+- **Code completion, matching inside a name** - completion offers every name holding the typed letters in order, such as `ExtractFileName` for `FileName`.
+- **Build output, Jump to error** - after a failed build, Jump to error opens the first error located in a source file and skips an error reported against an MSBuild `.targets` or `.props` file, such as `F2039 Could not create output file`.
+- **Settings page, Delphi expression evaluator** - the evaluator is out of beta and has no tile on the settings page; the `vallenta.studio.debug.delphiExpressionEvaluator` setting in the VS Code Settings editor turns it off.
+- **Linux platform, out of beta** - deploying, running and debugging Linux64 projects is a Pro feature, like debugging on Win32 and Win64.
+- **Form designer, new event handler** - a new event handler is declared next to the other handlers of its component, such as `MyGridSetValue` below `MyGridGetValue`.
+
+### Fixed
+- **Inlay hints, alias of a type from an indirectly used unit** - an inline declaration shows its inferred type after the name when that type is an alias declared in a used unit for a type from a unit outside the file's uses clause, such as `var LList: TMyList := MyList` for `TMyList = TObjectList<TObject>`.
+- **Inlay hints and hover, Low and High** - an inline declaration initialized with `Low` or `High` shows the type of the bound, such as `TMyEnum` for `for var I := Low(TMyEnum) to High(TMyEnum)`.
+- **Go to Definition and hover, result of a function from a used unit** - the members of the result resolve when its type is declared in a unit outside the file's uses clause, such as `Next` in `with GetMyDataSet do`.
+- **Code completion, index of a property or array member** - completion inside the brackets of an indexed property or an array member, such as `MyObject.Values[`, offers the identifiers in scope, as in the argument of a method call.
+
+## [1.2.11] 
+
+### Added
+- **Find Project** - the Workspace Projects tab of the search panel, opened by the search button in the header of the Projects section, lists the recent projects and every project and project group file of the workspace, filtered by the typed name.
+- **Find Project, replacing the project list** - with Add to the project list cleared, the selected project or project group replaces the listed ones, which then appear under Recent.
+- **Find Project, number of recent projects** - the Recent Projects Limit setting sets how many recent projects Find Project lists.
+- **Find File in Active Project** - the Files tab of the search panel lists the files of the active project, the units reached through its search path included, filtered by the typed name.
+- **Remove All Projects** - the More menu of the Projects section header empties the project list, project groups included, after a confirmation; the removed entries appear under Recent.
+- **Project groups, rebuild and clean** - the context menu of a project group rebuilds all projects of the group or cleans them in every configuration and platform.
+- **Project context menu, build** - the context menu of a project in the Projects sidebar builds, rebuilds or cleans that project with its own configuration and platform, and the active project stays unchanged.
+- **EurekaLog 6 post-processing** - the executable of a project using EurekaLog 6, such as a Delphi 2007 project, is post-processed by the ecc32 of EurekaLog 6 after each successful build, set by the EurekaLog post-processing tile on the settings page.
+- **New Delphi Project, Linux64 platform** - the New Delphi Project page offers Linux64 for every project type except a VCL Forms Application.
+- **Project Options, search path order** - the Search Paths dialog moves the selected path up or down with the arrow buttons beside the list.
+- **Rename Symbol, units on the Delphi library path** - **F2** renames a symbol declared in a unit found through the Delphi library path, set by Rename in library units in the Navigation & Code Actions group of the settings page.
+- **Debugging, memory view** - Show in Memory View on a Variables or Watch row opens the value's memory beside the source as hex and text, in Windows and Linux debug sessions, with the bytes changed since the last stop highlighted.
+- **Debugging, memory view formats** - The memory view shows its bytes as the Delphi type chosen in its toolbar, such as `Double`, and its text column in the chosen encoding.
+- **Debugging, memory view data inspector** - A data inspector beside the memory view reads the bytes at the cursor as values of the basic Delphi types, such as `TDateTime`.
+- **Debugging, memory view pointers** - Enter on a pointer in the memory view shows the memory it points to, and Back returns to where it was.
+- **Debugging, memory view copy** - The memory view copies a selection in the form chosen in its context menu, such as a Pascal `array of Byte` constant.
+- **Debugging, memory view search** - Ctrl+F in the memory view finds bytes or text in the program's memory, forward or backward from the cursor.
+- **Debugging, memory view editing** - In its edit mode, the memory view writes typed bytes and values into the stopped program, in Windows and Linux debug sessions.
+
+### Changed
+- **Code completion, member order** - the members of the nearest type come first and those of its ancestors after them, each type in declaration order, such as the members of `TStringList` before those of `TObject`.
+- **Projects section, header** - the header holds the search button, an Add menu with New Project, Add Project or Group File and Add All Projects in a Folder, and a More menu with Refresh Projects and Remove All Projects.
+- **Projects section, display name button** - the button setting the display name of a project shows a pencil.
+- **Add Project or Group File, file type** - the file dialog opens with All Delphi Files selected.
+
+### Fixed
+- **Project file with EurekaLog 6 options** - saving a project file from the extension keeps the EurekaLog 6 options block at its end.
+- **Language server, changing the active project during a start** - the language server of the previous project stops once its start completes, and the Developer Tools console reports no error.
+- **Source Files, context menu near the edge of the view** - the context menu shows all its entries inside the view, such as Remove from Project for the last file of the list.
+- **Active platform switch, conditional declarations** - after a switch of the active platform, a symbol declared in both branches of a conditional such as `{$IF Defined(CPU64BITS)}` resolves to the declaration in the branch active on the new platform.
+- **Conditional visibility specifiers** - a member below `{$IFDEF X} protected {$ENDIF}` with a conditional block of its own has the visibility of the active branch, such as `TObject.CPP_ABI_1`, a public member on Win64.
+- **Inlay hints while typing** - the inlay hints stay visible during typing and are updated when typing pauses.
+
+## [1.2.10] 
+
+### Added
+- **Inlay hints, parameter names** - the parameter name shows before the arguments of a call, such as `ReadConfig(AFileName: 'app.ini')`, set by Parameter names in the Inlay hints dialog of the Code highlighting tile on the settings page.
+- **Inlay hints, var and out arguments** - an argument passed to a var or out parameter shows `var` or `out` before it, such as `Inc(var N)`, set by var/out argument hints on the Code highlighting tile of the settings page.
+- **Inlay hints, inline variable types** - an inline declaration without a type shows its inferred type after the name, such as `var LCount: Integer := 5`, set by Inline variable types in the Inlay hints dialog of the Code highlighting tile on the settings page.
+- **Colors for var and out arguments** - an argument passed to a var or out parameter is colored at the call, such as `N` in `Inc(N)`, set by var/out argument colors on the Code highlighting tile of the settings page.
+- **Inlay hints and var/out colors, event calls** - the arguments of a call through a procedural type, such as `FOnChange(Self)`, get parameter-name hints and var/out marks.
+
+### Changed
+- **Editor colors, large units** - the colors of a unit with several thousand lines, such as `Vcl.Forms`, appear within a few seconds after it is opened or edited.
+
+### Fixed
+- **Unused unit detection, a helper's inline routine** - a unit is not reported as unused when the file calls an `inline` routine of a helper for one of its types, such as the accessor of a helper property read on a descendant class.
+- **Unused unit detection, a member typed from another unit** - a unit is not reported as unused when a called `inline` routine names a member or routine declared with one of its types, such as an inherited field or a `TList` property of another class.
+- **Account, signing in through the browser after a sign-out** - the Account page shows the profile and the subscription plan, and the plan's features are available.
+- **Account, signing in from an editor built on VS Code** - the browser sign-in returns to the editor that started it, such as Cursor.
+- **Semantic validation, a class-reference type declared in the implementation section** - a constructor or member called through it is not reported as unknown, such as `TMyClassRef(Source.ClassType).Create`.
+- **A variable initialized by a constructor called through a class reference** - the variable has the type of the referenced class, such as `TMyClass` for `var Obj := TMyClassRef(Source.ClassType).Create`.
+- **Form designer, event handlers** - a handler created from the designer adds no `System` entry to the uses clause of the form's unit.
 
 ## [1.2.9] 
 
 ### Added
-- **Declare Variable** — the identifier at the caret is declared as a local variable of its routine, with its type entered in a picker.
-- **Declare Inline Variable** — the identifier at the caret is declared as an inline variable before its first use.
-- **Declare Field** — the identifier at the caret is declared as a field of its class, in the section chosen.
-- **Declare Method** — the routine whose implementation holds the caret is declared in the class section chosen, and a stub written without a body gets one.
-- **Toggle Inline Variable** — the local variable at the caret moves between the `var` section and an inline declaration.
-- **New method placement, a setting under Navigation & Code Actions** — Apply Signature and Declare Method place a new method declaration in the section it names.
-- **Debugging, anonymous methods in units** — the parameters and local variables of an anonymous method declared in a unit show in the debugger, also in optimized builds.
-- **Debugging, `absolute` variables in units** — a variable declared `absolute` in a unit or one of its routines shows the value of its overlaid variable.
-- **Debugging, variables captured by an anonymous method** — Watch and hover resolve a captured variable in the routine declaring the anonymous method and inside its body, and `Self` inside the body is the instance of the declaring method.
-- **Debugging, date and time variables** — a variable declared as a date or time type shows its date or time, such as `05.10.2026 14:30:00`.
+- **Declare Variable** - the identifier at the caret is declared as a local variable of its routine, with its type entered in a picker.
+- **Declare Inline Variable** - the identifier at the caret is declared as an inline variable before its first use.
+- **Declare Field** - the identifier at the caret is declared as a field of its class, in the section chosen.
+- **Declare Method** - the routine whose implementation holds the caret is declared in the class section chosen, and a stub written without a body gets one.
+- **Toggle Inline Variable** - the local variable at the caret moves between the `var` section and an inline declaration.
+- **New method placement, a setting under Navigation & Code Actions** - Apply Signature and Declare Method place a new method declaration in the section it names.
+- **Debugging, anonymous methods in units** - the parameters and local variables of an anonymous method declared in a unit show in the debugger, also in optimized builds.
+- **Debugging, `absolute` variables in units** - a variable declared `absolute` in a unit or one of its routines shows the value of its overlaid variable.
+- **Debugging, variables captured by an anonymous method** - Watch and hover resolve a captured variable in the routine declaring the anonymous method and inside its body, and `Self` inside the body is the instance of the declaring method.
+- **Debugging, date and time variables** - a variable declared as a date or time type shows its date or time, such as `05.10.2026 14:30:00`.
 
 ### Changed
-- **Settings page, redesign** — the settings page shows Setup steps that mark what still needs attention, features as tiles with their own switch and options, and preferences in one card per category.
-- **Debugging, Show as Raw** — **Show as Raw (number)** on a date or time value shows its number for the rest of the session.
-- **Vallenta Studio LSP output, protocol messages** — the output lists the messages exchanged with the language server while the LSP Debug panel is enabled, one line per message.
-- **LSP Debug panel, large messages** — a message larger than 256 KB shows its size and the first 4 KB of its text.
+- **Settings page, redesign** - the settings page shows Setup steps that mark what still needs attention, features as tiles with their own switch and options, and preferences in one card per category.
+- **Debugging, Show as Raw** - **Show as Raw (number)** on a date or time value shows its number for the rest of the session.
+- **Vallenta Studio LSP output, protocol messages** - the output lists the messages exchanged with the language server while the LSP Debug panel is enabled, one line per message.
+- **LSP Debug panel, large messages** - a message larger than 256 KB shows its size and the first 4 KB of its text.
 
 ### Fixed
-- **Run and debug, library and package file names** — a library or package is found under the file name its project sets, such as a module built as `.elm`, and its breakpoints are hit.
-- **Extension log, Delphi registry settings** — an optional registry key or value that does not exist is not logged as an error, such as the IDE's Environment Variables key when no variable is defined.
-- **Semantic validation, a method overload implemented without a declaration** — the implementation is reported as not declared in its class.
-- **Unused unit detection, a value of a nested enumeration** — a unit is not reported as unused when the file names a value of an enumeration type declared inside one of its types.
-- **A variable or parameter named after `absolute`** — inside the routine, its name resolves to its own declaration, and it is not reported as unused when the variable aliasing it is read.
-- **A constant used as the value of an inline `const`** — its name resolves to its own declaration, and it is not reported as unused, such as `A` in `const B = A;`.
-- **Unused unit detection, a `for .. in` loop** — a unit needed by a `for .. in` loop is not reported as unused.
-- **Unused unit detection, a type used by an inline routine** — a unit is not reported as unused when a called `inline` routine uses one of its types.
-- **Unused unit detection, a property with an inline accessor** — a unit is not reported as unused when the file uses a property whose accessor is an `inline` routine, such as `Items` of a `TObjectList`.
-- **Class completion, overloaded and inline routines** — Ctrl+Shift+C writes an implementation header without `overload` or `inline`.
-- **Scoped enumerations** — a value of an enumeration declared under `{$SCOPEDENUMS ON}` resolves only qualified by its type name, and a type of the same name resolves to the type, such as `Int64` in a unit using `System.JSON.Serializers`.
-- **Responsiveness, large language server messages** — the Vallenta Studio views and editor features stay responsive while a large message is exchanged with the language server, such as the symbols of a large unit.
-- **LSP Debug panel, messages with non-ASCII text** — a message containing non-ASCII characters, such as `ä` in a file's text, shows in the LSP Debug panel.
+- **Run and debug, library and package file names** - a library or package is found under the file name its project sets, such as a module built as `.elm`, and its breakpoints are hit.
+- **Extension log, Delphi registry settings** - an optional registry key or value that does not exist is not logged as an error, such as the IDE's Environment Variables key when no variable is defined.
+- **Semantic validation, a method overload implemented without a declaration** - the implementation is reported as not declared in its class.
+- **Unused unit detection, a value of a nested enumeration** - a unit is not reported as unused when the file names a value of an enumeration type declared inside one of its types.
+- **A variable or parameter named after `absolute`** - inside the routine, its name resolves to its own declaration, and it is not reported as unused when the variable aliasing it is read.
+- **A constant used as the value of an inline `const`** - its name resolves to its own declaration, and it is not reported as unused, such as `A` in `const B = A;`.
+- **Unused unit detection, a `for .. in` loop** - a unit needed by a `for .. in` loop is not reported as unused.
+- **Unused unit detection, a type used by an inline routine** - a unit is not reported as unused when a called `inline` routine uses one of its types.
+- **Unused unit detection, a property with an inline accessor** - a unit is not reported as unused when the file uses a property whose accessor is an `inline` routine, such as `Items` of a `TObjectList`.
+- **Class completion, overloaded and inline routines** - Ctrl+Shift+C writes an implementation header without `overload` or `inline`.
+- **Scoped enumerations** - a value of an enumeration declared under `{$SCOPEDENUMS ON}` resolves only qualified by its type name, and a type of the same name resolves to the type, such as `Int64` in a unit using `System.JSON.Serializers`.
+- **Responsiveness, large language server messages** - the Vallenta Studio views and editor features stay responsive while a large message is exchanged with the language server, such as the symbols of a large unit.
+- **LSP Debug panel, messages with non-ASCII text** - a message containing non-ASCII characters, such as `ä` in a file's text, shows in the LSP Debug panel.
 
 
 ## [1.2.8] 
 
 ### Added
-- **Debugging Linux, Delphi 13.2** — programs built with Delphi 13.2 show their variables and evaluate Watch expressions.
-- **Debugging Linux, optimized Delphi 13.2 code** — variables of optimized code show their values in the Variables and Watch views.
-- **Debugging Linux, debug engine version** — starting a debug session warns when the debug engine is too old to show the program's variables.
-- **Colors for var and out parameters** — var and out parameters can be given their own colors in **Edit symbol colors…** on the Settings page (*Source Highlight Enhancements*).
-- **Form Designer settings, designer version** — the Form Designer card shows a hint for each designer build that is older than the latest VallentaDesigner release.
-- **Form Designer settings, latest designer release** — the Form Designer card shows the version of the latest VallentaDesigner release.
-- **Code folding** — Pascal code folds by its syntax.
-- **Code folding, `{$IFDEF}` branches** — each branch of an `{$IFDEF}` block folds.
-- **Code folding, `{$REGION}`** — `{$REGION}` … `{$ENDREGION}` blocks fold.
-- **Code folding, folded region caption** — a folded `{$REGION}` block shows its caption highlighted, styled by Folded Region Caption on the Editor Options card of the settings page.
-- **Minimap, region captions** — Region Captions in the Minimap on the Editor Options card of the settings page shows `{$REGION}` captions as minimap labels.
-- **Outline, `{$REGION}` blocks** — Regions in the Outline on the Editor Options card of the settings page shows `{$REGION}` blocks as groups in the outline.
-- **Debugging, Source Path** — the folders listed in Source Path on the Debugger page of Project Options are searched for the source files of the debugged program, and Source Path can be edited there.
-- **Debugging, source files not found** — when debug symbols are converted after a build, the Warnings tab of the build output names the source files that the debugger cannot open.
+- **Debugging Linux, Delphi 13.2** - programs built with Delphi 13.2 show their variables and evaluate Watch expressions.
+- **Debugging Linux, optimized Delphi 13.2 code** - variables of optimized code show their values in the Variables and Watch views.
+- **Debugging Linux, debug engine version** - starting a debug session warns when the debug engine is too old to show the program's variables.
+- **Colors for var and out parameters** - var and out parameters can be given their own colors in **Edit symbol colors…** on the Settings page (*Source Highlight Enhancements*).
+- **Form Designer settings, designer version** - the Form Designer card shows a hint for each designer build that is older than the latest VallentaDesigner release.
+- **Form Designer settings, latest designer release** - the Form Designer card shows the version of the latest VallentaDesigner release.
+- **Code folding** - Pascal code folds by its syntax.
+- **Code folding, `{$IFDEF}` branches** - each branch of an `{$IFDEF}` block folds.
+- **Code folding, `{$REGION}`** - `{$REGION}` … `{$ENDREGION}` blocks fold.
+- **Code folding, folded region caption** - a folded `{$REGION}` block shows its caption highlighted, styled by Folded Region Caption on the Editor Options card of the settings page.
+- **Minimap, region captions** - Region Captions in the Minimap on the Editor Options card of the settings page shows `{$REGION}` captions as minimap labels.
+- **Outline, `{$REGION}` blocks** - Regions in the Outline on the Editor Options card of the settings page shows `{$REGION}` blocks as groups in the outline.
+- **Debugging, Source Path** - the folders listed in Source Path on the Debugger page of Project Options are searched for the source files of the debugged program, and Source Path can be edited there.
+- **Debugging, source files not found** - when debug symbols are converted after a build, the Warnings tab of the build output names the source files that the debugger cannot open.
 
 ### Changed
-- **Debugging Linux, session start** — LLDB's index of the program's debug information is stored on disk and reused when an unchanged executable is debugged again.
-- **Debugging Linux, Debug Console at session start** — the source locations of the session are set up without being listed in the Debug Console.
+- **Debugging Linux, session start** - LLDB's index of the program's debug information is stored on disk and reused when an unchanged executable is debugged again.
+- **Debugging Linux, Debug Console at session start** - the source locations of the session are set up without being listed in the Debug Console.
 
 ### Fixed
-- **Debugging Linux, F10 while the Watch or Variables view is still evaluating** — the step stops on the next line.
-- **Debugging Linux, a step after a Watch getter raised an exception** — the step stops on the next line.
-- **Debugging Linux, breakpoints while the Watch and Variables views call getters** — breakpoints keep their state in the editor.
-- **Debugging Linux, Delphi 12, interface variables** — an interface variable shows the object that implements it.
-- **Debugging Linux, own debug engine** — Use my own… on the Platform Manager card accepts an lldb-dap older than 21.1.0.
-- **Debugging, a `var` parameter** — hover and the Watch and Variables views show the value of the referenced variable.
-- **Debugging, a `const` record parameter** — hover and the Watch and Variables views show the record's fields.
-- **Debugging, a pointer to a record** — the pointer expands into the record's fields on hover and in the Watch view.
-- **Debugging, an `Extended` variable in optimized Win32 code** — the Watch and Variables views show its value.
-- **Project Options, Inherit parent with an empty list** — unchecking Inherit parent and pressing OK now removes the Runtime Packages inherited from Base from that configuration or platform.
-- **Project Options, a value set for one configuration and platform** — the build now uses the value shown in the editor, also where the project had no settings for that combination yet.
-- **An anonymous method parameter that shares its name with a variable of the enclosing routine** — inside the anonymous method, `Item.Caption` resolves on the parameter's type.
-- **A variable declared in the var section of an anonymous method** — outside the anonymous method, the same name resolves to the enclosing routine's declaration.
-- **A type declared in both System and a unit in the uses clause** — the name resolves to the used unit's declaration, such as `TMonitor` with `Vcl.Forms` in the uses clause.
-- **A type declared in an include file of a used unit** — a same-named type in a unit listed later in the uses clause takes precedence over it.
-- **A unit named through an include file in the uses clause** — a same-named type in a unit listed after the include takes precedence over that unit's type.
-- **Unused unit detection, a unit required by the body of an inline routine** — a unit needed only so the compiler can expand the body of a called `inline` function or method is not reported as unused.
-- **A comment holding an older copy of the unit** — the unit's declarations resolve.
-- **Debugging, units of a package in the project group** — a stop in a unit of a package from the same project group opens that unit's source file.
+- **Debugging Linux, F10 while the Watch or Variables view is still evaluating** - the step stops on the next line.
+- **Debugging Linux, a step after a Watch getter raised an exception** - the step stops on the next line.
+- **Debugging Linux, breakpoints while the Watch and Variables views call getters** - breakpoints keep their state in the editor.
+- **Debugging Linux, Delphi 12, interface variables** - an interface variable shows the object that implements it.
+- **Debugging Linux, own debug engine** - Use my own… on the Platform Manager card accepts an lldb-dap older than 21.1.0.
+- **Debugging, a `var` parameter** - hover and the Watch and Variables views show the value of the referenced variable.
+- **Debugging, a `const` record parameter** - hover and the Watch and Variables views show the record's fields.
+- **Debugging, a pointer to a record** - the pointer expands into the record's fields on hover and in the Watch view.
+- **Debugging, an `Extended` variable in optimized Win32 code** - the Watch and Variables views show its value.
+- **Project Options, Inherit parent with an empty list** - unchecking Inherit parent and pressing OK now removes the Runtime Packages inherited from Base from that configuration or platform.
+- **Project Options, a value set for one configuration and platform** - the build now uses the value shown in the editor, also where the project had no settings for that combination yet.
+- **An anonymous method parameter that shares its name with a variable of the enclosing routine** - inside the anonymous method, `Item.Caption` resolves on the parameter's type.
+- **A variable declared in the var section of an anonymous method** - outside the anonymous method, the same name resolves to the enclosing routine's declaration.
+- **A type declared in both System and a unit in the uses clause** - the name resolves to the used unit's declaration, such as `TMonitor` with `Vcl.Forms` in the uses clause.
+- **A type declared in an include file of a used unit** - a same-named type in a unit listed later in the uses clause takes precedence over it.
+- **A unit named through an include file in the uses clause** - a same-named type in a unit listed after the include takes precedence over that unit's type.
+- **Unused unit detection, a unit required by the body of an inline routine** - a unit needed only so the compiler can expand the body of a called `inline` function or method is not reported as unused.
+- **A comment holding an older copy of the unit** - the unit's declarations resolve.
+- **Debugging, units of a package in the project group** - a stop in a unit of a package from the same project group opens that unit's source file.
 
 
 ## [1.2.7] 
 
 ### Added
-- **Delphi 2007** — Delphi 2007 is detected, and its projects build, index, run and debug from the extension.
-- **Project Options, a Delphi 2007 project** — the project opens in the editor read-only.
-- **Windows ANSI code page for Pascal files** — Pascal files that are not UTF-8 open and save in the Windows ANSI code page, switched by Windows ANSI Code Page on the Editor Options card of the settings page.
-- **Class completion, properties** — Ctrl+Shift+C completes a property that lacks a backing field or accessors.
-- **Class completion, Finish incomplete properties** — a setting under LSP Server on the settings page decides whether Ctrl+Shift+C completes properties as well as methods.
-- **Class completion, Ctrl+. on a property** — completes that property on its own, or every incomplete property of its type.
-- **Debugging Linux, Show Text** — a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
-- **Debugging Linux, Show as Date/Time** — a numeric row in the Variables and Watch views can be shown as a date, a time or both.
-- **Deployment Linux, files outside the project** — a deployment entry can name a file outside the project directory, such as `..\..\Bin\Linux64\bplShared.so`.
-- **Deployment Linux, macros in a deployment entry** — a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
-- **Deployment Linux, adding an entry by its path** — + Add Path adds a deployment entry from a typed path, checked while it is typed.
-- **Deployment Linux, where an entry resolves to** — each deployment entry shows its resolved file path in every build configuration and whether that file exists.
-- **Projects, display name** — a project in the Projects list can be given a display name, shown above its project file name.
-- **Project groups, build entries of the context menu** — *Build All Projects with their default buildconfig* builds each project with its own configuration and platform, and *Build All Projects with {BuildConfig}/{Platform}* builds every project with the configuration and platform selected in the build toolbar and skips a project that lacks either.
+- **Delphi 2007** - Delphi 2007 is detected, and its projects build, index, run and debug from the extension.
+- **Project Options, a Delphi 2007 project** - the project opens in the editor read-only.
+- **Windows ANSI code page for Pascal files** - Pascal files that are not UTF-8 open and save in the Windows ANSI code page, switched by Windows ANSI Code Page on the Editor Options card of the settings page.
+- **Class completion, properties** - Ctrl+Shift+C completes a property that lacks a backing field or accessors.
+- **Class completion, Finish incomplete properties** - a setting under LSP Server on the settings page decides whether Ctrl+Shift+C completes properties as well as methods.
+- **Class completion, Ctrl+. on a property** - completes that property on its own, or every incomplete property of its type.
+- **Debugging Linux, Show Text** - a `TStrings` row in the Variables and Watch views opens its full text in an editor tab.
+- **Debugging Linux, Show as Date/Time** - a numeric row in the Variables and Watch views can be shown as a date, a time or both.
+- **Deployment Linux, files outside the project** - a deployment entry can name a file outside the project directory, such as `..\..\Bin\Linux64\bplShared.so`.
+- **Deployment Linux, macros in a deployment entry** - a deployment entry can name its file through a macro, such as `$(BDSCOMMONDIR)\Bpl\Linux64\bplShared.so`.
+- **Deployment Linux, adding an entry by its path** - + Add Path adds a deployment entry from a typed path, checked while it is typed.
+- **Deployment Linux, where an entry resolves to** - each deployment entry shows its resolved file path in every build configuration and whether that file exists.
+- **Projects, display name** - a project in the Projects list can be given a display name, shown above its project file name.
+- **Project groups, build entries of the context menu** - *Build All Projects with their default buildconfig* builds each project with its own configuration and platform, and *Build All Projects with {BuildConfig}/{Platform}* builds every project with the configuration and platform selected in the build toolbar and skips a project that lacks either.
 
 ### Changed
-- **Deployment Linux, deployed files** — the deployed files are a list, and selecting an entry opens its editor.
-- **Deployment Linux, picking a file** — a picked file is stored through the macro of the folder containing it, such as `$(BDSCOMMONDIR)`.
-- **Debugging Linux, deployment** — with VallentaAgent 0.2.4, a file already present on the target is not sent again.
-- **Debugging Linux, Delphi exceptions switched off** — with *All Delphi Exceptions* cleared, a raise in the running program no longer stops it on the target and waits for the debugger to resume it, which slowed stepping over code that raises and handles exceptions.
-- **Debugging Linux, Logging** — VallentaAgent 0.2.4 logs a deployment: every stored file with its size and transfer rate, the reason for every refused file or connection, and the `lldb-server` command line and ports used to start each session. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
-- **Form Designer settings** — a Delphi release below 11.3 is listed as not supported and has no designer path field.
+- **Deployment Linux, deployed files** - the deployed files are a list, and selecting an entry opens its editor.
+- **Deployment Linux, picking a file** - a picked file is stored through the macro of the folder containing it, such as `$(BDSCOMMONDIR)`.
+- **Debugging Linux, deployment** - with VallentaAgent 0.2.4, a file already present on the target is not sent again.
+- **Debugging Linux, Delphi exceptions switched off** - with *All Delphi Exceptions* cleared, a raise in the running program no longer stops it on the target and waits for the debugger to resume it, which slowed stepping over code that raises and handles exceptions.
+- **Debugging Linux, Logging** - VallentaAgent 0.2.4 logs a deployment: every stored file with its size and transfer rate, the reason for every refused file or connection, and the `lldb-server` command line and ports used to start each session. A run with `--log-level debug` adds one line per command. The agent's README describes the levels.
+- **Form Designer settings** - a Delphi release below 11.3 is listed as not supported and has no designer path field.
 
 ### Fixed
-- **A class helper declared in the implementation section** — a member of the helped class resolves inside the helper's methods.
-- **Code completion inside a class or record helper method** — the helped type's members are offered alongside the helper's own.
-- **A class whose base class is named through a type alias** — its inherited members resolve.
-- **Code completion after a type alias** — the members of the aliased type are offered.
-- **A record's last field followed by `end` on the same line** — `TPoint = record X, Y: Integer end;` no longer reports *Syntax error near 'end'*.
-- **An escaped identifier as the first field of a record or class** — `TMyRecord = record &File: Integer; end;` no longer reports *Syntax error near '&File: Integer'*.
-- **A typed constant of an inline record type** — `const Origin: record X, Y: Integer; end = (X: 0; Y: 0);` no longer reports *Syntax error*.
-- **A field of an inline record type** — `Box.Width` resolves when `Box` is declared as `record Width, Height: Integer; end`.
-- **A member of a typed constant** — `Origin.X` resolves for a record constant such as `const Origin: TPoint = (X: 0; Y: 0);`.
-- **A class section that follows a comment or compiler directive** — its members keep their declared visibility.
-- **Unused-parameter hints on form event handlers** — a handler declared by the IDE in a form, such as `Button1Click(Sender: TObject)`, no longer reports *Parameter 'Sender' is never used*.
-- **A comma-separated index on an array of arrays** — `Grid[0, 1].Caption` resolves when `Grid` is a `TArray<TArray<TMyRecord>>` and no longer reports *Unknown member 'Caption'*.
-- **An inline variable initialized from an array element** — after `var Item := Grid[0, 1];`, `Item.Caption` resolves and no longer reports *Unknown member 'Caption'*.
-- **A member reached through an indexed property** — `MyObject.Lines[0].Add` resolves when `Lines` is declared as `property Lines[Index: Integer]: TStrings`.
-- **A character read from a string** — `S[1].IsDigit` resolves when `S` is a string.
-- **An unknown member of a built-in type** — `S.Trimm` on a `string` reports *Unknown member 'Trimm' on type 'string'*.
-- **A field of a `with` target that shares a routine's name** — inside `with Message do`, `Pos.X` resolves to the `Pos` field of `Message`.
-- **A nested class used inside its generic owner** — `TEnumerator.Create(Self)` in a method of `TList<T>` resolves to the nested `TEnumerator`.
-- **A helper declared for a type alias** — a helper for `UInt32` applies to a `Cardinal` value.
-- **Go to Definition on a call of an overloaded routine** — Ctrl+Click on `CreateEx` in `TMyFrame.CreateEx(Editor, Self)` goes straight to the overload selected by the arguments.
-- **Build for Linux, symbol cleanup** — the cleanup performed at the start of a Build or Rebuild removes the project's PDB only.
-- **Run and debug, packages** — a package project's output is found under its LIB suffix in the package output directory.
-- **Debugging, a static method called through its type** — `TMyRecord.FromValue(5).AsText` evaluates in the Watch view and no longer reports *'TMyRecord' is a type, not a value*.
-- **Debugging, a method of a record** — `MyRecord.AsText` evaluates in the Watch view and no longer reports *'AsText' is not a member of TMyRecord*.
-- **Projects in a project group over MCP (Pro)** — `set_active_project` and the other MCP tools accept a project that belongs to a project group and no longer report *is not registered*.
-- **Unit rename, projects in a project group** — renaming `Unit1.pas` to `Customers.pas` updates the unit's reference in the `.dproj` of a project that belongs to a project group.
-- **Attach to Process, projects in a project group** — the running executable of a project in a project group is listed with the project executables at the top of the process list.
-- **Convert to UTF-8 with BOM, ANSI files outside Windows-1252** — a file in another system code page, such as Windows-1251, keeps its characters.
-- **UTF-8 files without BOM** — the encoding warning reports them, and Convert to UTF-8 with BOM keeps their characters.
-- **Convert to UTF-8 with BOM, unsaved changes** — a file whose save would replace its special characters is not saved, and a message names the file.
-- **`{$IF CompilerVersion …}` and `{$IF RTLVersion …}` blocks** — a block that compares either constant is evaluated with the value of the selected Delphi release.
-- **A project that states no application type** — the project type is detected.
-- **Deployment on Linux, runtime packages** — a package project deploys the `.so` file generated during its Linux64 build.
-- **Debugging Linux, the Delphi keymap** — the Delphi run and stepping keys drive a Linux session.
-- **Debugging Linux, the debug engine download** — the downloaded engine holds every DLL loaded by `lldb-dap`.
-- **Debugging Linux, stepping while values are evaluated** — a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
-- **Debugging Linux, Restart** — Restart on the debug toolbar starts the program again on the target.
-- **Projects view, adding a project that is already listed** — the selected project becomes the active project.
+- **A class helper declared in the implementation section** - a member of the helped class resolves inside the helper's methods.
+- **Code completion inside a class or record helper method** - the helped type's members are offered alongside the helper's own.
+- **A class whose base class is named through a type alias** - its inherited members resolve.
+- **Code completion after a type alias** - the members of the aliased type are offered.
+- **A record's last field followed by `end` on the same line** - `TPoint = record X, Y: Integer end;` no longer reports *Syntax error near 'end'*.
+- **An escaped identifier as the first field of a record or class** - `TMyRecord = record &File: Integer; end;` no longer reports *Syntax error near '&File: Integer'*.
+- **A typed constant of an inline record type** - `const Origin: record X, Y: Integer; end = (X: 0; Y: 0);` no longer reports *Syntax error*.
+- **A field of an inline record type** - `Box.Width` resolves when `Box` is declared as `record Width, Height: Integer; end`.
+- **A member of a typed constant** - `Origin.X` resolves for a record constant such as `const Origin: TPoint = (X: 0; Y: 0);`.
+- **A class section that follows a comment or compiler directive** - its members keep their declared visibility.
+- **Unused-parameter hints on form event handlers** - a handler declared by the IDE in a form, such as `Button1Click(Sender: TObject)`, no longer reports *Parameter 'Sender' is never used*.
+- **A comma-separated index on an array of arrays** - `Grid[0, 1].Caption` resolves when `Grid` is a `TArray<TArray<TMyRecord>>` and no longer reports *Unknown member 'Caption'*.
+- **An inline variable initialized from an array element** - after `var Item := Grid[0, 1];`, `Item.Caption` resolves and no longer reports *Unknown member 'Caption'*.
+- **A member reached through an indexed property** - `MyObject.Lines[0].Add` resolves when `Lines` is declared as `property Lines[Index: Integer]: TStrings`.
+- **A character read from a string** - `S[1].IsDigit` resolves when `S` is a string.
+- **An unknown member of a built-in type** - `S.Trimm` on a `string` reports *Unknown member 'Trimm' on type 'string'*.
+- **A field of a `with` target that shares a routine's name** - inside `with Message do`, `Pos.X` resolves to the `Pos` field of `Message`.
+- **A nested class used inside its generic owner** - `TEnumerator.Create(Self)` in a method of `TList<T>` resolves to the nested `TEnumerator`.
+- **A helper declared for a type alias** - a helper for `UInt32` applies to a `Cardinal` value.
+- **Go to Definition on a call of an overloaded routine** - Ctrl+Click on `CreateEx` in `TMyFrame.CreateEx(Editor, Self)` goes straight to the overload selected by the arguments.
+- **Build for Linux, symbol cleanup** - the cleanup performed at the start of a Build or Rebuild removes the project's PDB only.
+- **Run and debug, packages** - a package project's output is found under its LIB suffix in the package output directory.
+- **Debugging, a static method called through its type** - `TMyRecord.FromValue(5).AsText` evaluates in the Watch view and no longer reports *'TMyRecord' is a type, not a value*.
+- **Debugging, a method of a record** - `MyRecord.AsText` evaluates in the Watch view and no longer reports *'AsText' is not a member of TMyRecord*.
+- **Projects in a project group over MCP (Pro)** - `set_active_project` and the other MCP tools accept a project that belongs to a project group and no longer report *is not registered*.
+- **Unit rename, projects in a project group** - renaming `Unit1.pas` to `Customers.pas` updates the unit's reference in the `.dproj` of a project that belongs to a project group.
+- **Attach to Process, projects in a project group** - the running executable of a project in a project group is listed with the project executables at the top of the process list.
+- **Convert to UTF-8 with BOM, ANSI files outside Windows-1252** - a file in another system code page, such as Windows-1251, keeps its characters.
+- **UTF-8 files without BOM** - the encoding warning reports them, and Convert to UTF-8 with BOM keeps their characters.
+- **Convert to UTF-8 with BOM, unsaved changes** - a file whose save would replace its special characters is not saved, and a message names the file.
+- **`{$IF CompilerVersion …}` and `{$IF RTLVersion …}` blocks** - a block that compares either constant is evaluated with the value of the selected Delphi release.
+- **A project that states no application type** - the project type is detected.
+- **Deployment on Linux, runtime packages** - a package project deploys the `.so` file generated during its Linux64 build.
+- **Debugging Linux, the Delphi keymap** - the Delphi run and stepping keys drive a Linux session.
+- **Debugging Linux, the debug engine download** - the downloaded engine holds every DLL loaded by `lldb-dap`.
+- **Debugging Linux, stepping while values are evaluated** - a step or continue pressed while the Watch, hover or Variables view is still calling getters waits for the call in progress. Before, the step could start inside a getter that had raised and end the program, or the editor kept showing the program as running after the step had stopped.
+- **Debugging Linux, Restart** - Restart on the debug toolbar starts the program again on the target.
+- **Projects view, adding a project that is already listed** - the selected project becomes the active project.
 
 
 ## [1.2.6] 
 
 ### Added
-- **Convert Debug Symbols After Build, as a setting** — `vallenta.studio.build.convertSymbolsAfterBuild` converts the debug symbols after every successful Win32 or Win64 build of any project.
-- **Build Output, Hints tab** — compiler hints are listed on their own tab of the Build Output view.
+- **Convert Debug Symbols After Build, as a setting** - `vallenta.studio.build.convertSymbolsAfterBuild` converts the debug symbols after every successful Win32 or Win64 build of any project.
+- **Build Output, Hints tab** - compiler hints are listed on their own tab of the Build Output view.
 
 ### Changed
-- **Parameter hints, overloads** — only the overloads that accept the arguments already typed are listed.
+- **Parameter hints, overloads** - only the overloads that accept the arguments already typed are listed.
 
 ### Fixed
-- **Debugging, an indexed property** — the Watch and Variables views show the value of an indexed property, including the one its class declares `default`.
-- **Debugging, a property declared with `index`** — the Watch and Variables views show its value.
-- **Debugging, a member of a generic class** — the value shown is the one the instantiation being inspected holds.
-- **Debugging, expanding a generic collection in the Watch view** — the fields, elements and properties of a `TList<T>` or any other generic instantiation are shown, on Win32 and Win64.
-- **Debugging, the name of a generic collection** — an instance of `TList<T>` or any other generic class is named `TList<System.Integer>` in the Watch and Variables views, on Win32 and Win64.
-- **A variable declared with `absolute`** — the variable resolves to its declared type for hover, completion and Go to Definition.
-- **An inline variable declared from an operator expression** — the variable shows its type on hover and offers its members in completion.
-- **An inferred type that depends on the target platform** — the type follows the platform the project has selected.
-- **Unused unit detection, a unit required for inline expansion** — a unit that a call needs only so the compiler can expand an `inline` method is not reported as unused.
-- **Build Output, compiler hints** — a hint the compiler reports appears on the Hints tab of the Build Output view, in every interface language.
-- **Type of a bare identifier** — a field, property or parameter of another class or routine no longer supplies the type.
-- **Debugging, a class cast of an interface variable** — `TMyClass(MyIntf)` shows the implementing object's fields and properties.
-- **Debugging, `Result` of a function returning a record** — the Watch and Variables views show the record's fields.
-- **Debugging, `Result` of a function returning a string** — the Watch and Variables views show its value.
-- **Debugging, a routine nested in another** — the enclosing routine's locals, parameters and `Self` resolve in the Watch and Variables views, on hover and in the Debug Console.
-- **Debugging on Linux, a value the debug info declares as a reference** — the Watch and Variables views show its value.
-- **Debugging on Linux, a record with a variant part** — `TRect` and every other `case` record show their fields in the Watch and Variables views.
-- **Debugging on Linux, a global variable** — a unit-level variable resolves in the Watch view, on hover and in the Debug Console.
-- **Debugging on Linux, a Watch expression calling a routine a breakpoint sits in** — the call returns its value.
-- **Build status, a clean or rebuild** — the status line names that operation while it runs and when it ends.
-- **EurekaLog, cleaning a project** — a clean of a project with EurekaLog enabled succeeds.
+- **Debugging, an indexed property** - the Watch and Variables views show the value of an indexed property, including the one its class declares `default`.
+- **Debugging, a property declared with `index`** - the Watch and Variables views show its value.
+- **Debugging, a member of a generic class** - the value shown is the one the instantiation being inspected holds.
+- **Debugging, expanding a generic collection in the Watch view** - the fields, elements and properties of a `TList<T>` or any other generic instantiation are shown, on Win32 and Win64.
+- **Debugging, the name of a generic collection** - an instance of `TList<T>` or any other generic class is named `TList<System.Integer>` in the Watch and Variables views, on Win32 and Win64.
+- **A variable declared with `absolute`** - the variable resolves to its declared type for hover, completion and Go to Definition.
+- **An inline variable declared from an operator expression** - the variable shows its type on hover and offers its members in completion.
+- **An inferred type that depends on the target platform** - the type follows the platform the project has selected.
+- **Unused unit detection, a unit required for inline expansion** - a unit that a call needs only so the compiler can expand an `inline` method is not reported as unused.
+- **Build Output, compiler hints** - a hint the compiler reports appears on the Hints tab of the Build Output view, in every interface language.
+- **Type of a bare identifier** - a field, property or parameter of another class or routine no longer supplies the type.
+- **Debugging, a class cast of an interface variable** - `TMyClass(MyIntf)` shows the implementing object's fields and properties.
+- **Debugging, `Result` of a function returning a record** - the Watch and Variables views show the record's fields.
+- **Debugging, `Result` of a function returning a string** - the Watch and Variables views show its value.
+- **Debugging, a routine nested in another** - the enclosing routine's locals, parameters and `Self` resolve in the Watch and Variables views, on hover and in the Debug Console.
+- **Debugging on Linux, a value the debug info declares as a reference** - the Watch and Variables views show its value.
+- **Debugging on Linux, a record with a variant part** - `TRect` and every other `case` record show their fields in the Watch and Variables views.
+- **Debugging on Linux, a global variable** - a unit-level variable resolves in the Watch view, on hover and in the Debug Console.
+- **Debugging on Linux, a Watch expression calling a routine a breakpoint sits in** - the call returns its value.
+- **Build status, a clean or rebuild** - the status line names that operation while it runs and when it ends.
+- **EurekaLog, cleaning a project** - a clean of a project with EurekaLog enabled succeeds.
 
 
 ## [1.2.5] - 2026-09-15
 
 ### Added
-- **Debugging, Copy Address** — the context menu of a class, record or array row in the Variables and Watch views copies the address of its storage.
-- **Projects, remembered open files** — a scope setting on the settings page remembers open editor tabs and breakpoints per project, per project group, or not at all.
+- **Debugging, Copy Address** - the context menu of a class, record or array row in the Variables and Watch views copies the address of its storage.
+- **Projects, remembered open files** - a scope setting on the settings page remembers open editor tabs and breakpoints per project, per project group, or not at all.
 
 ### Changed
-- **Debugging, the Variables view** — a method's receiver is listed as `Self`, and an object's children are `[Raw View]`, `[Fields]` and `[Properties]`.
+- **Debugging, the Variables view** - a method's receiver is listed as `Self`, and an object's children are `[Raw View]`, `[Fields]` and `[Properties]`.
 
 ### Fixed
-- **Debugging, an interface method named without parentheses** — `MyIntf.GetNumber` evaluates in the Watch view, on hover and in the Debug Console.
-- **Debugging on Win32, locals below a raised exception** — a caller frame of a raised exception now shows its locals and answers expressions over them.
-- **Debugging, Show as Date/Time in the Watch view** — the submenu is offered on a numeric row only.
-- **Complete Class** — only the member a method resolution clause names receives an implementation.
-- **Debugging, symbol conversion after a build** — the debug-information conversion of a large project finishes in seconds again.
+- **Debugging, an interface method named without parentheses** - `MyIntf.GetNumber` evaluates in the Watch view, on hover and in the Debug Console.
+- **Debugging on Win32, locals below a raised exception** - a caller frame of a raised exception now shows its locals and answers expressions over them.
+- **Debugging, Show as Date/Time in the Watch view** - the submenu is offered on a numeric row only.
+- **Complete Class** - only the member a method resolution clause names receives an implementation.
+- **Debugging, symbol conversion after a build** - the debug-information conversion of a large project finishes in seconds again.
 
 
 ## [1.2.4] - 2026-09-11
 
 ### Added
-- **Find All References (Base Declaration)** — a new command lists every reference to the declarations the member at the caret implements or overrides.
-- **Find All References over MCP (Pro)** — the `find_references` tool now also searches the declarations a member implements or overrides.
-- **Reordering in the Projects view** — a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
-- **Debugging over MCP (Pro)** — an AI agent now launches or attaches to a Delphi program, sets breakpoints, steps through it, and reads the stopped program in Delphi form, sharing the session the Run and Debug view shows. An agent could read code and start builds, and everything about a running program had to be relayed to it by hand.
-- **The active project over MCP (Pro)** — an AI agent now makes a registered project the active one, and the build toolbar, the project inspector and the remembered breakpoints follow it. Choosing the project an agent builds or debugs was a step in the Projects sidebar.
-- **Linux debugging, Rocky Linux 9 and 10 in the distribution catalogue** — *New Distribution* now prepares a Rocky Linux 9 or 10 sysroot from the distribution's own package repositories, which a Linux64 build links against for a Rocky, RHEL or Alma target of that major. 
-- **Linux debugging, Debian 12 and 13 in the distribution catalogue** — *New Distribution* now prepares a Debian 12 or 13 sysroot from Debian's snapshot archive, and a Linux64 build links against it. 
-- **Linux debugging, openSUSE Leap 16.0 in the distribution catalogue** — *New Distribution* now prepares a Leap 16.0 sysroot from the release repository, and a Linux64 build links against it. 
+- **Find All References (Base Declaration)** - a new command lists every reference to the declarations the member at the caret implements or overrides.
+- **Find All References over MCP (Pro)** - the `find_references` tool now also searches the declarations a member implements or overrides.
+- **Reordering in the Projects view** - a project or a project group is now movable to another position in the list, and the new order of a project group is saved to its `.groupproj`. 
+- **Debugging over MCP (Pro)** - an AI agent now launches or attaches to a Delphi program, sets breakpoints, steps through it, and reads the stopped program in Delphi form, sharing the session the Run and Debug view shows. An agent could read code and start builds, and everything about a running program had to be relayed to it by hand.
+- **The active project over MCP (Pro)** - an AI agent now makes a registered project the active one, and the build toolbar, the project inspector and the remembered breakpoints follow it. Choosing the project an agent builds or debugs was a step in the Projects sidebar.
+- **Linux debugging, Rocky Linux 9 and 10 in the distribution catalogue** - *New Distribution* now prepares a Rocky Linux 9 or 10 sysroot from the distribution's own package repositories, which a Linux64 build links against for a Rocky, RHEL or Alma target of that major. 
+- **Linux debugging, Debian 12 and 13 in the distribution catalogue** - *New Distribution* now prepares a Debian 12 or 13 sysroot from Debian's snapshot archive, and a Linux64 build links against it. 
+- **Linux debugging, openSUSE Leap 16.0 in the distribution catalogue** - *New Distribution* now prepares a Leap 16.0 sysroot from the release repository, and a Linux64 build links against it. 
 
 ### Fixed
-- **Build, the Build Output view stuck on an earlier build** — every build now appears in the Build Output view with its errors and warnings. After a build that ended before the compiler ran, every later build in that window was refused with *A build is already in progress* and the view kept showing the earlier build.
-- **Build, the Build Output view switching to an empty Errors tab** — a build started after a failed one now stays on the tab already selected while it runs. The view switched to the Errors tab as that build started, so its output arrived on a tab no longer shown.
-- **Build, an error from the resource compiler** — the Errors tab now lists an error the resource compiler reported, with the file and line it names. A build that failed there showed *Failed* with *Errors: 0* and an empty Errors tab.
-- **Build, a failure in no recognised format** — the Errors tab of a failed build now carries the exit code and the last lines of the build output. A failure that matched no compiler or tool format left the tab empty.
-- **Build, EurekaLog post-processing on a non-Windows platform** — EurekaLog post-processing now runs for Win32 and Win64 builds only.
-- **Build, an error line after the file is edited** — an entry in the Errors and Warnings tabs now points at the line its statement has moved to.
-- **Linux debugging, a target with lldb 21** — Linux debugging now works on a target whose lldb-server is version 21 or newer, such as Rocky Linux 9.7, with VallentaAgent 0.2.3. Every session on such a target failed with *lldb-server exited before it was ready (code Some(0))*.
-- **Linux debugging, a sysroot imported from an rpm-based target** — *New Distribution, From target* now imports from a target with the rpm layout, such as Rocky Linux 9, and a Linux64 build links against that sysroot. The import stopped with *No libgcc.a under /usr/lib/gcc/x86_64-linux-gnu*.
-- **Linux debugging, an import from a target without tar** — *New Distribution, From target* now names the missing tar or gzip command and the install command for the target's distribution. The import ended with *Packing the collected files failed* and no cause.
-- **Linux debugging, a sysroot imported from an Arch, Void or Gentoo target** — *New Distribution, From target* now imports from such a target, and a Linux64 build links against that sysroot. The import stopped with *Neither dpkg nor rpm is present*.
-- **Linux debugging, an import from a Void target without ICU or from a musl target** — *New Distribution, From target* now stops before collecting anything on a Void target without the ICU library, naming the install command, and on a musl-based target such as Alpine.
-- **Linux debugging, an exception inside a property getter** — a Delphi exception raised while the debugger evaluates a property getter or a Watch call now shows as that value's text, and the session stays at the stopped line. 
-- **Linux debugging, lldb's notifications about Delphi types** — the notifications naming `DW_TAG_BORLAND_Delphi_string`, `DW_TAG_BORLAND_Delphi_dynamic_array` and `DW_TAG_BORLAND_Delphi_set` tags and members "unable to be parsed" no longer appear. Expanding a class in the debugger's own tree or hovering a global showed one per string, array and set field.
-- **Linux debugging, Add to Watch from the Variables view** — a row of the Variables view now carries its Delphi expression, so Add to Watch and Copy as Expression put `Station.Location.Lat` into the Watch view. The rows carried no expression, and the Add to Watch command was absent from their context menu.
-- **Linux debugging, the `[Fields]` node** — a class instance in the Variables view now expands into `[Fields]` and `[Properties]` nodes, as on Windows. Its fields were listed directly under the object.
-- **Linux debugging, a field hovered inside its own class** — a member of the enclosing class now shows its value on hover and in the Watch view when it is written without `Self.`. Hover showed the declaration alone, and Watch reported *use of undeclared identifier*.
-- **Debugger, Add to Watch on an object member** — a field or property added to the Watch view from the Variables view, such as `list.FCount` or `list.Count`, now evaluates in Delphi syntax. The Watch view showed *Unexpected '>'* for the spelling it received, and the same expression typed in Delphi form was refused as a call.
-- **Debugger, a property read through an abstract getter** — a property whose getter is declared `virtual; abstract;`, such as `Count` of a `TStringList`, now evaluates in Watch, hover and the `[Properties]` node on Win32, Win64 and Linux64. The property was refused as not described by the debug information, on Linux in Watch and hover.
-- **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** — a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. 
-- **Debugger, a local the compiler keeps in a register** — a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. 
-- **Debugger, `[Fields]` and `[Properties]` in name order** — the two nodes now list their entries sorted by name, case-insensitively and with numbers compared by value. They followed the declaration order.
-- **LSP, an inline variable initialised from a list element** — `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
-- **LSP, the value of a constant declared inside a routine** — hovering `MAX_ITEMS` in a routine that declares `const MAX_ITEMS = 99;` now shows `const MAX_ITEMS: Integer = 99`. The hover named the inferred type alone, so reading the value meant opening the declaration.
-- **LSP, the value of a constant written as an expression** — hovering `MAX_BYTES`, declared as `const MAX_BYTES = KB * 64;`, now shows `= 65536` under the declaration, in the hover and in the code completion details. The hover showed the expression as written, so arriving at the value meant opening every constant it named.
+- **Build, the Build Output view stuck on an earlier build** - every build now appears in the Build Output view with its errors and warnings. After a build that ended before the compiler ran, every later build in that window was refused with *A build is already in progress* and the view kept showing the earlier build.
+- **Build, the Build Output view switching to an empty Errors tab** - a build started after a failed one now stays on the tab already selected while it runs. The view switched to the Errors tab as that build started, so its output arrived on a tab no longer shown.
+- **Build, an error from the resource compiler** - the Errors tab now lists an error the resource compiler reported, with the file and line it names. A build that failed there showed *Failed* with *Errors: 0* and an empty Errors tab.
+- **Build, a failure in no recognised format** - the Errors tab of a failed build now carries the exit code and the last lines of the build output. A failure that matched no compiler or tool format left the tab empty.
+- **Build, EurekaLog post-processing on a non-Windows platform** - EurekaLog post-processing now runs for Win32 and Win64 builds only.
+- **Build, an error line after the file is edited** - an entry in the Errors and Warnings tabs now points at the line its statement has moved to.
+- **Linux debugging, a target with lldb 21** - Linux debugging now works on a target whose lldb-server is version 21 or newer, such as Rocky Linux 9.7, with VallentaAgent 0.2.3. Every session on such a target failed with *lldb-server exited before it was ready (code Some(0))*.
+- **Linux debugging, a sysroot imported from an rpm-based target** - *New Distribution, From target* now imports from a target with the rpm layout, such as Rocky Linux 9, and a Linux64 build links against that sysroot. The import stopped with *No libgcc.a under /usr/lib/gcc/x86_64-linux-gnu*.
+- **Linux debugging, an import from a target without tar** - *New Distribution, From target* now names the missing tar or gzip command and the install command for the target's distribution. The import ended with *Packing the collected files failed* and no cause.
+- **Linux debugging, a sysroot imported from an Arch, Void or Gentoo target** - *New Distribution, From target* now imports from such a target, and a Linux64 build links against that sysroot. The import stopped with *Neither dpkg nor rpm is present*.
+- **Linux debugging, an import from a Void target without ICU or from a musl target** - *New Distribution, From target* now stops before collecting anything on a Void target without the ICU library, naming the install command, and on a musl-based target such as Alpine.
+- **Linux debugging, an exception inside a property getter** - a Delphi exception raised while the debugger evaluates a property getter or a Watch call now shows as that value's text, and the session stays at the stopped line. 
+- **Linux debugging, lldb's notifications about Delphi types** - the notifications naming `DW_TAG_BORLAND_Delphi_string`, `DW_TAG_BORLAND_Delphi_dynamic_array` and `DW_TAG_BORLAND_Delphi_set` tags and members "unable to be parsed" no longer appear. Expanding a class in the debugger's own tree or hovering a global showed one per string, array and set field.
+- **Linux debugging, Add to Watch from the Variables view** - a row of the Variables view now carries its Delphi expression, so Add to Watch and Copy as Expression put `Station.Location.Lat` into the Watch view. The rows carried no expression, and the Add to Watch command was absent from their context menu.
+- **Linux debugging, the `[Fields]` node** - a class instance in the Variables view now expands into `[Fields]` and `[Properties]` nodes, as on Windows. Its fields were listed directly under the object.
+- **Linux debugging, a field hovered inside its own class** - a member of the enclosing class now shows its value on hover and in the Watch view when it is written without `Self.`. Hover showed the declaration alone, and Watch reported *use of undeclared identifier*.
+- **Debugger, Add to Watch on an object member** - a field or property added to the Watch view from the Variables view, such as `list.FCount` or `list.Count`, now evaluates in Delphi syntax. The Watch view showed *Unexpected '>'* for the spelling it received, and the same expression typed in Delphi form was refused as a call.
+- **Debugger, a property read through an abstract getter** - a property whose getter is declared `virtual; abstract;`, such as `Count` of a `TStringList`, now evaluates in Watch, hover and the `[Properties]` node on Win32, Win64 and Linux64. The property was refused as not described by the debug information, on Linux in Watch and hover.
+- **Debugger, Add to Watch inside `[Fields]` and `[Properties]`** - a row under an object's `[Fields]` or `[Properties]` node now carries its Delphi expression, so Add to Watch and Copy as Expression work on it, and an object reached that way expands with its own two nodes. 
+- **Debugger, a local the compiler keeps in a register** - a local of a build with optimization on now shows its value in Watch, hover, the Debug Console and the Variables view on Win32 and Win64. 
+- **Debugger, `[Fields]` and `[Properties]` in name order** - the two nodes now list their entries sorted by name, case-insensitively and with numbers compared by value. They followed the declaration order.
+- **LSP, an inline variable initialised from a list element** - `var Item := MyList[I];` now types `Item` as the element type, and a member access such as `Item.Caption` no longer reports *Unknown member*. Every class and interface declaring a default indexed property was affected, and hover named the container type.
+- **LSP, the value of a constant declared inside a routine** - hovering `MAX_ITEMS` in a routine that declares `const MAX_ITEMS = 99;` now shows `const MAX_ITEMS: Integer = 99`. The hover named the inferred type alone, so reading the value meant opening the declaration.
+- **LSP, the value of a constant written as an expression** - hovering `MAX_BYTES`, declared as `const MAX_BYTES = KB * 64;`, now shows `= 65536` under the declaration, in the hover and in the code completion details. The hover showed the expression as written, so arriving at the value meant opening every constant it named.
 
 
 ## [1.2.3] - 2026-09-05
 
 ### Added
-- **Form Designer (beta)** — a `.dfm` form now opens in the Vallenta Form Designer instead of the text editor, where controls are placed from a palette built from the packages installed in your Delphi, edited in an object inspector backed by the IDE's own property editors, and wired to event handlers that Vallenta Studio creates, renames and removes in the unit for you. The unit follows the form throughout: a component added or deleted on the form gains or loses its field, renaming a component renames its field and its handlers, and saving the form saves the unit with it. 
+- **Form Designer (beta)** - a `.dfm` form now opens in the Vallenta Form Designer instead of the text editor, where controls are placed from a palette built from the packages installed in your Delphi, edited in an object inspector backed by the IDE's own property editors, and wired to event handlers that Vallenta Studio creates, renames and removes in the unit for you. The unit follows the form throughout: a component added or deleted on the form gains or loses its field, renaming a component renames its field and its handlers, and saving the form saves the unit with it. 
 The designer is a separate application built from MIT-licensed source with each Delphi version you use; its repository is published shortly, and until then the button on the **Form Designer** card of the settings page leads to the Vallenta Studio repository, where the release will be announced. 
 Free during the beta
 
-- **Linux64 debugging (beta, Pro)** — Linux64 projects can now be deployed to and debugged on a Linux machine directly from VS Code. 
+- **Linux64 debugging (beta, Pro)** - Linux64 projects can now be deployed to and debugged on a Linux machine directly from VS Code. 
 Supports breakpoints, stepping, call stack, locals, Watch evaluation in Delphi syntax (including method calls), exceptions, and program output in a dedicated terminal session.
 
 The new **Platform Manager** card on the Settings page features:
@@ -265,540 +347,540 @@ The new **Platform Manager** card on the Settings page features:
 On the Linux side, you run a single static binary: **VallentaAgent**, installed with a single command. The binary, install script, and instructions are hosted on its GitHub page, linked directly from the card.
 Additional files required by your program can be deployed per build configuration using the new projects **Deployment Settings**.
 
-- **XML documentation comments in hover, code completion and parameter hints** — a `///` block written above a declaration now shows in the hover popup under the signature, on the highlighted item in code completion, and in the parameter hint while you type an argument list. The descriptions Embarcadero ships across the RTL, VCL and FMX, and any your own code carries, appeared nowhere before; `vallenta.studio.documentation.enabled` turns the display off.
-- **The hover card on the highlighted completion entry** — the details pane beside the completion list now shows what hovering the symbol in source shows: signature, visibility, declaring file, inherited-from, overloads and any `///` documentation. Highlighting an entry previously showed a bare signature line, and nothing at all for a symbol without documentation; press **Ctrl+Space** with the list open to expand the pane the first time.
-- **Debugger, expressions in Delphi syntax (beta)** — Watch, hover, the Debug Console and breakpoint conditions now read Delphi expressions such as `Counter.Value = 7` and `s = 'text'`. C++ syntax was the only form accepted, and `x == 5` and `->` were required throughout; the evaluator is on by default, and `vallenta.studio.debug.delphiExpressionEvaluator` turns it off.
-- **Debugger, the Variables view in Delphi form** — every value in the Variables view now reads the way Delphi writes it. 
-- **Debugger, an interface variable names the class behind it** — a variable declared as an interface now shows the class implementing it and expands into that object. Such a variable showed a bare reference, and reaching the object needed a cast typed into the Watch window.
-- **Debugger, an object's fields under [Fields]** — expanding an object now offers a **[Fields]** entry listing its own and inherited fields, beside **[Properties]**. Those fields sat under the C++ debugger's **[Raw View]** entry.
-- **Debugger, a Watch call the evaluator previously declined** — Watch now runs a call such as `Settings.FindByName('alpha')` and shows what it returns. 
+- **XML documentation comments in hover, code completion and parameter hints** - a `///` block written above a declaration now shows in the hover popup under the signature, on the highlighted item in code completion, and in the parameter hint while you type an argument list. The descriptions Embarcadero ships across the RTL, VCL and FMX, and any your own code carries, appeared nowhere before; `vallenta.studio.documentation.enabled` turns the display off.
+- **The hover card on the highlighted completion entry** - the details pane beside the completion list now shows what hovering the symbol in source shows: signature, visibility, declaring file, inherited-from, overloads and any `///` documentation. Highlighting an entry previously showed a bare signature line, and nothing at all for a symbol without documentation; press **Ctrl+Space** with the list open to expand the pane the first time.
+- **Debugger, expressions in Delphi syntax (beta)** - Watch, hover, the Debug Console and breakpoint conditions now read Delphi expressions such as `Counter.Value = 7` and `s = 'text'`. C++ syntax was the only form accepted, and `x == 5` and `->` were required throughout; the evaluator is on by default, and `vallenta.studio.debug.delphiExpressionEvaluator` turns it off.
+- **Debugger, the Variables view in Delphi form** - every value in the Variables view now reads the way Delphi writes it. 
+- **Debugger, an interface variable names the class behind it** - a variable declared as an interface now shows the class implementing it and expands into that object. Such a variable showed a bare reference, and reaching the object needed a cast typed into the Watch window.
+- **Debugger, an object's fields under [Fields]** - expanding an object now offers a **[Fields]** entry listing its own and inherited fields, beside **[Properties]**. Those fields sat under the C++ debugger's **[Raw View]** entry.
+- **Debugger, a Watch call the evaluator previously declined** - Watch now runs a call such as `Settings.FindByName('alpha')` and shows what it returns. 
 
 ### Fixed
-- **LSP, the repeated `-- protected --` header in code completion** — the member list after a dot now carries a single `-- protected --` header. A class mixing `strict protected` with `protected` members showed one header per member, pushing the members below a block of identical rows.
-- **LSP, code completion after a dereferenced pointer** — the member list now opens on the dot behind a dereferenced pointer, such as `MyRecPtr^.`. Every pointer variable was affected, and the dot opened no list at all.
-- **LSP, Rename Symbol changing only a name's case** — **F2** on an identifier, changing only its case such as `AValue` to `aValue`, now rewrites every occurrence. Every identifier and unit name was affected, and the rename dialog closed leaving the source unchanged.
-- **LSP, a generic method declared with a space before its type parameter list** — a call such as `MyObject.Process<Integer>` no longer reports *Unknown member* when the method is declared as `procedure Process <T>;`. Every generic method, function and class method written that way was affected, whatever the spacing at the call site.
-- **LSP, a helper declared in an indirectly used unit** — `MyRecord.Field.AsText` no longer reports *Unknown member* when the helper's unit is named in the interface `uses` clause of a used unit rather than in the calling unit's own. Every class and record helper reached that way was ignored, and its members were missing from hover, code completion and Go to Definition as well.
-- **LSP, the previous project's units reported as unknown identifiers after a project switch** — making another project active now leaves the units of the previous one alone. Every unit still open from the previous project was re-reported against the new project's settings, filling the Problems panel with *Unknown identifier* and *Unknown type* entries for it.
-- **Problems panel, the previous project's encoding warnings** — the ANSI-encoding warnings now follow the active project, and the warning on a file outside it goes when its editor closes. Warnings for the units of a project you switched away from, and for files whose tab was closed minutes earlier, stayed in the panel.
-- **Build, the compiler error hidden behind *Could not compile used unit*** — a failing build now lists the error that actually stopped the compiler, such as `E2511 Type parameter 'T' must be a class type`, and points it at the unit carrying it. The Errors tab showed only `F2063` against `CodeGear.Delphi.Targets`, with the real error missing.
-- **Project options editor, `&#xD;` added to a multi-line build event** — saving the project options now leaves a pre-build or post-build event spanning several lines exactly as it stood. Every multi-line event written by the IDE picked up a literal `&#xD;` at the end of each of its lines, which then ran as part of the command.
-- **Debugger, 64-bit, a local showing a neighbouring variable's value** — a local in a routine that keeps floating-point values in registers now shows its own value. Every local in such a routine showed the contents of a neighbouring one.
-- **Debugger, a Currency value shown as a scaled integer** — a `Currency` local now shows `12.34`, typed `Currency`. The value showed as `123400` and the type as `Int64`.
-- **Editor colors, a class's nested type section** — a header such as `private type` now takes one color, the one the theme gives every other reserved word. Pascal files on the Dark 2026 and Light 2026 themes were affected.
-- **Editor colors, the word operators** — `and`, `or`, `not` and the other word operators now take the reserved-word color, and `Self` and `Result` take the language-variable color. Those words took the color of a number on every theme.
-- **Editor colors, a unit's section headers** — `initialization` and `finalization` now take the color `implementation` and `interface` take. They took the color of a declaration section on every theme.
+- **LSP, the repeated `-- protected --` header in code completion** - the member list after a dot now carries a single `-- protected --` header. A class mixing `strict protected` with `protected` members showed one header per member, pushing the members below a block of identical rows.
+- **LSP, code completion after a dereferenced pointer** - the member list now opens on the dot behind a dereferenced pointer, such as `MyRecPtr^.`. Every pointer variable was affected, and the dot opened no list at all.
+- **LSP, Rename Symbol changing only a name's case** - **F2** on an identifier, changing only its case such as `AValue` to `aValue`, now rewrites every occurrence. Every identifier and unit name was affected, and the rename dialog closed leaving the source unchanged.
+- **LSP, a generic method declared with a space before its type parameter list** - a call such as `MyObject.Process<Integer>` no longer reports *Unknown member* when the method is declared as `procedure Process <T>;`. Every generic method, function and class method written that way was affected, whatever the spacing at the call site.
+- **LSP, a helper declared in an indirectly used unit** - `MyRecord.Field.AsText` no longer reports *Unknown member* when the helper's unit is named in the interface `uses` clause of a used unit rather than in the calling unit's own. Every class and record helper reached that way was ignored, and its members were missing from hover, code completion and Go to Definition as well.
+- **LSP, the previous project's units reported as unknown identifiers after a project switch** - making another project active now leaves the units of the previous one alone. Every unit still open from the previous project was re-reported against the new project's settings, filling the Problems panel with *Unknown identifier* and *Unknown type* entries for it.
+- **Problems panel, the previous project's encoding warnings** - the ANSI-encoding warnings now follow the active project, and the warning on a file outside it goes when its editor closes. Warnings for the units of a project you switched away from, and for files whose tab was closed minutes earlier, stayed in the panel.
+- **Build, the compiler error hidden behind *Could not compile used unit*** - a failing build now lists the error that actually stopped the compiler, such as `E2511 Type parameter 'T' must be a class type`, and points it at the unit carrying it. The Errors tab showed only `F2063` against `CodeGear.Delphi.Targets`, with the real error missing.
+- **Project options editor, `&#xD;` added to a multi-line build event** - saving the project options now leaves a pre-build or post-build event spanning several lines exactly as it stood. Every multi-line event written by the IDE picked up a literal `&#xD;` at the end of each of its lines, which then ran as part of the command.
+- **Debugger, 64-bit, a local showing a neighbouring variable's value** - a local in a routine that keeps floating-point values in registers now shows its own value. Every local in such a routine showed the contents of a neighbouring one.
+- **Debugger, a Currency value shown as a scaled integer** - a `Currency` local now shows `12.34`, typed `Currency`. The value showed as `123400` and the type as `Int64`.
+- **Editor colors, a class's nested type section** - a header such as `private type` now takes one color, the one the theme gives every other reserved word. Pascal files on the Dark 2026 and Light 2026 themes were affected.
+- **Editor colors, the word operators** - `and`, `or`, `not` and the other word operators now take the reserved-word color, and `Self` and `Result` take the language-variable color. Those words took the color of a number on every theme.
+- **Editor colors, a unit's section headers** - `initialization` and `finalization` now take the color `implementation` and `interface` take. They took the color of a declaration section on every theme.
 
 
 ## [1.2.2] - 2026-08-28
 
 ### Added
-- **Convert Debug Symbols without picking the executable** — the active project's symbols now convert straight from the build toolbar's Debug menu and from the command palette, with no file dialog. **Convert Debug Symbols After Build**, in the new **Vallenta Studio** section of the project options editor, runs the same conversion after every successful build of that configuration, so a Windows service or any other attach target has matching symbols before it starts.
-- **Go to Line Number in the Keyboard Mappings editor** — the editor now lists **Go to Line Number**, and **Set to Delphi defaults** puts it on Delphi's **Alt+G**. An existing keymap keeps its keys, so click **Set to Delphi defaults** once to pick the new shortcut up.
+- **Convert Debug Symbols without picking the executable** - the active project's symbols now convert straight from the build toolbar's Debug menu and from the command palette, with no file dialog. **Convert Debug Symbols After Build**, in the new **Vallenta Studio** section of the project options editor, runs the same conversion after every successful build of that configuration, so a Windows service or any other attach target has matching symbols before it starts.
+- **Go to Line Number in the Keyboard Mappings editor** - the editor now lists **Go to Line Number**, and **Set to Delphi defaults** puts it on Delphi's **Alt+G**. An existing keymap keeps its keys, so click **Set to Delphi defaults** once to pick the new shortcut up.
 
 ### Fixed
-- **LSP, the compiler-injected intrinsics reported as unknown** — `CompilerVersion`, `AtomicCmpExchange128`, `VarArgStart`, `VarArgEnd`, `VarArgGetValue` and `VarArgCopy` no longer report *Unknown identifier*, and hover shows a signature for them. The compiler supplies all six, so `System.pas` carries them only inside comments or not at all and there was no declaration anywhere to index.
-- **LSP, a declaration under `{$IFDEF}` in a heavily conditional unit reported as unknown** — a type such as `TVarArgList` from `System.pas` no longer reports *Unknown type*. The `{$IFDEF}` branches your target actually compiles are now always indexed; a unit with several hundred conditional blocks could previously have the branch you build left out.
-- **LSP, `varargs` on a procedural-type variable or field reported as a syntax error** — a declaration such as `curl_formadd` in `System.Curl.pas`, written as `function (…): CURLFORMcode; cdecl varargs;`, no longer reports *Syntax error near 'varargs'*. Variables and record fields were affected in every spelling, with or without a semicolon between the calling convention and `varargs`.
-- **LSP, a member reached through the result of calling a procedural-type value** — `FLibrary.FFromObject(…).AsType<T>` in `System.JSON.pas` no longer reports *Unknown member* on `AsType`. Every field, variable or parameter holding a callable was affected, and nothing after the call resolved — no hover, no completion, no Go to Definition.
-- **LSP, a parameter of an anonymous method read from a routine nested inside it** — `Path` in `System.IOUtils.pas`, read inside the `StuffPath` function nested in `TDirectory.Copy`'s anonymous method, no longer reports *Unknown identifier*. The parameters of every anonymous method were affected wherever a nested routine read them, and they had no hover and no Go to Definition there.
-- **LSP, an inline variable reusing a name from an earlier block** — `var list := TObjectList.Create;` declared in an `else` branch no longer reports *Unknown member* on `list.FindInstanceOf(nil)` when the `then` branch declares its own `list := TList.Create;`. Members were checked against the routine's first declaration of the name, and hover and code completion after the dot showed the wrong type wherever a later block reused a name.
-- **LSP, Find All References missing a member reached through another unit's variable** — `G_Obj.C1`, where `G_Obj: TTestObj` is declared in a unit the calling unit uses while `TTestObj` itself lives in a unit it does not, is now found. Every call that reached the member through a value declared in an intermediate unit was missing from the results.
-- **LSP, `Self` inside a helper method** — `Self.SomeMethod`, calling a method of the helped type from inside a class or record helper method, no longer reports *Unknown member* on the helper's own type. The bare `SomeMethod` already resolved; the `Self`-qualified form had no hover, no code completion and no Go to Definition there.
-- **LSP, a helper declared for a unit-qualified type** — `MyRec.MyHelperMethod` no longer reports *Unknown member* on `TMyRecord` when the helper is declared as `record helper for MyUnit.TMyRecord`, with the unit name in front of the helped type. Every helper whose helped type was written that way was ignored entirely, and its members were missing from hover and code completion as well.
-- **LSP, Find All References on a member of a type declared below `implementation`** — `TestProc1` of a class declared in the implementation section now lists its calls instead of reporting no references. Every member of a type declared below `implementation` was affected, including calls in the same file.
-- **LSP, Delphi 13's `not in` operator reported as a syntax error** — a condition such as `if MyValue not in MySet then` no longer reports *Missing token*. Every use of the operator was affected, and the left operand resolved as a member access — no hover, no completion, no Go to Definition on it.
-- **LSP, a window opened while another window is still indexing** — a window that starts while another one is still filling the shared symbol cache now picks the finished index up on its own. RTL types such as `TStringList` and inherited members such as `ClassName` stayed *Unknown* in that window until the language server was restarted.
-- **Debugger, 64-bit, a property whose getter is a virtual method** — a property such as `MyObject.Items` now shows its value when you expand **[Properties]**, instead of ending the debug session. On 64-bit targets these properties showed a wrong value or terminated the debugged program.
+- **LSP, the compiler-injected intrinsics reported as unknown** - `CompilerVersion`, `AtomicCmpExchange128`, `VarArgStart`, `VarArgEnd`, `VarArgGetValue` and `VarArgCopy` no longer report *Unknown identifier*, and hover shows a signature for them. The compiler supplies all six, so `System.pas` carries them only inside comments or not at all and there was no declaration anywhere to index.
+- **LSP, a declaration under `{$IFDEF}` in a heavily conditional unit reported as unknown** - a type such as `TVarArgList` from `System.pas` no longer reports *Unknown type*. The `{$IFDEF}` branches your target actually compiles are now always indexed; a unit with several hundred conditional blocks could previously have the branch you build left out.
+- **LSP, `varargs` on a procedural-type variable or field reported as a syntax error** - a declaration such as `curl_formadd` in `System.Curl.pas`, written as `function (…): CURLFORMcode; cdecl varargs;`, no longer reports *Syntax error near 'varargs'*. Variables and record fields were affected in every spelling, with or without a semicolon between the calling convention and `varargs`.
+- **LSP, a member reached through the result of calling a procedural-type value** - `FLibrary.FFromObject(…).AsType<T>` in `System.JSON.pas` no longer reports *Unknown member* on `AsType`. Every field, variable or parameter holding a callable was affected, and nothing after the call resolved - no hover, no completion, no Go to Definition.
+- **LSP, a parameter of an anonymous method read from a routine nested inside it** - `Path` in `System.IOUtils.pas`, read inside the `StuffPath` function nested in `TDirectory.Copy`'s anonymous method, no longer reports *Unknown identifier*. The parameters of every anonymous method were affected wherever a nested routine read them, and they had no hover and no Go to Definition there.
+- **LSP, an inline variable reusing a name from an earlier block** - `var list := TObjectList.Create;` declared in an `else` branch no longer reports *Unknown member* on `list.FindInstanceOf(nil)` when the `then` branch declares its own `list := TList.Create;`. Members were checked against the routine's first declaration of the name, and hover and code completion after the dot showed the wrong type wherever a later block reused a name.
+- **LSP, Find All References missing a member reached through another unit's variable** - `G_Obj.C1`, where `G_Obj: TTestObj` is declared in a unit the calling unit uses while `TTestObj` itself lives in a unit it does not, is now found. Every call that reached the member through a value declared in an intermediate unit was missing from the results.
+- **LSP, `Self` inside a helper method** - `Self.SomeMethod`, calling a method of the helped type from inside a class or record helper method, no longer reports *Unknown member* on the helper's own type. The bare `SomeMethod` already resolved; the `Self`-qualified form had no hover, no code completion and no Go to Definition there.
+- **LSP, a helper declared for a unit-qualified type** - `MyRec.MyHelperMethod` no longer reports *Unknown member* on `TMyRecord` when the helper is declared as `record helper for MyUnit.TMyRecord`, with the unit name in front of the helped type. Every helper whose helped type was written that way was ignored entirely, and its members were missing from hover and code completion as well.
+- **LSP, Find All References on a member of a type declared below `implementation`** - `TestProc1` of a class declared in the implementation section now lists its calls instead of reporting no references. Every member of a type declared below `implementation` was affected, including calls in the same file.
+- **LSP, Delphi 13's `not in` operator reported as a syntax error** - a condition such as `if MyValue not in MySet then` no longer reports *Missing token*. Every use of the operator was affected, and the left operand resolved as a member access - no hover, no completion, no Go to Definition on it.
+- **LSP, a window opened while another window is still indexing** - a window that starts while another one is still filling the shared symbol cache now picks the finished index up on its own. RTL types such as `TStringList` and inherited members such as `ClassName` stayed *Unknown* in that window until the language server was restarted.
+- **Debugger, 64-bit, a property whose getter is a virtual method** - a property such as `MyObject.Items` now shows its value when you expand **[Properties]**, instead of ending the debug session. On 64-bit targets these properties showed a wrong value or terminated the debugged program.
 
 ## [1.2.1] - 2026-08-17
 
 ### Added
-- **Build Output, jump to the first error** — the **Errors** tab has a new **Jump to error** checkbox: with it on, a failed build opens the first error's source file at its line, exactly as clicking that entry does. Off by default, and also settable as `vallenta.studio.build.jumpToFirstError`.
-- **Code completion for Delphi's intrinsic routines** — `Length`, `SetLength`, `Inc`, `Assigned`, `SizeOf` and the rest of the compiler's built-in routines are now offered in code completion, ranked alongside your own unit's symbols. None of them appeared before, since the compiler supplies them and there is no declaration anywhere in `System.pas` to index.
+- **Build Output, jump to the first error** - the **Errors** tab has a new **Jump to error** checkbox: with it on, a failed build opens the first error's source file at its line, exactly as clicking that entry does. Off by default, and also settable as `vallenta.studio.build.jumpToFirstError`.
+- **Code completion for Delphi's intrinsic routines** - `Length`, `SetLength`, `Inc`, `Assigned`, `SizeOf` and the rest of the compiler's built-in routines are now offered in code completion, ranked alongside your own unit's symbols. None of them appeared before, since the compiler supplies them and there is no declaration anywhere in `System.pas` to index.
 
 ### Fixed
-- **LSP, the compiler-only math routines reported as unknown** — `BuiltInSqrt`, `BuiltInSin`, `BuiltInLog2` and the rest of the `BuiltIn…` family, plus `MemoryBarrier` and `MulDivInt64`, no longer report *Unknown identifier*, and hover shows a signature for them.
-- **LSP, `raise` without a trailing semicolon in an `except … else` branch** — an `else raise` written without a `;` before `end` no longer reports *';' expected but '.' found* at the bottom of the unit. The semicolon is optional there, and `else raise EMyError.Create('…')` was affected the same way.
-- **LSP, members a generic type inherits from its same-named base** — `Reset` and `MoveNext` on a parameter typed `IEnumerator<string>` no longer report *Unknown member*. `IEnumerator<T>` inherits both from the plain `IEnumerator`, and a generic sharing its base's name lost everything it inherited; generic classes written the same way are covered too.
-- **LSP, a nested type named through its owner below `implementation`** — a parameter, variable or field typed `TOuter.TNested` no longer reports *Unknown type* when `TOuter` is declared in the implementation section. The same declaration in the `interface` section was unaffected. Nested records, classes and pointer types are all covered.
-- **LSP, a member reached through a nested pointer type** — a variable typed `TOuter.PNested`, where the nested type points to a record, now offers the record's fields after the dot instead of reporting *Unknown member*. Both spellings are covered, the explicit `Rec^.Field` and the implicit `Rec.Field`.
-- **LSP, a class helper member with the same name as one on the helped class** — `Obj.Value` now resolves to the helper's `Value` rather than the class's own, so a chain such as `Obj.Value.DoSomething` no longer reports *Unknown member*. An in-scope helper is searched first, exactly as the compiler does; a helper member marked `overload` still merges with the class's instead of hiding it.
-- **LSP, protected members of the helped class inside a helper method** — a `protected` or `strict protected` field, property or method of the helped class no longer reports *Unknown identifier* in a class or record helper's method body. `private` members stay out of reach, as in the compiler.
-- **LSP, an inline variable assigned a local constant** — `var V := MyConst;`, where `MyConst` is declared in the routine's own `const` section without a type, now shows the constant's type on hover instead of showing no type at all. A constant declared in the unit's `const` section, or one written with an explicit type, was unaffected.
-- **LSP, a search path built from your own MSBuild property** — a `DCC_UnitSearchPath` entry written as `$(MyLibraryPaths)`, declared in the `.dproj` or in an imported `.optset`, now expands to the real directories. Units found only on those paths were unknown to the editor.
-- **MCP server port applied to every workspace** — a fixed port set on the **MCP Server** card is now saved to the current workspace instead of your user settings. Each window binds its own port, so one shared value let only the first window start.
-- **Build toolbar, emptying a field in Configuration Settings** — clearing **Output Directory**, **Host Application** or **Run Parameters** and pressing **Save** now removes the value from the `.dproj`, instead of reporting *No changes were needed* and keeping it. Changing a value to a different one always worked. A value inherited from the configuration level is cleared for the selected platform only, and an **Output Directory** that is not set now shows as empty rather than as `.\`.
+- **LSP, the compiler-only math routines reported as unknown** - `BuiltInSqrt`, `BuiltInSin`, `BuiltInLog2` and the rest of the `BuiltIn…` family, plus `MemoryBarrier` and `MulDivInt64`, no longer report *Unknown identifier*, and hover shows a signature for them.
+- **LSP, `raise` without a trailing semicolon in an `except … else` branch** - an `else raise` written without a `;` before `end` no longer reports *';' expected but '.' found* at the bottom of the unit. The semicolon is optional there, and `else raise EMyError.Create('…')` was affected the same way.
+- **LSP, members a generic type inherits from its same-named base** - `Reset` and `MoveNext` on a parameter typed `IEnumerator<string>` no longer report *Unknown member*. `IEnumerator<T>` inherits both from the plain `IEnumerator`, and a generic sharing its base's name lost everything it inherited; generic classes written the same way are covered too.
+- **LSP, a nested type named through its owner below `implementation`** - a parameter, variable or field typed `TOuter.TNested` no longer reports *Unknown type* when `TOuter` is declared in the implementation section. The same declaration in the `interface` section was unaffected. Nested records, classes and pointer types are all covered.
+- **LSP, a member reached through a nested pointer type** - a variable typed `TOuter.PNested`, where the nested type points to a record, now offers the record's fields after the dot instead of reporting *Unknown member*. Both spellings are covered, the explicit `Rec^.Field` and the implicit `Rec.Field`.
+- **LSP, a class helper member with the same name as one on the helped class** - `Obj.Value` now resolves to the helper's `Value` rather than the class's own, so a chain such as `Obj.Value.DoSomething` no longer reports *Unknown member*. An in-scope helper is searched first, exactly as the compiler does; a helper member marked `overload` still merges with the class's instead of hiding it.
+- **LSP, protected members of the helped class inside a helper method** - a `protected` or `strict protected` field, property or method of the helped class no longer reports *Unknown identifier* in a class or record helper's method body. `private` members stay out of reach, as in the compiler.
+- **LSP, an inline variable assigned a local constant** - `var V := MyConst;`, where `MyConst` is declared in the routine's own `const` section without a type, now shows the constant's type on hover instead of showing no type at all. A constant declared in the unit's `const` section, or one written with an explicit type, was unaffected.
+- **LSP, a search path built from your own MSBuild property** - a `DCC_UnitSearchPath` entry written as `$(MyLibraryPaths)`, declared in the `.dproj` or in an imported `.optset`, now expands to the real directories. Units found only on those paths were unknown to the editor.
+- **MCP server port applied to every workspace** - a fixed port set on the **MCP Server** card is now saved to the current workspace instead of your user settings. Each window binds its own port, so one shared value let only the first window start.
+- **Build toolbar, emptying a field in Configuration Settings** - clearing **Output Directory**, **Host Application** or **Run Parameters** and pressing **Save** now removes the value from the `.dproj`, instead of reporting *No changes were needed* and keeping it. Changing a value to a different one always worked. A value inherited from the configuration level is cleared for the selected platform only, and an **Output Directory** that is not set now shows as empty rather than as `.\`.
 
 ## [1.2.0] - 2026-08-15
 
 ### Added
-- **Debugger, calling a method on an interface** — `MyIntf.DoSomething()` now evaluates in the **Watch** panel, including at the end of a chain (`Ctx.Config.DoSomething()`). Only the form with parentheses calls it, so hovering a name never runs code; a method that takes parameters, or a `procedure`, says why it cannot be shown instead of returning something wrong.
-- **MCP server for AI agents (Pro)** — AI agents (GitHub Copilot agent mode, Claude Code) can query Delphi code intelligence and drive builds through a local MCP server: find symbol, find references, find implementations, go to definition/implementation/declaration, code completion, hover info, document outline, diagnostics, inactive `{$IFDEF}` regions, project info, build configuration switching, build/cancel and build output. On by default for a Pro subscription, switchable with `vallenta.studio.mcp.enabled`; VS Code 1.102+ discovers the server automatically, Claude Code is registered in one click from the **MCP Server** card on the settings page. Localhost-only, token-protected.
+- **Debugger, calling a method on an interface** - `MyIntf.DoSomething()` now evaluates in the **Watch** panel, including at the end of a chain (`Ctx.Config.DoSomething()`). Only the form with parentheses calls it, so hovering a name never runs code; a method that takes parameters, or a `procedure`, says why it cannot be shown instead of returning something wrong.
+- **MCP server for AI agents (Pro)** - AI agents (GitHub Copilot agent mode, Claude Code) can query Delphi code intelligence and drive builds through a local MCP server: find symbol, find references, find implementations, go to definition/implementation/declaration, code completion, hover info, document outline, diagnostics, inactive `{$IFDEF}` regions, project info, build configuration switching, build/cancel and build output. On by default for a Pro subscription, switchable with `vallenta.studio.mcp.enabled`; VS Code 1.102+ discovers the server automatically, Claude Code is registered in one click from the **MCP Server** card on the settings page. Localhost-only, token-protected.
 
 ### Fixed
-- **LSP, types and routines declared in an `{$I}` include file** — a type, constant, variable or routine declared in an `.inc` now resolves in every unit that includes it, instead of reporting *Unknown type* / *Unknown identifier* on every use. Hover, Go to Definition, code completion and Find All References work, and Go to Definition opens the `.inc` itself at the declaration. An include pulled in below `implementation` stays private to that unit, and one guarded by `{$IFDEF}` counts only where its condition holds, so a library that splits a unit into a Windows and a POSIX include contributes only the one your target compiles. Renaming a symbol declared in an `.inc` is refused with an explanation, since one include is shared by several units. Implementation bodies written inside an `.inc` are not reached yet.
-- **Debugger, a `stdcall`, `safecall` or `cdecl` member returning a value in a register** — a number, an enum, or an object such as a `TStringList` read from such a property or method reported *'X' is not available — most likely optimized out by the linker*. It now evaluates, on interfaces and on plain classes alike. Strings and interfaces were unaffected. Win32 only; Win64 has a single convention.
-- **Color box on a character literal** — `#114`, written on its own or inside a string, no longer shows a color swatch with a color picker. VS Code reads `#` followed by three, four, six or eight hex digits as a CSS color in any language that supplies no colors of its own; that is now off for `.pas` and `.dfm` files. Switch it back on with `"[pascal]": { "editor.defaultColorDecorators": "auto" }`.
-- **LSP, status stuck at "Updating index: 99%"** — a configuration or platform switch that arrived while the index was still loading left the status bar spinning at 99%, and the index kept the previous configuration's defines and search paths. The rebuild now runs, and the status returns to *Index ready* even when an indexing run is cancelled or fails. **Reindex All** was affected the same way.
-- **LSP, inactive code shading not refreshing while typing** — the greyed-out `{$IFDEF}` branches of a file now keep up with fast edits. A burst of keystrokes could drop the refresh for that file until the next change.
-- **LSP, closing a project while the index was still building** — a running indexing pass is now given the chance to stop before its caches are closed. Closing them underneath it logged errors on exit and could leave freshly indexed units unsaved, so they were read again on the next start.
-- **LSP, a field or variable named after a unit** — a field, parameter, local or unit-level variable whose name matches a unit's — one called `Classes`, or a field named after the unit it is declared in — now resolves to its own declaration. Hover showed the unit instead, and a member reached through it (`MyField.ToString`) had no Go to Definition target. Qualifying a name with a real unit is unaffected.
-- **LSP, `OpenString` reported as an unknown type** — the parameter type `OpenString` no longer reports *Unknown type*, in `System.Generics.Defaults` or in your own code, and **Ctrl+.** no longer offers to add a declaration for the routine it appears in.
-- **LSP, hover on a compiler built-in type** — hovering `Integer`, `Boolean`, `Double`, `ShortString` or any other type the compiler supplies now shows a short description of it. Nothing appeared before; only types with a declaration to find were covered.
-- **LSP, hover on an inline variable declared from an expression** — `var B := A + 1;` now shows its type, and code completion works on it. Only a literal or a plain variable on the right gave a type before; anything composite — arithmetic, a comparison, string concatenation, an array or string index, a cast, `Length(…)`, or even just parentheses — showed the name with no type at all. Types follow the compiler's own rules, so `A / 2` is `Extended` and `A > 1` is `Boolean`. A record with overloaded operators is not covered yet.
-- **LSP, a field declared in a `var` block inside a class** — a field written under `private var` or `class var` is now scoped to its class. It counted as a unit-level variable before, so a same-named field of another class in the same unit could win: in `System.Generics.Collections`, `FComparer.GetHashCode` inside `TDictionary<K,V>` reported *Unknown member* on `IComparer<T>`, which is `TList<T>`'s field. Class-level `const` sections were affected the same way.
-- **LSP, a member reached through a default indexed property on a cast** — `TMyClass(P)[0].Field` now resolves, and code completion after `TMyClass(P)[0].` offers the element's members. The indexing step was dropped on a cast, so the member was looked up on the cast's own class: it reported *Unknown member*, and completion showed *unresolved* instead of a member list. 
-- **LSP, an anonymous method with a calling convention** — `procedure (…) stdcall begin … end` assigned to a variable or passed as an argument no longer reports *Syntax error*; `cdecl`, `safecall`, `register` and `pascal` are covered as well, on `procedure` and `function` alike, with or without a local `var` section. 
-- **LSP, a type declared in a unit you do not use directly** — members now resolve on a value whose type comes from another unit's function, property or variable, as in `with GetList do …` or `var L := GetList; L.Count`. 
-- **LSP, a type declared `packed`** — a variable of a `packed record` or `packed class` now offers its members after the dot. Code completion listed a single *unresolved: packed record* entry instead, because `packed` was read as the name of the underlying type rather than as a modifier. An alias of a `packed array` now reaches its element type as well.
-- **LSP, a record type declared inside a routine** — a field list naming more than one field at once (`Field1, Field2: Word;`) no longer reports *Unknown identifier* on every name after the first. It showed up when the routine also named a type of its own somewhere else — a pointer to the record, an alias of it, or a local variable of that type. The same record at unit level, and one field per line, were unaffected. Inside such a record declared in a method, names now resolve against the record rather than the method's own class.
-- **LSP, hover on a field or variable declared together with others** — hovering `var0` in `var0, var1 : Word` now shows `var0 : Word` instead of the whole declaration. Applies to record and class fields and to unit-level `var` sections; the declaration's own spacing is kept.
-- **LSP, an enum written inline on a field or a variable** — `State: (Idle, Running, Done);` written directly as the type of a record field, a class field or a variable no longer reports *Unknown identifier* on its values, and the values are offered in code completion the way a named enum's are. An inline `set of (…)` and an enum declared inside a routine are covered as well.
-- **Debugger, *could not read the list text*** — a `TStrings` or `TStringList` now shows its contents. The strings are read from the program's memory instead of by calling into it, so nothing runs in the debugged program and a list is no longer altered by inspecting it.
+- **LSP, types and routines declared in an `{$I}` include file** - a type, constant, variable or routine declared in an `.inc` now resolves in every unit that includes it, instead of reporting *Unknown type* / *Unknown identifier* on every use. Hover, Go to Definition, code completion and Find All References work, and Go to Definition opens the `.inc` itself at the declaration. An include pulled in below `implementation` stays private to that unit, and one guarded by `{$IFDEF}` counts only where its condition holds, so a library that splits a unit into a Windows and a POSIX include contributes only the one your target compiles. Renaming a symbol declared in an `.inc` is refused with an explanation, since one include is shared by several units. Implementation bodies written inside an `.inc` are not reached yet.
+- **Debugger, a `stdcall`, `safecall` or `cdecl` member returning a value in a register** - a number, an enum, or an object such as a `TStringList` read from such a property or method reported *'X' is not available - most likely optimized out by the linker*. It now evaluates, on interfaces and on plain classes alike. Strings and interfaces were unaffected. Win32 only; Win64 has a single convention.
+- **Color box on a character literal** - `#114`, written on its own or inside a string, no longer shows a color swatch with a color picker. VS Code reads `#` followed by three, four, six or eight hex digits as a CSS color in any language that supplies no colors of its own; that is now off for `.pas` and `.dfm` files. Switch it back on with `"[pascal]": { "editor.defaultColorDecorators": "auto" }`.
+- **LSP, status stuck at "Updating index: 99%"** - a configuration or platform switch that arrived while the index was still loading left the status bar spinning at 99%, and the index kept the previous configuration's defines and search paths. The rebuild now runs, and the status returns to *Index ready* even when an indexing run is cancelled or fails. **Reindex All** was affected the same way.
+- **LSP, inactive code shading not refreshing while typing** - the greyed-out `{$IFDEF}` branches of a file now keep up with fast edits. A burst of keystrokes could drop the refresh for that file until the next change.
+- **LSP, closing a project while the index was still building** - a running indexing pass is now given the chance to stop before its caches are closed. Closing them underneath it logged errors on exit and could leave freshly indexed units unsaved, so they were read again on the next start.
+- **LSP, a field or variable named after a unit** - a field, parameter, local or unit-level variable whose name matches a unit's - one called `Classes`, or a field named after the unit it is declared in - now resolves to its own declaration. Hover showed the unit instead, and a member reached through it (`MyField.ToString`) had no Go to Definition target. Qualifying a name with a real unit is unaffected.
+- **LSP, `OpenString` reported as an unknown type** - the parameter type `OpenString` no longer reports *Unknown type*, in `System.Generics.Defaults` or in your own code, and **Ctrl+.** no longer offers to add a declaration for the routine it appears in.
+- **LSP, hover on a compiler built-in type** - hovering `Integer`, `Boolean`, `Double`, `ShortString` or any other type the compiler supplies now shows a short description of it. Nothing appeared before; only types with a declaration to find were covered.
+- **LSP, hover on an inline variable declared from an expression** - `var B := A + 1;` now shows its type, and code completion works on it. Only a literal or a plain variable on the right gave a type before; anything composite - arithmetic, a comparison, string concatenation, an array or string index, a cast, `Length(…)`, or even just parentheses - showed the name with no type at all. Types follow the compiler's own rules, so `A / 2` is `Extended` and `A > 1` is `Boolean`. A record with overloaded operators is not covered yet.
+- **LSP, a field declared in a `var` block inside a class** - a field written under `private var` or `class var` is now scoped to its class. It counted as a unit-level variable before, so a same-named field of another class in the same unit could win: in `System.Generics.Collections`, `FComparer.GetHashCode` inside `TDictionary<K,V>` reported *Unknown member* on `IComparer<T>`, which is `TList<T>`'s field. Class-level `const` sections were affected the same way.
+- **LSP, a member reached through a default indexed property on a cast** - `TMyClass(P)[0].Field` now resolves, and code completion after `TMyClass(P)[0].` offers the element's members. The indexing step was dropped on a cast, so the member was looked up on the cast's own class: it reported *Unknown member*, and completion showed *unresolved* instead of a member list. 
+- **LSP, an anonymous method with a calling convention** - `procedure (…) stdcall begin … end` assigned to a variable or passed as an argument no longer reports *Syntax error*; `cdecl`, `safecall`, `register` and `pascal` are covered as well, on `procedure` and `function` alike, with or without a local `var` section. 
+- **LSP, a type declared in a unit you do not use directly** - members now resolve on a value whose type comes from another unit's function, property or variable, as in `with GetList do …` or `var L := GetList; L.Count`. 
+- **LSP, a type declared `packed`** - a variable of a `packed record` or `packed class` now offers its members after the dot. Code completion listed a single *unresolved: packed record* entry instead, because `packed` was read as the name of the underlying type rather than as a modifier. An alias of a `packed array` now reaches its element type as well.
+- **LSP, a record type declared inside a routine** - a field list naming more than one field at once (`Field1, Field2: Word;`) no longer reports *Unknown identifier* on every name after the first. It showed up when the routine also named a type of its own somewhere else - a pointer to the record, an alias of it, or a local variable of that type. The same record at unit level, and one field per line, were unaffected. Inside such a record declared in a method, names now resolve against the record rather than the method's own class.
+- **LSP, hover on a field or variable declared together with others** - hovering `var0` in `var0, var1 : Word` now shows `var0 : Word` instead of the whole declaration. Applies to record and class fields and to unit-level `var` sections; the declaration's own spacing is kept.
+- **LSP, an enum written inline on a field or a variable** - `State: (Idle, Running, Done);` written directly as the type of a record field, a class field or a variable no longer reports *Unknown identifier* on its values, and the values are offered in code completion the way a named enum's are. An inline `set of (…)` and an enum declared inside a routine are covered as well.
+- **Debugger, *could not read the list text*** - a `TStrings` or `TStringList` now shows its contents. The strings are read from the program's memory instead of by calling into it, so nothing runs in the debugged program and a list is no longer altered by inspecting it.
 
 ## [1.1.23] - 2026-08-09
 
 ### Added
-- **Own color for attributes** — attribute names (`[TestFixture]`, `[Setup]`) are now a semantic token type of their own, `attribute`, so they no longer borrow the color of whatever else shares the spelling. It joins the list in **Edit symbol colors…** on the Settings page (*Source Highlight Enhancements*), and can also be targeted as `attribute:pascal` in `editor.semanticTokenColorCustomizations`. The color applies to every attribute, including one whose class is not in your search path.
-- **Debugger, show a string list as text** — a `TStrings` or `TStringList` row in **Variables** or **Watch** now offers a button (hover the row, or right-click it) that opens the list's full text in a read-only editor beside your code, with search and word wrap. Any descendant is covered, including the lists behind a `TMemo`, `TListBox` or `TComboBox`. The text is complete, where copying the row's value stops after about 256 characters. A row that offers it shows its type as `TStringList : TStrings`.
+- **Own color for attributes** - attribute names (`[TestFixture]`, `[Setup]`) are now a semantic token type of their own, `attribute`, so they no longer borrow the color of whatever else shares the spelling. It joins the list in **Edit symbol colors…** on the Settings page (*Source Highlight Enhancements*), and can also be targeted as `attribute:pascal` in `editor.semanticTokenColorCustomizations`. The color applies to every attribute, including one whose class is not in your search path.
+- **Debugger, show a string list as text** - a `TStrings` or `TStringList` row in **Variables** or **Watch** now offers a button (hover the row, or right-click it) that opens the list's full text in a read-only editor beside your code, with search and word wrap. Any descendant is covered, including the lists behind a `TMemo`, `TListBox` or `TComboBox`. The text is complete, where copying the row's value stops after about 256 characters. A row that offers it shows its type as `TStringList : TStrings`.
 
 ### Fixed
-- **LSP, an attribute on a type or a member** — an attribute such as `[Setup]` or `[TestFixture]` now has a color of its own, and hover, Go to Definition and Ctrl+Click reach the attribute class it names. 
-- **Rename Symbol on an attribute class** — renaming a class whose name ends with `Attribute` is now refused with an explanation, instead of silently producing source that no longer compiles. Because an attribute may be written without that suffix (`[Setup]` for `SetupAttribute`), the declaration and its uses are spelled differently, and only the declaration was being renamed. 
-- **LSP, loop variable of a `for … in` loop over a derived container** — a container declared as its own class (`TMyList = class(TObjectList<TMyItem>)`) now gives the loop variable its type; it stayed unresolved before, because the element type is named in the base clause rather than on the variable. Covers any class derived from a generic container, at any depth. A container spelled with its type arguments was unaffected.
-- **LSP, loop variable of a `for … in` loop over a container from another unit** — iterating a property or field whose type is an alias declared in another unit (`TMyList = TList<TMyItem>`) now types the loop variable. It came out as `Pointer`, or as no type at all, depending on which units the iterating unit imported.
-- **LSP, a type name that also exists in a unit you do not use** — hover, Go to Definition and code completion now resolve a type name to the declaration that is actually in scope. A same-named type from an unrelated unit could win before, so hover could show the wrong kind of type and Go to Definition jump into a unit you never imported.
-- **LSP, members inherited from a generic base class** — a class derived from a generic instantiation written with a space before the type arguments (`TDerived = class(TBase <Cardinal>)`) now sees the fields, methods and properties it inherits. `Self.Field` reported *Unknown member* and a call to an inherited method reported *Unknown identifier*. The spelling without the space was unaffected.
-- **LSP, a type written with a space before its type arguments** — `TArray <Byte>` and the same spelling on any generic type no longer report *Unknown type*.
-- **LSP, a generic type named together with its unit** — a type such as `System.Generics.Collections.TList<Integer>` no longer reports *Unknown type*, as a base class, a variable type or a field type. Only the spelling without the unit prefix resolved before; the prefix worked on non-generic types.
-- **LSP, a mistyped member on a variable of a generic or unit-qualified type** — a member that does not exist now reports *Unknown member* on a variable declared with type arguments (`TList<Integer>`) or with its unit (`System.Classes.TStringList`). The typo went unreported before; only a variable of a plain, unqualified type was checked. Valid members always resolved and are unaffected.
-- **LSP, false *never used* hint on an inline variable in a `try` block** — an inline variable declared inside a `try` block is no longer reported as unused when another `try` block in the same routine declares one of the same name. Rename and occurrence highlighting on such a variable now stay within their own block as well; `begin … end` blocks and `case` branches were unaffected.
-- **Debugger, an interface property returning a number, `Boolean`, enum or set** — a property such as `FContext.RetryCount` or `FContext.IsActive` reached through an interface now shows its value in a **Watch** or on hover, instead of reporting *identifier "Integer" is undefined*. A `Boolean` reads as `True` / `False` and an enum as its enumerator. Covers a property reached through a chain (`FContext.Options.RetryCount`) on Win32 and Win64; interface properties returning a string or another interface were unaffected.
-- **Debugger, a property on an interface declared `safecall`, `stdcall` or `cdecl`** — these now evaluate in a **Watch** and on hover. A `safecall` property showed its value as `nil`, and `stdcall` or `cdecl` ended the debug session, after which every further watch reported *Unable to read memory* — including variables that had just been readable. Interfaces without a convention directive, and 64-bit targets, were unaffected. 
-- **Debugger, interface variable expands to its implementing object** — an interface variable whose methods declare a calling convention now shows the object behind it, with its class name and fields, instead of an empty `IInterface` node.
+- **LSP, an attribute on a type or a member** - an attribute such as `[Setup]` or `[TestFixture]` now has a color of its own, and hover, Go to Definition and Ctrl+Click reach the attribute class it names. 
+- **Rename Symbol on an attribute class** - renaming a class whose name ends with `Attribute` is now refused with an explanation, instead of silently producing source that no longer compiles. Because an attribute may be written without that suffix (`[Setup]` for `SetupAttribute`), the declaration and its uses are spelled differently, and only the declaration was being renamed. 
+- **LSP, loop variable of a `for … in` loop over a derived container** - a container declared as its own class (`TMyList = class(TObjectList<TMyItem>)`) now gives the loop variable its type; it stayed unresolved before, because the element type is named in the base clause rather than on the variable. Covers any class derived from a generic container, at any depth. A container spelled with its type arguments was unaffected.
+- **LSP, loop variable of a `for … in` loop over a container from another unit** - iterating a property or field whose type is an alias declared in another unit (`TMyList = TList<TMyItem>`) now types the loop variable. It came out as `Pointer`, or as no type at all, depending on which units the iterating unit imported.
+- **LSP, a type name that also exists in a unit you do not use** - hover, Go to Definition and code completion now resolve a type name to the declaration that is actually in scope. A same-named type from an unrelated unit could win before, so hover could show the wrong kind of type and Go to Definition jump into a unit you never imported.
+- **LSP, members inherited from a generic base class** - a class derived from a generic instantiation written with a space before the type arguments (`TDerived = class(TBase <Cardinal>)`) now sees the fields, methods and properties it inherits. `Self.Field` reported *Unknown member* and a call to an inherited method reported *Unknown identifier*. The spelling without the space was unaffected.
+- **LSP, a type written with a space before its type arguments** - `TArray <Byte>` and the same spelling on any generic type no longer report *Unknown type*.
+- **LSP, a generic type named together with its unit** - a type such as `System.Generics.Collections.TList<Integer>` no longer reports *Unknown type*, as a base class, a variable type or a field type. Only the spelling without the unit prefix resolved before; the prefix worked on non-generic types.
+- **LSP, a mistyped member on a variable of a generic or unit-qualified type** - a member that does not exist now reports *Unknown member* on a variable declared with type arguments (`TList<Integer>`) or with its unit (`System.Classes.TStringList`). The typo went unreported before; only a variable of a plain, unqualified type was checked. Valid members always resolved and are unaffected.
+- **LSP, false *never used* hint on an inline variable in a `try` block** - an inline variable declared inside a `try` block is no longer reported as unused when another `try` block in the same routine declares one of the same name. Rename and occurrence highlighting on such a variable now stay within their own block as well; `begin … end` blocks and `case` branches were unaffected.
+- **Debugger, an interface property returning a number, `Boolean`, enum or set** - a property such as `FContext.RetryCount` or `FContext.IsActive` reached through an interface now shows its value in a **Watch** or on hover, instead of reporting *identifier "Integer" is undefined*. A `Boolean` reads as `True` / `False` and an enum as its enumerator. Covers a property reached through a chain (`FContext.Options.RetryCount`) on Win32 and Win64; interface properties returning a string or another interface were unaffected.
+- **Debugger, a property on an interface declared `safecall`, `stdcall` or `cdecl`** - these now evaluate in a **Watch** and on hover. A `safecall` property showed its value as `nil`, and `stdcall` or `cdecl` ended the debug session, after which every further watch reported *Unable to read memory* - including variables that had just been readable. Interfaces without a convention directive, and 64-bit targets, were unaffected. 
+- **Debugger, interface variable expands to its implementing object** - an interface variable whose methods declare a calling convention now shows the object behind it, with its class name and fields, instead of an empty `IInterface` node.
 
 ## [1.1.22] - 2026-08-07
 
 ### Added
-- **New Delphi Project** — create a project without the Delphi IDE: VCL Forms Application, FMX Application, Console Application, Empty Program, DLL or Package. The wizard asks for the name, the location, the main form unit and its form class, and the platforms (Win32 / Win64), and lists the files it will write; a file that already exists is flagged there and never overwritten. The finished project is added to the Projects list, made active, and its main unit opened. Reach it from the new-project button in the Projects sidebar, the command palette, or the Explorer context menu.
-- **Save modified files before a build** — a build now saves every modified file before it starts, so the **Ctrl+F9** / **Shift+F9** shortcuts and the palette commands compile what is on screen; on by default, switchable under **Build** on the settings page.
-- **Go to Interface Section / Go to Implementation Section** — two commands that jump the caret to the unit's `interface` or `implementation` keyword. They ship without a key; assign one in the **Keyboard Mappings** editor on the settings page.
-- **Open File in Delphi IDE** — a new command opens the current file in the Delphi IDE, for editing a form in the visual designer. A `.dfm` / `.fmx` opens its unit, so the form is one **F12** away inside Delphi. A running IDE takes the file over and comes to the front, instead of a second instance starting. Assign the key shortcut in the **Keyboard Mappings** editor on the settings page.
+- **New Delphi Project** - create a project without the Delphi IDE: VCL Forms Application, FMX Application, Console Application, Empty Program, DLL or Package. The wizard asks for the name, the location, the main form unit and its form class, and the platforms (Win32 / Win64), and lists the files it will write; a file that already exists is flagged there and never overwritten. The finished project is added to the Projects list, made active, and its main unit opened. Reach it from the new-project button in the Projects sidebar, the command palette, or the Explorer context menu.
+- **Save modified files before a build** - a build now saves every modified file before it starts, so the **Ctrl+F9** / **Shift+F9** shortcuts and the palette commands compile what is on screen; on by default, switchable under **Build** on the settings page.
+- **Go to Interface Section / Go to Implementation Section** - two commands that jump the caret to the unit's `interface` or `implementation` keyword. They ship without a key; assign one in the **Keyboard Mappings** editor on the settings page.
+- **Open File in Delphi IDE** - a new command opens the current file in the Delphi IDE, for editing a form in the visual designer. A `.dfm` / `.fmx` opens its unit, so the form is one **F12** away inside Delphi. A running IDE takes the file over and comes to the front, instead of a second instance starting. Assign the key shortcut in the **Keyboard Mappings** editor on the settings page.
 
 ### Fixed
-- **Toggle Form / Source on a file with an upper-case extension** — **F12** and the *Open …* link at the top of the file now find the companion of a unit written as `MainForm.PAS` or a form written as `MainForm.DFM`; neither found anything before.
-- **LSP, loop variable of a `for … in` loop** — the variable now gets its type in three cases that were still missing: an element that is a simple type (`list: TList<Integer>`), a container reached through a type alias (`TInt64Set = THashSet<Int64>`), and a container held in a field. It could also come out as the *wrong* type — with `System.SysUtils` in the uses clause the variable was typed `Char`, and an enumerator of the same name declared in another unit won over the container's own. Covers `TList<T>`, `TObjectList<T>`, `THashSet<T>`, `TStack<T>`, `TQueue<T>`, `TDictionary<K,V>` and `TOrderedDictionary<K,V>`.
-- **LSP, class helper on a descendant class** — a method added by a `class helper for TBase` now resolves on a variable of a class derived from `TBase`, instead of reporting *Unknown member*. Hover, Go to Definition and code completion are covered; a variable of the helped class itself was unaffected.
-- **LSP, member reached through a `strict private` field** — hover and Go to Definition work again on a member accessed through a `strict private` or `strict protected` field of the enclosing class or record (`FMyClass.Execute`). Non-strict `private`, `protected` and `public` fields were unaffected.
-- **LSP, a variable or constant named after a compiler directive** — a `var` or `const` called `local`, `static`, `virtual`, `platform`, `deprecated` or one of the other directive names no longer shows a false syntax error when another declaration precedes it in the same block. A procedural-type variable keeps its calling convention (`var F: function(...): Integer; stdcall;`).
-- **Generated project files, targeted platforms** — the platform list written into a `.dproj` generated for a `.dpr` / `.dpk` was wrong beyond Win32, Win64 and Android: macOS ARM64 and the iOS ARM simulator were swapped, and Linux, macOS Intel, Win64 Modern and Windows ARM64EC were not recorded at all. Windows-only projects were unaffected.
-- **Convert to UTF-8 with BOM, applied twice** — the ANSI warning and its popup now disappear the moment the file is converted. The action stayed clickable before, and a second click converted the already converted file again and garbled every non-English character in it. Converting a file that is not ANSI is refused now, and unsaved changes are written before the conversion instead of being discarded.
-- **Debugger, a local reported as optimized away on the line that uses it** — in a build with optimization on, a variable the compiler keeps in a register was hidden on the last line reading it (*"Variable is optimized away and not available"*, Win64) — the very line you stop on to inspect it. A function's `Result` was hidden throughout for the same reason.
-- **Debugger, RTL entries in the Variables panel** — stepping over a line no longer adds `… returned` rows for the runtime routines it called (`Writeln`, `ClassName`), which showed a mangled name and a meaningless value next to your own locals.
-- **Debugger, class methods in a Watch** — `obj.ClassName` and the other `TObject` class methods (`QualifiedClassName`, `ClassParent`, `InstanceSize`, …) now evaluate on an object of any class instead of reporting the member as unavailable. Class methods a base class declares are found through the inheritance chain, and they are called on the class the object really is. 
+- **Toggle Form / Source on a file with an upper-case extension** - **F12** and the *Open …* link at the top of the file now find the companion of a unit written as `MainForm.PAS` or a form written as `MainForm.DFM`; neither found anything before.
+- **LSP, loop variable of a `for … in` loop** - the variable now gets its type in three cases that were still missing: an element that is a simple type (`list: TList<Integer>`), a container reached through a type alias (`TInt64Set = THashSet<Int64>`), and a container held in a field. It could also come out as the *wrong* type - with `System.SysUtils` in the uses clause the variable was typed `Char`, and an enumerator of the same name declared in another unit won over the container's own. Covers `TList<T>`, `TObjectList<T>`, `THashSet<T>`, `TStack<T>`, `TQueue<T>`, `TDictionary<K,V>` and `TOrderedDictionary<K,V>`.
+- **LSP, class helper on a descendant class** - a method added by a `class helper for TBase` now resolves on a variable of a class derived from `TBase`, instead of reporting *Unknown member*. Hover, Go to Definition and code completion are covered; a variable of the helped class itself was unaffected.
+- **LSP, member reached through a `strict private` field** - hover and Go to Definition work again on a member accessed through a `strict private` or `strict protected` field of the enclosing class or record (`FMyClass.Execute`). Non-strict `private`, `protected` and `public` fields were unaffected.
+- **LSP, a variable or constant named after a compiler directive** - a `var` or `const` called `local`, `static`, `virtual`, `platform`, `deprecated` or one of the other directive names no longer shows a false syntax error when another declaration precedes it in the same block. A procedural-type variable keeps its calling convention (`var F: function(...): Integer; stdcall;`).
+- **Generated project files, targeted platforms** - the platform list written into a `.dproj` generated for a `.dpr` / `.dpk` was wrong beyond Win32, Win64 and Android: macOS ARM64 and the iOS ARM simulator were swapped, and Linux, macOS Intel, Win64 Modern and Windows ARM64EC were not recorded at all. Windows-only projects were unaffected.
+- **Convert to UTF-8 with BOM, applied twice** - the ANSI warning and its popup now disappear the moment the file is converted. The action stayed clickable before, and a second click converted the already converted file again and garbled every non-English character in it. Converting a file that is not ANSI is refused now, and unsaved changes are written before the conversion instead of being discarded.
+- **Debugger, a local reported as optimized away on the line that uses it** - in a build with optimization on, a variable the compiler keeps in a register was hidden on the last line reading it (*"Variable is optimized away and not available"*, Win64) - the very line you stop on to inspect it. A function's `Result` was hidden throughout for the same reason.
+- **Debugger, RTL entries in the Variables panel** - stepping over a line no longer adds `… returned` rows for the runtime routines it called (`Writeln`, `ClassName`), which showed a mangled name and a meaningless value next to your own locals.
+- **Debugger, class methods in a Watch** - `obj.ClassName` and the other `TObject` class methods (`QualifiedClassName`, `ClassParent`, `InstanceSize`, …) now evaluate on an object of any class instead of reporting the member as unavailable. Class methods a base class declares are found through the inheritance chain, and they are called on the class the object really is. 
 
 ## [1.1.21] - 2026-08-04
 
 ### Changed
-- **LSP, crash notification** — the notification shown when the language server stops unexpectedly has a new **Show LSP Log** button that opens the Output panel on the *Vallenta Studio LSP* channel.
+- **LSP, crash notification** - the notification shown when the language server stops unexpectedly has a new **Show LSP Log** button that opens the Output panel on the *Vallenta Studio LSP* channel.
 
 ### Fixed
-- **LSP, class completion in a nested class** — **Ctrl+Shift+C** on a method of a class nested inside another type now writes the full path (`function TIntList.TTest.GetCurrent`). It named only the inner class before, so the generated body did not compile. A nested method that is already implemented is recognised again as well, so a second press no longer adds a duplicate body. **Apply Signature** writes the same header. Covers types nested in classes, records and generics, at any depth.
-- **LSP, labels reported as a syntax error** — a label inside a `case` branch (`tt1:` followed by `myLabel:`) no longer reports *Syntax error*. Numeric labels (`label 10;` … `10:` … `goto 10`) are recognised as well; they were rejected everywhere before.
-- **LSP, values of a `set of (…)` declared in a class** — a nested type such as `test = set of (test1, test2, test3)` no longer reports *Unknown identifier* on its values, in the declaring unit and in any unit that uses it. The same declaration outside a class was unaffected.
-- **LSP, names in a file that is not saved as UTF-8** — a class or type whose name contains non-English characters now resolves in a unit stored in a legacy encoding (GBK, Shift-JIS, a Windows ANSI codepage). Go to Definition, hover and code completion found nothing for those names before, and hover spelled them garbled. A file without a byte order mark is now read the way the Delphi compiler reads it, in the system codepage for non-Unicode programs; symbol caches are rebuilt once on the first start after updating.
-- **LSP, names written with their full unit prefix** — hover, Go to Definition, code completion and parameter hints work again on a name qualified with its unit (`System.Classes.TStringList`, `System.Types.TDuplicates`). They found nothing whenever the leading part was a unit in its own right, which covers everything under `System`.
-- **LSP, an enum value of another unit reported as an unknown type** — a declaration naming an enum value through its type and unit (`System.Types.TDuplicates.dupIgnore`, the spelling System.Classes itself uses) no longer reports *Unknown type*.
-- **Missing units, quick fix on a unit-qualified name** — **Ctrl+.** on an *Unknown type* that already names its unit no longer offers unrelated units to add. `System.Types.TDuplicates.dupIgnore` suggested `Word2000` and `WordXP`, which happen to declare a type called `System`.
-- **Build, editor focus** — the build output panel no longer takes the keyboard focus when a build ends, so the caret stays in the editor after **Ctrl+F9** / **Shift+F9**. The panel is still revealed.
-- **Debugger, one very large class made variables undefined across the project** — a single class with a few thousand fields or methods (a large form, a big generated class) corrupted the debug symbols from that class on, so the damage was not limited to that class: breakpoints and stepping kept working, but **Watch**, hover and **Variables** reported *identifier is undefined* for locals, `Self` and object fields, also in units unrelated to the class — while plain numeric variables still resolved. Classes of any size are written correctly now; regenerate the symbols once (delete the `.pdb` next to your executable or rebuild).
-- **Debugger, fields missing on very large classes** — a class with several thousand fields showed only the first part of them in the debugger; all fields are visible again. Fields located beyond 32 KB inside a large object and enum values of 32768 and above (`…_FORCE_DWORD` style) also showed wrong values and cut off the members after them.
-- **Debugger, symbol files of very large projects** — the generated `.pdb` of a project with far over a million types could make symbol tools crash when looking up types; the affected lookup table is now written correctly.
+- **LSP, class completion in a nested class** - **Ctrl+Shift+C** on a method of a class nested inside another type now writes the full path (`function TIntList.TTest.GetCurrent`). It named only the inner class before, so the generated body did not compile. A nested method that is already implemented is recognised again as well, so a second press no longer adds a duplicate body. **Apply Signature** writes the same header. Covers types nested in classes, records and generics, at any depth.
+- **LSP, labels reported as a syntax error** - a label inside a `case` branch (`tt1:` followed by `myLabel:`) no longer reports *Syntax error*. Numeric labels (`label 10;` … `10:` … `goto 10`) are recognised as well; they were rejected everywhere before.
+- **LSP, values of a `set of (…)` declared in a class** - a nested type such as `test = set of (test1, test2, test3)` no longer reports *Unknown identifier* on its values, in the declaring unit and in any unit that uses it. The same declaration outside a class was unaffected.
+- **LSP, names in a file that is not saved as UTF-8** - a class or type whose name contains non-English characters now resolves in a unit stored in a legacy encoding (GBK, Shift-JIS, a Windows ANSI codepage). Go to Definition, hover and code completion found nothing for those names before, and hover spelled them garbled. A file without a byte order mark is now read the way the Delphi compiler reads it, in the system codepage for non-Unicode programs; symbol caches are rebuilt once on the first start after updating.
+- **LSP, names written with their full unit prefix** - hover, Go to Definition, code completion and parameter hints work again on a name qualified with its unit (`System.Classes.TStringList`, `System.Types.TDuplicates`). They found nothing whenever the leading part was a unit in its own right, which covers everything under `System`.
+- **LSP, an enum value of another unit reported as an unknown type** - a declaration naming an enum value through its type and unit (`System.Types.TDuplicates.dupIgnore`, the spelling System.Classes itself uses) no longer reports *Unknown type*.
+- **Missing units, quick fix on a unit-qualified name** - **Ctrl+.** on an *Unknown type* that already names its unit no longer offers unrelated units to add. `System.Types.TDuplicates.dupIgnore` suggested `Word2000` and `WordXP`, which happen to declare a type called `System`.
+- **Build, editor focus** - the build output panel no longer takes the keyboard focus when a build ends, so the caret stays in the editor after **Ctrl+F9** / **Shift+F9**. The panel is still revealed.
+- **Debugger, one very large class made variables undefined across the project** - a single class with a few thousand fields or methods (a large form, a big generated class) corrupted the debug symbols from that class on, so the damage was not limited to that class: breakpoints and stepping kept working, but **Watch**, hover and **Variables** reported *identifier is undefined* for locals, `Self` and object fields, also in units unrelated to the class - while plain numeric variables still resolved. Classes of any size are written correctly now; regenerate the symbols once (delete the `.pdb` next to your executable or rebuild).
+- **Debugger, fields missing on very large classes** - a class with several thousand fields showed only the first part of them in the debugger; all fields are visible again. Fields located beyond 32 KB inside a large object and enum values of 32768 and above (`…_FORCE_DWORD` style) also showed wrong values and cut off the members after them.
+- **Debugger, symbol files of very large projects** - the generated `.pdb` of a project with far over a million types could make symbol tools crash when looking up types; the affected lookup table is now written correctly.
 
 ## [1.1.20] - 2026-08-02
 
 ### Added
-- **Attach to a running process** — debug a Delphi program that is already running instead of starting it from the editor. Reach it from the arrow beside the **Debug** button on the build toolbar, from the command palette (**Attach to Process**), or with an `attach` entry in `launch.json`. The process list puts your projects' running executables first and shows each one's platform and whether its debug symbols are ready; system processes stay hidden until you switch them on in the list's title bar. Once attached you get the same session as a normal launch — breakpoints, stepping, call stacks, locals, and the Watch evaluator with property getters and interface chains. Stopping the session detaches and leaves the program running. You can attach with no project open, as long as the `.pdb` sits beside the executable.
-- **Attach, targets that cannot be debugged are flagged before you pick them** — debug symbols cannot be added to a program that is already running, so a program that was never converted is marked in the list and warned about before attaching, with the option to attach anyway. A program running elevated is marked as well, together with the note that VS Code has to run as administrator to attach to it.
-- **Keyboard mappings editor** — a new **Keyboard Mappings** card on the settings page opens an editor for the extension's shortcuts, grouped by function. **Set to Delphi defaults** applies the Delphi IDE keys — F9 Run, F5 Toggle Breakpoint, F8 Step Over, F7 Trace Into, Ctrl+F9 Compile, Shift+F9 Build — covering the IDE's Run and Project menus. Click a shortcut to record a new one; conflicts are flagged as you type. **Apply only in Delphi context** keeps the keys to Pascal files, forms, the Vallenta Studio sidebar and Delphi debug sessions, so your other projects keep the standard VS Code behaviour. A fresh installation gets the Delphi keymap automatically; updating never changes keys you already have.
-- **Rename Unit and Remove Unit from Project in the command palette** — both were reachable only from the Source Files menu, so neither could be given a keyboard shortcut. They now act on the open unit when invoked without one.
+- **Attach to a running process** - debug a Delphi program that is already running instead of starting it from the editor. Reach it from the arrow beside the **Debug** button on the build toolbar, from the command palette (**Attach to Process**), or with an `attach` entry in `launch.json`. The process list puts your projects' running executables first and shows each one's platform and whether its debug symbols are ready; system processes stay hidden until you switch them on in the list's title bar. Once attached you get the same session as a normal launch - breakpoints, stepping, call stacks, locals, and the Watch evaluator with property getters and interface chains. Stopping the session detaches and leaves the program running. You can attach with no project open, as long as the `.pdb` sits beside the executable.
+- **Attach, targets that cannot be debugged are flagged before you pick them** - debug symbols cannot be added to a program that is already running, so a program that was never converted is marked in the list and warned about before attaching, with the option to attach anyway. A program running elevated is marked as well, together with the note that VS Code has to run as administrator to attach to it.
+- **Keyboard mappings editor** - a new **Keyboard Mappings** card on the settings page opens an editor for the extension's shortcuts, grouped by function. **Set to Delphi defaults** applies the Delphi IDE keys - F9 Run, F5 Toggle Breakpoint, F8 Step Over, F7 Trace Into, Ctrl+F9 Compile, Shift+F9 Build - covering the IDE's Run and Project menus. Click a shortcut to record a new one; conflicts are flagged as you type. **Apply only in Delphi context** keeps the keys to Pascal files, forms, the Vallenta Studio sidebar and Delphi debug sessions, so your other projects keep the standard VS Code behaviour. A fresh installation gets the Delphi keymap automatically; updating never changes keys you already have.
+- **Rename Unit and Remove Unit from Project in the command palette** - both were reachable only from the Source Files menu, so neither could be given a keyboard shortcut. They now act on the open unit when invoked without one.
 
 ### Changed
-- **Build toolbar shows your actual shortcuts** — the Run, Debug, Build, Rebuild and Clean tooltips read the keys you have mapped instead of fixed text; Build, Rebuild and Clean showed none at all before.
-- **Convert Debug Symbols, running target** — converting the symbols of a program that is currently running now stops with a note to close it first, instead of leaving the program and its symbols out of step.
+- **Build toolbar shows your actual shortcuts** - the Run, Debug, Build, Rebuild and Clean tooltips read the keys you have mapped instead of fixed text; Build, Rebuild and Clean showed none at all before.
+- **Convert Debug Symbols, running target** - converting the symbols of a program that is currently running now stops with a note to close it first, instead of leaving the program and its symbols out of step.
 
 ### Fixed
-- **LSP, server stopped shortly after a project finished indexing** — the language server could shut down without notice and did not restart, leaving code completion, hover, Go to Definition and diagnostics dead until the window was reloaded. Most likely when a file was edited while a large project was still indexing.
-- **LSP, missing editor colors while indexing** — semantic highlighting could silently fail for a file that was open while a project was still indexing, leaving it in the plain editor colors until it was reopened.
-- **LSP, hover on an overloaded routine** — hovering the declaration of a second or later overload showed the first overload instead of its own signature. Affected routine overloads in an open file; class method overloads were unaffected.
-- **LSP, comment inside a declaration shown in hover** — a comment written inside a declaration (`TEnum = (Enum1, // note`) no longer appears in the hover popup. Covers `//`, `{…}` and `(*…*)` in types, routines, properties, fields, variables and constants; symbol caches are rebuilt once on the first start after updating.
-- **LSP, loop variable of a `for … in` loop** — a variable declared in the loop itself (`for var item in dic.Values do`) had no type, so code completion, hover and Go to Definition did nothing on it. Covers generic containers (`TList<T>`, `TObjectList<T>`, `TDictionary<K,V>.Values`), dynamic arrays, sets, strings and any type with a `GetEnumerator`. A collection put into a variable first (`var vc := dic.Values;`) is not covered yet.
-- **Editor colors, comment inside brackets** — a comment written inside an array index (`LArray[0 {note}]`) is colored as a comment again, instead of taking the attribute color.
+- **LSP, server stopped shortly after a project finished indexing** - the language server could shut down without notice and did not restart, leaving code completion, hover, Go to Definition and diagnostics dead until the window was reloaded. Most likely when a file was edited while a large project was still indexing.
+- **LSP, missing editor colors while indexing** - semantic highlighting could silently fail for a file that was open while a project was still indexing, leaving it in the plain editor colors until it was reopened.
+- **LSP, hover on an overloaded routine** - hovering the declaration of a second or later overload showed the first overload instead of its own signature. Affected routine overloads in an open file; class method overloads were unaffected.
+- **LSP, comment inside a declaration shown in hover** - a comment written inside a declaration (`TEnum = (Enum1, // note`) no longer appears in the hover popup. Covers `//`, `{…}` and `(*…*)` in types, routines, properties, fields, variables and constants; symbol caches are rebuilt once on the first start after updating.
+- **LSP, loop variable of a `for … in` loop** - a variable declared in the loop itself (`for var item in dic.Values do`) had no type, so code completion, hover and Go to Definition did nothing on it. Covers generic containers (`TList<T>`, `TObjectList<T>`, `TDictionary<K,V>.Values`), dynamic arrays, sets, strings and any type with a `GetEnumerator`. A collection put into a variable first (`var vc := dic.Values;`) is not covered yet.
+- **Editor colors, comment inside brackets** - a comment written inside an array index (`LArray[0 {note}]`) is colored as a comment again, instead of taking the attribute color.
 
 ## [1.1.19] - 2026-07-30
 
 ### Added
-- **Missing units, choose where the quick fix adds them** — a new **Add Missing Unit To** setting (settings page → *Editor Options*, or `vallenta.studio.lsp.semanticValidation.addMissingUnitTarget`) can put a unit used in the implementation part into the `interface` uses clause instead. The implementation variant stays available as a second **Ctrl+.** action. Default is unchanged: the usage location decides.
-- **Debugger, switch off local variables** — a new **Evaluate local variables** checkbox in the **Delphi Debug** view (Run and Debug sidebar, formerly *Delphi Exception Filters*) lets you switch off the evaluation of locals: the **Variables** view stays empty and nothing is evaluated while stepping — useful when large object graphs make stepping slow. Hover and Watch still evaluate on demand, and toggling takes effect immediately, even mid-session. Also available as the `vallenta.studio.debug.evaluateLocals` setting.
-- **Debugger, Watch ignores identifier case** — **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals; symbols need to be regenerated once (delete the `.pdb` next to your executable or rebuild). Can be switched off with `vallenta.studio.debug.caseInsensitiveIdentifiers`.
+- **Missing units, choose where the quick fix adds them** - a new **Add Missing Unit To** setting (settings page → *Editor Options*, or `vallenta.studio.lsp.semanticValidation.addMissingUnitTarget`) can put a unit used in the implementation part into the `interface` uses clause instead. The implementation variant stays available as a second **Ctrl+.** action. Default is unchanged: the usage location decides.
+- **Debugger, switch off local variables** - a new **Evaluate local variables** checkbox in the **Delphi Debug** view (Run and Debug sidebar, formerly *Delphi Exception Filters*) lets you switch off the evaluation of locals: the **Variables** view stays empty and nothing is evaluated while stepping - useful when large object graphs make stepping slow. Hover and Watch still evaluate on demand, and toggling takes effect immediately, even mid-session. Also available as the `vallenta.studio.debug.evaluateLocals` setting.
+- **Debugger, Watch ignores identifier case** - **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals; symbols need to be regenerated once (delete the `.pdb` next to your executable or rebuild). Can be switched off with `vallenta.studio.debug.caseInsensitiveIdentifiers`.
 
 ### Fixed
-- **Debugger, Win64 variables reported as optimized away** — in an optimized Win64 build, a local or parameter the compiler keeps in a register showed *Variable is optimized away and not available.* in **Variables** and **Watch** instead of its value. Affected `Integer`, `Boolean`, `Char`, enums and other values smaller than a pointer; object references, strings and `Int64` were unaffected, as was Win32 throughout.
-- **Debugger, Watch ignores identifier case** — **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals.
-- **LSP, array of an inline record** — a declaration such as `array [0..2] of record … end` no longer breaks the unit it appears in. Everything below it was lost, leaving the rest of the unit without code completion, hover, Go to Definition and document outline. `array of record … end` and `file of record … end` are covered too.
-- **LSP, `AnsiString` with a named codepage** — a codepage written as a constant, `type TAscii = type AnsiString(CP_ASCII)`, no longer breaks the unit it appears in the same way; only a numeric codepage (`AnsiString(20127)`) parsed before. A qualified name such as `System.CP_UTF8` is covered as well.
-- **LSP, parameter hints with a long routine name** — the hint popup no longer scrolls sideways when the class and method name are long; the signature wraps onto the next line instead.
-- **LSP, types declared inside a routine** — a type declared in a procedure's local `type` section now shadows same-named types elsewhere, the way the compiler scopes it. FMX.Layouts' local `TState` reported *Unknown member* on every value because a same-named type nested in another class won the lookup. Fields, globals and parameters keep the type their own declaring scope sees.
-- **LSP, `&`-escaped members** — `TState.&End` now resolves like its unescaped spelling; the `&` is ignored when matching the member name.
-- **Editor, reserved words as member names** — a reserved word after a dot (`TState.End`) now parses without the `&` escape, as the compiler reads it; FMX.Layouts and several other RTL units no longer show syntax errors. A dangling `obj.` before `end` or `else` while typing is still reported as incomplete member access.
+- **Debugger, Win64 variables reported as optimized away** - in an optimized Win64 build, a local or parameter the compiler keeps in a register showed *Variable is optimized away and not available.* in **Variables** and **Watch** instead of its value. Affected `Integer`, `Boolean`, `Char`, enums and other values smaller than a pointer; object references, strings and `Int64` were unaffected, as was Win32 throughout.
+- **Debugger, Watch ignores identifier case** - **Watch** and hover now resolve identifiers case-insensitively, the way Pascal reads them: a Watch on `C_Lage` finds a variable declared as `c_lage` instead of reporting *identifier is undefined*. Covers locals, parameters, fields and unit-level globals.
+- **LSP, array of an inline record** - a declaration such as `array [0..2] of record … end` no longer breaks the unit it appears in. Everything below it was lost, leaving the rest of the unit without code completion, hover, Go to Definition and document outline. `array of record … end` and `file of record … end` are covered too.
+- **LSP, `AnsiString` with a named codepage** - a codepage written as a constant, `type TAscii = type AnsiString(CP_ASCII)`, no longer breaks the unit it appears in the same way; only a numeric codepage (`AnsiString(20127)`) parsed before. A qualified name such as `System.CP_UTF8` is covered as well.
+- **LSP, parameter hints with a long routine name** - the hint popup no longer scrolls sideways when the class and method name are long; the signature wraps onto the next line instead.
+- **LSP, types declared inside a routine** - a type declared in a procedure's local `type` section now shadows same-named types elsewhere, the way the compiler scopes it. FMX.Layouts' local `TState` reported *Unknown member* on every value because a same-named type nested in another class won the lookup. Fields, globals and parameters keep the type their own declaring scope sees.
+- **LSP, `&`-escaped members** - `TState.&End` now resolves like its unescaped spelling; the `&` is ignored when matching the member name.
+- **Editor, reserved words as member names** - a reserved word after a dot (`TState.End`) now parses without the `&` escape, as the compiler reads it; FMX.Layouts and several other RTL units no longer show syntax errors. A dangling `obj.` before `end` or `else` while typing is still reported as incomplete member access.
 
 ## [1.1.18] - 2026-07-27
 
 ### Added
-- **Parameter hints** — typing a call's `(` or `,` now shows the routine's parameters, with the one you are filling in in bold. Every overload is listed — step through them with ↑/↓, and the one matching the arguments you have typed so far is preselected. Methods, constructors, `inherited` and calls inside a `with` block are covered; **Ctrl+Shift+Space** brings the hint back at any time.
+- **Parameter hints** - typing a call's `(` or `,` now shows the routine's parameters, with the one you are filling in in bold. Every overload is listed - step through them with ↑/↓, and the one matching the arguments you have typed so far is preselected. Methods, constructors, `inherited` and calls inside a `with` block are covered; **Ctrl+Shift+Space** brings the hint back at any time.
 
 ### Added
-- **Go to Definition switches between declaration and implementation** — Ctrl+Click or F12 on a routine's own name now jumps to its counterpart: from the declaration — in the `interface` section or inside a class — to the body, and from the body header back to the declaration. Overloads land on the matching signature. Clicking the class part of `TFoo.Bar` still goes to the class, and every other position — call sites, parameter types, variables — keeps following the **Go to Definition target** setting.
+- **Go to Definition switches between declaration and implementation** - Ctrl+Click or F12 on a routine's own name now jumps to its counterpart: from the declaration - in the `interface` section or inside a class - to the body, and from the body header back to the declaration. Overloads land on the matching signature. Clicking the class part of `TFoo.Bar` still goes to the class, and every other position - call sites, parameter types, variables - keeps following the **Go to Definition target** setting.
 
 ### Changed
-- **LSP, faster diagnostics on large units** — the unused-variable analysis is many times faster on large `with`-heavy units (Vcl.Forms: 36 s → ~1 s), and errors and warnings now appear as soon as they are found instead of waiting for the slower hint analyzers to finish.
+- **LSP, faster diagnostics on large units** - the unused-variable analysis is many times faster on large `with`-heavy units (Vcl.Forms: 36 s → ~1 s), and errors and warnings now appear as soon as they are found instead of waiting for the slower hint analyzers to finish.
 
 ### Fixed
-- **Missing units, quick fix on a qualified type** — **Ctrl+.** on an *Unknown type* written as `TOuter.TNested` now offers the unit declaring `TOuter`, instead of no fix at all. A unit-qualified name (`Vcl.Forms.TForm`) is still not covered.
-- **Editor colors, escaped quote at the end of a line** — a line ending in an escaped quote (`quotechar := ''''`) no longer colors the rest of the unit as one long string. 
-- **LSP, `Destroy` on a class from another unit** — `LVar.Destroy` no longer reports *Unknown member* when the class is declared in a different unit; it resolves, hovers and appears in code completion like any other inherited member. Symbol caches are rebuilt once on the first start after updating.
-- **LSP, members through a unit-qualified type alias** — an alias whose target names its unit (`PExceptionRecord = System.PExceptionRecord`) now resolves through to the type it names, so members reached through it no longer report *Unknown member*.
-- **LSP, `Create` on a dynamic array** — a dynamic array's implicit constructor (`TBytes.Create($EF, $BB, $BF)`) no longer reports *Unknown member*. Covers `array of T`, `packed array of T` and `TArray<T>`; a fixed-length array still has none.
-- **LSP, signature mismatch on aliased parameter types** — a routine declared with one type name and implemented with an alias of it (`PAnsiChar` against `MarshaledAString`, or your own `TMyChar = PAnsiChar`) no longer reports *Signature differs from the declaration*.
-- **LSP, signature mismatch on class constructors and destructors** — a `class destructor Destroy` declared beside an instance `destructor Destroy` no longer reports *Signature differs from the declaration*, and **Apply Signature** no longer offers to rewrite the one into the other.
-- **LSP, unused-parameter hint on procedural types** — the parameters of a procedural type (`TCompareProc = function(const S1, S2: string): Boolean`) are no longer flagged as *never used*; they name the type's call shape and have no body to be used in.
+- **Missing units, quick fix on a qualified type** - **Ctrl+.** on an *Unknown type* written as `TOuter.TNested` now offers the unit declaring `TOuter`, instead of no fix at all. A unit-qualified name (`Vcl.Forms.TForm`) is still not covered.
+- **Editor colors, escaped quote at the end of a line** - a line ending in an escaped quote (`quotechar := ''''`) no longer colors the rest of the unit as one long string. 
+- **LSP, `Destroy` on a class from another unit** - `LVar.Destroy` no longer reports *Unknown member* when the class is declared in a different unit; it resolves, hovers and appears in code completion like any other inherited member. Symbol caches are rebuilt once on the first start after updating.
+- **LSP, members through a unit-qualified type alias** - an alias whose target names its unit (`PExceptionRecord = System.PExceptionRecord`) now resolves through to the type it names, so members reached through it no longer report *Unknown member*.
+- **LSP, `Create` on a dynamic array** - a dynamic array's implicit constructor (`TBytes.Create($EF, $BB, $BF)`) no longer reports *Unknown member*. Covers `array of T`, `packed array of T` and `TArray<T>`; a fixed-length array still has none.
+- **LSP, signature mismatch on aliased parameter types** - a routine declared with one type name and implemented with an alias of it (`PAnsiChar` against `MarshaledAString`, or your own `TMyChar = PAnsiChar`) no longer reports *Signature differs from the declaration*.
+- **LSP, signature mismatch on class constructors and destructors** - a `class destructor Destroy` declared beside an instance `destructor Destroy` no longer reports *Signature differs from the declaration*, and **Apply Signature** no longer offers to rewrite the one into the other.
+- **LSP, unused-parameter hint on procedural types** - the parameters of a procedural type (`TCompareProc = function(const S1, S2: string): Boolean`) are no longer flagged as *never used*; they name the type's call shape and have no body to be used in.
 
 ## [1.1.17] - 2026-07-26
 
 ### Added
-- **Insert GUID (Ctrl+Shift+G)** — press **Ctrl+Shift+G** in a Delphi file (or right-click → **Insert GUID**) to drop a fresh interface GUID — `['{…}']` — at the cursor.
-- **Apply Signature (Ctrl+Shift+Alt+C)** — press **Ctrl+Shift+Alt+C** (or **Ctrl+.** → **Apply signature to declaration** / **to implementation**) to apply the routine signature at the cursor to its counterpart: the declaration when you are in the body, the implementation header when you are on the declaration. Parameter defaults, visibility and `virtual`/`override` are preserved; overloads are paired rather than guessed, and you are asked when more than one counterpart fits. A counterpart that does not exist yet is created.
-- **Signature mismatch, hint** — a routine whose implementation header no longer matches its declaration is flagged as you type, instead of at the next build. On by default at information severity, configurable on the Settings page.
+- **Insert GUID (Ctrl+Shift+G)** - press **Ctrl+Shift+G** in a Delphi file (or right-click → **Insert GUID**) to drop a fresh interface GUID - `['{…}']` - at the cursor.
+- **Apply Signature (Ctrl+Shift+Alt+C)** - press **Ctrl+Shift+Alt+C** (or **Ctrl+.** → **Apply signature to declaration** / **to implementation**) to apply the routine signature at the cursor to its counterpart: the declaration when you are in the body, the implementation header when you are on the declaration. Parameter defaults, visibility and `virtual`/`override` are preserved; overloads are paired rather than guessed, and you are asked when more than one counterpart fits. A counterpart that does not exist yet is created.
+- **Signature mismatch, hint** - a routine whose implementation header no longer matches its declaration is flagged as you type, instead of at the next build. On by default at information severity, configurable on the Settings page.
 
 ### Changed
-- **Debugger, faster symbol conversion** — converting debug symbols is now several times faster on large executables. The generated PDB is unchanged, and the accompanying `.meta.json` is about a third smaller.
+- **Debugger, faster symbol conversion** - converting debug symbols is now several times faster on large executables. The generated PDB is unchanged, and the accompanying `.meta.json` is about a third smaller.
 
 ### Fixed
-- **Debugger, macros in the Host Application path** — a Host Application or working directory written with a macro — an environment variable such as `$(FINE_ROOT)`, a Delphi *Environment Variables* override, or `$(BDS)` — now resolves when you debug a library or package, instead of failing with *Host application not found*. Output and search paths follow the same rules; previously only `$(Platform)` and `$(Config)` were expanded.
-- **Debugger, garbled function results in Variables** — stepping over a line that calls a function returning a `string`, `Variant`, interface or dynamic array listed those functions in the **Variables** view as *&lt;name&gt; returned*, showing nonsense text or *Error reading characters of string* — three such rows appeared for a single line like `IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))`. Delphi hands a result of that kind back through a hidden pointer rather than the register the debugger reads, which the generated debug symbols now describe correctly. Results that really are register-returned — numbers, Booleans, enums, object references — are unaffected.
-- **Editor colors, multiline strings** — Delphi keywords inside a Delphi 12+ multiline string (`record`, `begin`, `end`) are no longer highlighted as code by the block-nesting colors. A string whose content starts a line with a run of quotes, or whose delimiter uses an even number of quotes (`''''`), is no longer cut short either.
-- **Exception handler variables** — the variable an `on E: Exception do` handler declares is now a local like any other: code completion offers it and its members, and hover and Go to Definition work on it.
-- **Editor colors, exception handlers** — `on` is now highlighted as a keyword in `on E: Exception do`. A property named `On` stays an identifier.
-- **Editor colors, members named after a directive** — `E.Message` is colored as the property it is, instead of in the keyword color; `.Register`, `.Read`, `.Write` and `.Default` are likewise colored as the members they are.
-- **Structural highlight, exception handlers** — putting the cursor on an `on` highlights it together with its `do`, and the other way round, the way `for`, `while` and `with` already pair with theirs. A variable or property named `On` is left alone.
-- **Hover, units on the Delphi library path** — a third-party unit reached through the Delphi *Library Path* (e.g. `SuperObject`) no longer hovers as *Delphi RTL/VCL library*; it now reads *third-party library*, while Delphi's own RTL/VCL units keep the RTL label.
-- **LSP, conditional inside a type alias** — a type alias whose target is switched by a directive inside the declaration (`TFoo = {$IFDEF X} TThreadList {$ELSE} TList {$ENDIF};`) now resolves to the active branch from other units; previously the first branch always won unless the declaring unit was open in the editor.
+- **Debugger, macros in the Host Application path** - a Host Application or working directory written with a macro - an environment variable such as `$(FINE_ROOT)`, a Delphi *Environment Variables* override, or `$(BDS)` - now resolves when you debug a library or package, instead of failing with *Host application not found*. Output and search paths follow the same rules; previously only `$(Platform)` and `$(Config)` were expanded.
+- **Debugger, garbled function results in Variables** - stepping over a line that calls a function returning a `string`, `Variant`, interface or dynamic array listed those functions in the **Variables** view as *&lt;name&gt; returned*, showing nonsense text or *Error reading characters of string* - three such rows appeared for a single line like `IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))`. Delphi hands a result of that kind back through a hidden pointer rather than the register the debugger reads, which the generated debug symbols now describe correctly. Results that really are register-returned - numbers, Booleans, enums, object references - are unaffected.
+- **Editor colors, multiline strings** - Delphi keywords inside a Delphi 12+ multiline string (`record`, `begin`, `end`) are no longer highlighted as code by the block-nesting colors. A string whose content starts a line with a run of quotes, or whose delimiter uses an even number of quotes (`''''`), is no longer cut short either.
+- **Exception handler variables** - the variable an `on E: Exception do` handler declares is now a local like any other: code completion offers it and its members, and hover and Go to Definition work on it.
+- **Editor colors, exception handlers** - `on` is now highlighted as a keyword in `on E: Exception do`. A property named `On` stays an identifier.
+- **Editor colors, members named after a directive** - `E.Message` is colored as the property it is, instead of in the keyword color; `.Register`, `.Read`, `.Write` and `.Default` are likewise colored as the members they are.
+- **Structural highlight, exception handlers** - putting the cursor on an `on` highlights it together with its `do`, and the other way round, the way `for`, `while` and `with` already pair with theirs. A variable or property named `On` is left alone.
+- **Hover, units on the Delphi library path** - a third-party unit reached through the Delphi *Library Path* (e.g. `SuperObject`) no longer hovers as *Delphi RTL/VCL library*; it now reads *third-party library*, while Delphi's own RTL/VCL units keep the RTL label.
+- **LSP, conditional inside a type alias** - a type alias whose target is switched by a directive inside the declaration (`TFoo = {$IFDEF X} TThreadList {$ELSE} TList {$ENDIF};`) now resolves to the active branch from other units; previously the first branch always won unless the declaring unit was open in the editor.
 
 ## [1.1.16] - 2026-07-23
 
 ### Added
-- **Missing units, quick fix** — press **Ctrl+.** on an *Unknown type* or *Unknown identifier* to add the unit declaring it to the `uses` clause: **Add 'Vcl.Forms' to interface uses** or **Add 'Vcl.Dialogs' to implementation uses**, depending on where the symbol is used. When several units declare a symbol of that name (`TBitmap` in `Vcl.Graphics` and `FMX.Graphics`), one action per unit is offered, project units first and ordered by the project's unit scope names; `TList<Integer>` finds the generic `TList<T>`'s unit, a bare `TList` the non-generic one. Constants, enum values and global variables are covered too (`mrOk` → `System.UITypes`), and a section without a `uses` clause gets one created. Where a comment or a compiler directive sits at the end of the clause, no fix is offered and the clause is left for you to edit by hand.
-- **Settings, write launch.json** — a new **Debugger** section on the Settings page toggles whether Vallenta Studio writes or updates a launch configuration in `.vscode/launch.json` when you start debugging (on by default). Turn it off to leave your `launch.json` untouched; debugging still works.
-- **Debugger, symbol conversion timeout is now configurable** — the timeout for converting debug symbols now defaults to 5 minutes (up from a fixed 60 seconds) and can be changed with the new `vallenta.studio.symbolConverterTimeout` setting, giving large executables time to finish.
+- **Missing units, quick fix** - press **Ctrl+.** on an *Unknown type* or *Unknown identifier* to add the unit declaring it to the `uses` clause: **Add 'Vcl.Forms' to interface uses** or **Add 'Vcl.Dialogs' to implementation uses**, depending on where the symbol is used. When several units declare a symbol of that name (`TBitmap` in `Vcl.Graphics` and `FMX.Graphics`), one action per unit is offered, project units first and ordered by the project's unit scope names; `TList<Integer>` finds the generic `TList<T>`'s unit, a bare `TList` the non-generic one. Constants, enum values and global variables are covered too (`mrOk` → `System.UITypes`), and a section without a `uses` clause gets one created. Where a comment or a compiler directive sits at the end of the clause, no fix is offered and the clause is left for you to edit by hand.
+- **Settings, write launch.json** - a new **Debugger** section on the Settings page toggles whether Vallenta Studio writes or updates a launch configuration in `.vscode/launch.json` when you start debugging (on by default). Turn it off to leave your `launch.json` untouched; debugging still works.
+- **Debugger, symbol conversion timeout is now configurable** - the timeout for converting debug symbols now defaults to 5 minutes (up from a fixed 60 seconds) and can be changed with the new `vallenta.studio.symbolConverterTimeout` setting, giving large executables time to finish.
 
 ### Fixed
-- **LSP, a bare type name shared with a generic** — a type reference with no type arguments (e.g. `TList` in `type MyList = TList`) no longer resolves to a same-named generic such as `TList<T>` when no non-generic `TList` is in scope; the compiler treats the two as distinct names, so hover, Go to Definition and completion no longer point at the wrong type. A generic type's own bare name used inside its own declaration (`function Clone: TMyStack` within `TMyStack<T>`) still resolves to itself.
-- **LSP, `MANAGED_RECORD` and `WEAKREF` conditionals** — `{$IFDEF MANAGED_RECORD}` and `{$IFDEF WEAKREF}` now follow the Delphi version's predefined compiler symbols.
-- **Debugger, timed-out symbol conversion** — a conversion that hit the timeout could leave a partial PDB behind, causing the next debug start to skip re-converting and run without symbols; the incomplete file is now discarded so conversion runs again.
+- **LSP, a bare type name shared with a generic** - a type reference with no type arguments (e.g. `TList` in `type MyList = TList`) no longer resolves to a same-named generic such as `TList<T>` when no non-generic `TList` is in scope; the compiler treats the two as distinct names, so hover, Go to Definition and completion no longer point at the wrong type. A generic type's own bare name used inside its own declaration (`function Clone: TMyStack` within `TMyStack<T>`) still resolves to itself.
+- **LSP, `MANAGED_RECORD` and `WEAKREF` conditionals** - `{$IFDEF MANAGED_RECORD}` and `{$IFDEF WEAKREF}` now follow the Delphi version's predefined compiler symbols.
+- **Debugger, timed-out symbol conversion** - a conversion that hit the timeout could leave a partial PDB behind, causing the next debug start to skip re-converting and run without symbols; the incomplete file is now discarded so conversion runs again.
 
 ## [1.1.15] - 2026-07-22
 
 ### Added
-- **Dproj Editor, package & DCP output paths** — the Paths section now has **Package Output Directory** and **DCP Output Directory** fields, editable per configuration and platform.
-- **Dproj Editor, Search Paths filter** — a filter box with `*`/`?` wildcards at the top of the Search Paths dialog narrows long path lists; clear it with the ✕ button.
+- **Dproj Editor, package & DCP output paths** - the Paths section now has **Package Output Directory** and **DCP Output Directory** fields, editable per configuration and platform.
+- **Dproj Editor, Search Paths filter** - a filter box with `*`/`?` wildcards at the top of the Search Paths dialog narrows long path lists; clear it with the ✕ button.
 
 ### Changed
-- **Dproj Editor, editable output paths** — the output-directory fields can now be typed directly — so you can enter a macro path such as `..\..\$(Platform)` — with a folder button beside each for the pick-a-folder dialog.
+- **Dproj Editor, editable output paths** - the output-directory fields can now be typed directly - so you can enter a macro path such as `..\..\$(Platform)` - with a folder button beside each for the pick-a-folder dialog.
 
 ### Fixed
-- **Build Toolbar, Cancel Build** — dismissing the symbol-conversion failure notification with its close (✕) button now cancels the debug launch and returns the toolbar to Ready, instead of leaving it stuck on "Converting debug symbols…" with a Cancel Build button that did nothing. Choose **Continue** on that notification to debug without symbols.
-- **LSP, member of a type from an indirectly used unit** — a member reached through a function result, property or field whose type is declared in a unit the calling unit doesn't itself use (e.g. `ExceptionLog7.CurrentEurekaLogOptions.ActivateEurekaLog`, where the options class lives in another EurekaLog unit) now resolves on hover, Go to Definition and code completion; previously nothing was offered and completion showed an *unresolved* placeholder.
-- **LSP, `uses` entries split by `{$IFDEF}`** — a `uses` clause with compiler directives between or inside its entries (as in EurekaLog's `ExceptionLog7.pas`) no longer loses or garbles unit names during indexing; the units of every branch are recorded, so the types they provide resolve. Symbol caches rebuild once on the next start.
-- **LSP, same-named types from different units** — a member accessed through a function result or property now resolves against the type copy visible to the unit declaring that function or property — as the compiler does — instead of whichever same-named type the calling unit could see. This also removes false *Unknown member* errors on `TMonitor` members inside `Vcl.Forms`, and a nonexistent member on an inline `var` typed via `Default(T)` is flagged again.
-- **LSP, inline `var` from an inherited member** — a variable initialized from an unqualified member of the enclosing class (e.g. `var o2 := Owner;`, an inherited `property Owner: TObject`) now infers that member's type, even when a unit in the `uses` clause declares an unrelated member of the same name (e.g. `TComponent.Owner` from `Classes`); previously the unrelated one could win and the variable took the wrong type.
-- **LSP, republished properties** — a property republished without a type (`property Style;`) on a class from another unit now finds its type through the ancestor, so hover, Go to Definition and completion work on members reached through it — including a protected ancestor property republished public.
+- **Build Toolbar, Cancel Build** - dismissing the symbol-conversion failure notification with its close (✕) button now cancels the debug launch and returns the toolbar to Ready, instead of leaving it stuck on "Converting debug symbols…" with a Cancel Build button that did nothing. Choose **Continue** on that notification to debug without symbols.
+- **LSP, member of a type from an indirectly used unit** - a member reached through a function result, property or field whose type is declared in a unit the calling unit doesn't itself use (e.g. `ExceptionLog7.CurrentEurekaLogOptions.ActivateEurekaLog`, where the options class lives in another EurekaLog unit) now resolves on hover, Go to Definition and code completion; previously nothing was offered and completion showed an *unresolved* placeholder.
+- **LSP, `uses` entries split by `{$IFDEF}`** - a `uses` clause with compiler directives between or inside its entries (as in EurekaLog's `ExceptionLog7.pas`) no longer loses or garbles unit names during indexing; the units of every branch are recorded, so the types they provide resolve. Symbol caches rebuild once on the next start.
+- **LSP, same-named types from different units** - a member accessed through a function result or property now resolves against the type copy visible to the unit declaring that function or property - as the compiler does - instead of whichever same-named type the calling unit could see. This also removes false *Unknown member* errors on `TMonitor` members inside `Vcl.Forms`, and a nonexistent member on an inline `var` typed via `Default(T)` is flagged again.
+- **LSP, inline `var` from an inherited member** - a variable initialized from an unqualified member of the enclosing class (e.g. `var o2 := Owner;`, an inherited `property Owner: TObject`) now infers that member's type, even when a unit in the `uses` clause declares an unrelated member of the same name (e.g. `TComponent.Owner` from `Classes`); previously the unrelated one could win and the variable took the wrong type.
+- **LSP, republished properties** - a property republished without a type (`property Style;`) on a class from another unit now finds its type through the ancestor, so hover, Go to Definition and completion work on members reached through it - including a protected ancestor property republished public.
 
 ## [1.1.14] - 2026-07-20
 
 ### Added
-- **LSP, a unit opened from outside the project** — opening a `.pas` that isn't part of the active project — one belonging to another project, or anywhere on disk — now gives it the full language features (hover, Go to Definition, code completion, outline, jumping between a routine's declaration and its body, diagnostics) under the active project's settings, where before it offered none. Other units it uses from the same folder resolve as well, and opening such a unit resolves the types it provides in the ones that use it; closing a file removes it again, leaving the project's own symbol index untouched.
+- **LSP, a unit opened from outside the project** - opening a `.pas` that isn't part of the active project - one belonging to another project, or anywhere on disk - now gives it the full language features (hover, Go to Definition, code completion, outline, jumping between a routine's declaration and its body, diagnostics) under the active project's settings, where before it offered none. Other units it uses from the same folder resolve as well, and opening such a unit resolves the types it provides in the ones that use it; closing a file removes it again, leaving the project's own symbol index untouched.
 
 ### Fixed
-- **LSP, members of an element of a generic collection** — a member accessed on an indexed element of a generic collection (e.g. `FGroups[I].Active`, where `FGroups` is a `TObjectList<TRegGroup>`) now resolves on hover, Go to Definition and code completion; previously the element's type was not worked out, so nothing was offered and a misspelled member went unreported as well. Collections that take their index from a base such as `TList<T>` are covered, as is the explicit form (`FGroups.Items[I].Active`).
-- **LSP, indexed properties** — a property whose index takes more than one parameter (e.g. `Cells[Row: Integer; Col: Integer]`) now resolves the members of its element type, and a class declaring several indexed properties uses the one marked `default` instead of whichever was declared first.
-- **Code completion, enum variables and implementation-section types** — typing a dot after a variable of an enum type now offers the enum's values and the methods a `record helper` adds to it; previously the list showed only an *unresolved* placeholder. A variable whose type is declared in the unit's implementation section resolves for completion as well.
+- **LSP, members of an element of a generic collection** - a member accessed on an indexed element of a generic collection (e.g. `FGroups[I].Active`, where `FGroups` is a `TObjectList<TRegGroup>`) now resolves on hover, Go to Definition and code completion; previously the element's type was not worked out, so nothing was offered and a misspelled member went unreported as well. Collections that take their index from a base such as `TList<T>` are covered, as is the explicit form (`FGroups.Items[I].Active`).
+- **LSP, indexed properties** - a property whose index takes more than one parameter (e.g. `Cells[Row: Integer; Col: Integer]`) now resolves the members of its element type, and a class declaring several indexed properties uses the one marked `default` instead of whichever was declared first.
+- **Code completion, enum variables and implementation-section types** - typing a dot after a variable of an enum type now offers the enum's values and the methods a `record helper` adds to it; previously the list showed only an *unresolved* placeholder. A variable whose type is declared in the unit's implementation section resolves for completion as well.
 
 ## [1.1.13] - 2026-07-19
 
 ### Fixed
-- **Code completion, right after a routine header** — on the implementation side, with the caret just after a routine header whose body isn't written yet (`procedure Foo;` on the line above the caret, or right after its `;`), the suggestion list now leads with `begin` and the other routine declaration-area keywords (`var`, `const`, `type`, `asm`, nested routines and directives) instead of the unit's section-level keywords. A blank line directly above `implementation` no longer shifts the interface/implementation boundary by a line.
-- **LSP, compiler switch conditionals (`{$IFOPT}`)** — `{$IFOPT}` now follows the project's compiler switch settings — Optimization, Overflow and Range checking, I/O checking, and the rest — for the active configuration and platform, so the right branch is active and the other greyed out. Local switch directives (`{$Q+}`, `{$OPTIMIZATION ON}`, `{$B-,R+,Q+}`, including inside `{$I}` includes) are tracked as they change through a unit. `{$IFDEF Q+}` is now read the way the compiler reads it — the symbol `Q`, trailing `+` ignored — so `{$DEFINE Q}` makes it active; and an invalid `{$IFOPT OVERFLOWCHECKS+}` is greyed out with a hint instead of being treated as always active.
-- **LSP, RTL symbols after a nested `{$IF}`-split routine header** — a routine header split across nested `{$IF}`/`{$ELSEIF}`/`{$ELSE}` branches (`_DelphiPersonalityRoutine` in `System.pas`) silently ended the unit's indexing, so every symbol declared after it — `DynArraySize` and several hundred others in the tail of the `System` interface — was flagged with a false *Unknown identifier* and offered no hover or Go to Definition from other units. Such declarations are now indexed in every branch, each tagged with its condition.
-- **LSP, multiline string literals** — a Delphi 12+ multiline string (`'''…'''`), including one that embeds a shorter run of quotes by using a longer delimiter (e.g. `'''''`), no longer triggers a false *Syntax error*, and now colors as a single string in the editor rather than highlighting its content as code.
-- **LSP, types reached through a `{$I}` include in a `uses` clause** — a unit named inside an include file that sits in a `uses` clause (e.g. `uses {$I units.inc} Classes;`) is now recognized, so the types it provides resolve on hover, Go to Definition and code completion instead of showing a false *Unknown type*. Renaming such a unit is refused with a note naming the include file, since the reference there can't be rewritten automatically.
-- **LSP, unit search path changes** — adding or removing a project unit search path now takes effect without restarting the language server; previously the change was accepted but indexing kept using the old paths until a restart.
-- **LSP, a unit dropped from the project** — a unit removed from the project (or deleted on disk) while the editor was closed is now dropped from the symbol index on the next start, instead of lingering until a manual reindex.
-- **LSP, a type indexed after the file that uses it** — a type whose defining unit is indexed after the file referencing it now resolves as soon as that unit becomes available, instead of needing a language-server restart.
-- **LSP, `SizeOf` of a record in `{$IF}` conditions** — a conditional such as `{$IF SizeOf(Extended) <> SizeOf(TExtended80Rec)}` now resolves the record's size and shades the correct branch. Built-in and well-known RTL type sizes are evaluated for the active target platform.
-- **LSP, member of a function's result** — a member accessed directly on a function's return value (e.g. `GetObj.Value`, where `GetObj` returns a class) now resolves on hover, Go to Definition and code completion; previously the member wasn't recognized and couldn't be clicked, even when the function and its type were reachable through the `uses` clause.
-- **LSP, `goto` labels** — a label name — the `label` declaration, each `goto`, and the `name:` marker — is no longer flagged with a false *Unknown identifier*.
-- **Go to Definition and hover, `goto` labels** — Ctrl+Click / F12 on a `goto` now jumps to the `name:` marker, the marker jumps back to the `label` declaration, and hover shows the label; previously a label name was neither clickable nor hoverable.
+- **Code completion, right after a routine header** - on the implementation side, with the caret just after a routine header whose body isn't written yet (`procedure Foo;` on the line above the caret, or right after its `;`), the suggestion list now leads with `begin` and the other routine declaration-area keywords (`var`, `const`, `type`, `asm`, nested routines and directives) instead of the unit's section-level keywords. A blank line directly above `implementation` no longer shifts the interface/implementation boundary by a line.
+- **LSP, compiler switch conditionals (`{$IFOPT}`)** - `{$IFOPT}` now follows the project's compiler switch settings - Optimization, Overflow and Range checking, I/O checking, and the rest - for the active configuration and platform, so the right branch is active and the other greyed out. Local switch directives (`{$Q+}`, `{$OPTIMIZATION ON}`, `{$B-,R+,Q+}`, including inside `{$I}` includes) are tracked as they change through a unit. `{$IFDEF Q+}` is now read the way the compiler reads it - the symbol `Q`, trailing `+` ignored - so `{$DEFINE Q}` makes it active; and an invalid `{$IFOPT OVERFLOWCHECKS+}` is greyed out with a hint instead of being treated as always active.
+- **LSP, RTL symbols after a nested `{$IF}`-split routine header** - a routine header split across nested `{$IF}`/`{$ELSEIF}`/`{$ELSE}` branches (`_DelphiPersonalityRoutine` in `System.pas`) silently ended the unit's indexing, so every symbol declared after it - `DynArraySize` and several hundred others in the tail of the `System` interface - was flagged with a false *Unknown identifier* and offered no hover or Go to Definition from other units. Such declarations are now indexed in every branch, each tagged with its condition.
+- **LSP, multiline string literals** - a Delphi 12+ multiline string (`'''…'''`), including one that embeds a shorter run of quotes by using a longer delimiter (e.g. `'''''`), no longer triggers a false *Syntax error*, and now colors as a single string in the editor rather than highlighting its content as code.
+- **LSP, types reached through a `{$I}` include in a `uses` clause** - a unit named inside an include file that sits in a `uses` clause (e.g. `uses {$I units.inc} Classes;`) is now recognized, so the types it provides resolve on hover, Go to Definition and code completion instead of showing a false *Unknown type*. Renaming such a unit is refused with a note naming the include file, since the reference there can't be rewritten automatically.
+- **LSP, unit search path changes** - adding or removing a project unit search path now takes effect without restarting the language server; previously the change was accepted but indexing kept using the old paths until a restart.
+- **LSP, a unit dropped from the project** - a unit removed from the project (or deleted on disk) while the editor was closed is now dropped from the symbol index on the next start, instead of lingering until a manual reindex.
+- **LSP, a type indexed after the file that uses it** - a type whose defining unit is indexed after the file referencing it now resolves as soon as that unit becomes available, instead of needing a language-server restart.
+- **LSP, `SizeOf` of a record in `{$IF}` conditions** - a conditional such as `{$IF SizeOf(Extended) <> SizeOf(TExtended80Rec)}` now resolves the record's size and shades the correct branch. Built-in and well-known RTL type sizes are evaluated for the active target platform.
+- **LSP, member of a function's result** - a member accessed directly on a function's return value (e.g. `GetObj.Value`, where `GetObj` returns a class) now resolves on hover, Go to Definition and code completion; previously the member wasn't recognized and couldn't be clicked, even when the function and its type were reachable through the `uses` clause.
+- **LSP, `goto` labels** - a label name - the `label` declaration, each `goto`, and the `name:` marker - is no longer flagged with a false *Unknown identifier*.
+- **Go to Definition and hover, `goto` labels** - Ctrl+Click / F12 on a `goto` now jumps to the `name:` marker, the marker jumps back to the `label` declaration, and hover shows the label; previously a label name was neither clickable nor hoverable.
 
 ## [1.1.12] - 2026-07-17
 
 ### Added
-- **Unused units, quick fix** — press **Ctrl+.** on a unit flagged as unused in a `uses` clause to remove just that one, or every unused unit in the file at once; the leftover comma or line goes with it, and a clause left empty disappears. Where a comment or a compiler directive sits between the entries so that removing one would disturb it, no fix is offered and the entry is left for you to edit by hand.
+- **Unused units, quick fix** - press **Ctrl+.** on a unit flagged as unused in a `uses` clause to remove just that one, or every unused unit in the file at once; the leftover comma or line goes with it, and a clause left empty disappears. Where a comment or a compiler directive sits between the entries so that removing one would disturb it, no fix is offered and the entry is left for you to edit by hand.
 
 ### Changed
-- **Class completion, placement (Ctrl+Shift+C)** — a generated method body now appears next to the bodies of its neighbours in the class, mirroring the order the methods are declared in, instead of at the end of the unit. A method whose neighbours have no bodies yet is still appended at the end of the implementation section.
+- **Class completion, placement (Ctrl+Shift+C)** - a generated method body now appears next to the bodies of its neighbours in the class, mirroring the order the methods are declared in, instead of at the end of the unit. A method whose neighbours have no bodies yet is still appended at the end of the implementation section.
 
 ### Fixed
-- **Debugger, optimized Win64 local variables** — in a 64-bit build compiled with optimization, a register-held local variable (such as a `TList` or other object or pointer) could show as `nil` or a wrong value at a breakpoint; these now show their correct value. 32-bit builds were unaffected.
-- **LSP, types after an `{$IFDEF}`-split variant record** — a variant record whose fields are split across `{$IFDEF}`/`{$ELSE}` branches (e.g. `TTypeData` in `System.TypInfo`) broke the unit's indexing, so every type declared after it was missing: `PPropInfo` and friends were flagged with a false *Unknown type* error and their members did not resolve.
-- **LSP, inherited members of an implementation-section class** — a class declared in a unit's implementation section that inherits from a type imported in the implementation `uses` (e.g. `TCustomStrList = class(TStringList)`) now resolves its inherited members on hover and in code completion; previously every member (`Create`, `Add`, `Free`, …) was flagged with a false *Unknown member* error.
-- **Go to Definition and hover, `inherited` calls** — `inherited Test;` now navigates to the base class's method instead of the overriding method it is written in, and the `inherited` keyword itself — bare (`inherited;`) or qualified — now supports Go to Definition and hover for the method it calls; previously the keyword wasn't clickable at all.
-- **LSP, multiple generic constraints** — a generic type parameter with more than one constraint (e.g. `TFoo<T: class, constructor>`) no longer triggers a false *Syntax error*.
-- **LSP, generic vs non-generic type resolution** — with both `System.Classes` and `System.Generics.Collections` in the `uses` clause, a bare `TList` (e.g. `TCustomList = class(TList)`) wrongly resolved to the generic `TList<T>`. Hover, Go to Definition, code completion and inherited members now match a type reference by its type arguments, in any `uses` order: bare `TList` finds `Classes.TList`, `TList<Integer>` the generic class, and `TFunc<Integer, string>` the two-parameter `TFunc<T, TResult>`.
-- **LSP, inline `var` from a literal** — a variable declared with inline `var` and initialized from a literal (e.g. `var LInteger := 1;`, `var LText := 'abc';`, `var LFlag := True;`) now infers its type, so its members — including type-helper methods such as `Integer.ToString` — are recognized on hover and in code completion; previously the list came up empty. A `for var I := 1 to 10` loop variable infers the same way, and a single-character literal (`var LChar := 'a';`) infers `Char`, as the compiler does.
-- **Code completion, `Char` and `Currency` members** — a `Char` or `Currency` variable now offers its type-helper members (`ToUpper`, `ToString`, …); previously nothing was suggested. `TCharHelper` lives in `System.Character`, so that unit has to be in the `uses` clause.
-- **LSP, hexadecimal literals with an `E` digit** — a hex literal such as `$FE` or `$1E5` was read as a floating-point value, which could match the wrong overload of a routine on hover and Go to Definition; it is now integral.
-- **Code completion, built-in types** — a type position (e.g. `var LValue: |`) now offers Delphi's built-in simple types — `Integer`, `Double`, `Boolean`, `Char`, `Variant` and the rest. They are compiler intrinsics with no declaration in any source, so they could never be suggested before; 
-- **Unused variable detection, same-named inline variables in sibling blocks** — an uninitialized inline `var` (e.g. `var nValue: Integer;`) declared under the same name in two sibling blocks, such as separate `case` branches, is no longer flagged as *declared but never used* when each block uses its own. One that genuinely is unused is also no longer missed when a later block reuses the name. Inline `const` behaves the same.
-- **Find All References, uninitialized inline `var`** — a search from an uninitialized inline `var` now finds the uses in its own block. Previously, when the same name was declared in more than one block of a routine, every reference was attributed to the first declaration and a search from any later one found nothing.
-- **Source Files panel, Unicode filenames** — a unit whose filename is made up entirely of non-ASCII characters now appears in the **Source Files** panel, and **Remove from Project** and **Rename Unit…** work on it; previously it was missing from the panel altogether. 
-- **Outline and breadcrumbs, Unicode declarations** — a unit, class, record, interface, method, property or routine named with non-ASCII letters now appears in the Outline view and breadcrumbs; previously such declarations were missing.
-- **Add Existing File, Unicode form classes** — adding a `.pas` whose companion `.dfm`/`.fmx` declares a non-ASCII class name now keeps its `{Name: TDataModule}` comment in the `.dpr`; a `.dproj` generated for a `library` or `program` with a non-ASCII name is also no longer typed as a plain application.
-- **Class completion, shadowed routines** — a routine declared in the interface no longer misses out on its stub when another routine contains a local routine of the same name; Ctrl+Shift+C now generates its body as well.
-- **Class completion, caret in an interface** — with the caret inside an `interface` type declaration, Ctrl+Shift+C generated the missing bodies of every other type in the unit. It now does nothing there, since an interface's methods are implemented by the classes that support it.
-- **LSP, syntax errors while typing** — an unfinished routine (e.g. `begin` just typed, so the unit's closing `end.` is momentarily taken as the routine's own `end`) marked the entire file as one syntax error from the first line to the last. The errors now stay at the typing point — `';' expected but '.' found` and `'end.' expected` — hover, outline and code completion keep working for the rest of the unit.
+- **Debugger, optimized Win64 local variables** - in a 64-bit build compiled with optimization, a register-held local variable (such as a `TList` or other object or pointer) could show as `nil` or a wrong value at a breakpoint; these now show their correct value. 32-bit builds were unaffected.
+- **LSP, types after an `{$IFDEF}`-split variant record** - a variant record whose fields are split across `{$IFDEF}`/`{$ELSE}` branches (e.g. `TTypeData` in `System.TypInfo`) broke the unit's indexing, so every type declared after it was missing: `PPropInfo` and friends were flagged with a false *Unknown type* error and their members did not resolve.
+- **LSP, inherited members of an implementation-section class** - a class declared in a unit's implementation section that inherits from a type imported in the implementation `uses` (e.g. `TCustomStrList = class(TStringList)`) now resolves its inherited members on hover and in code completion; previously every member (`Create`, `Add`, `Free`, …) was flagged with a false *Unknown member* error.
+- **Go to Definition and hover, `inherited` calls** - `inherited Test;` now navigates to the base class's method instead of the overriding method it is written in, and the `inherited` keyword itself - bare (`inherited;`) or qualified - now supports Go to Definition and hover for the method it calls; previously the keyword wasn't clickable at all.
+- **LSP, multiple generic constraints** - a generic type parameter with more than one constraint (e.g. `TFoo<T: class, constructor>`) no longer triggers a false *Syntax error*.
+- **LSP, generic vs non-generic type resolution** - with both `System.Classes` and `System.Generics.Collections` in the `uses` clause, a bare `TList` (e.g. `TCustomList = class(TList)`) wrongly resolved to the generic `TList<T>`. Hover, Go to Definition, code completion and inherited members now match a type reference by its type arguments, in any `uses` order: bare `TList` finds `Classes.TList`, `TList<Integer>` the generic class, and `TFunc<Integer, string>` the two-parameter `TFunc<T, TResult>`.
+- **LSP, inline `var` from a literal** - a variable declared with inline `var` and initialized from a literal (e.g. `var LInteger := 1;`, `var LText := 'abc';`, `var LFlag := True;`) now infers its type, so its members - including type-helper methods such as `Integer.ToString` - are recognized on hover and in code completion; previously the list came up empty. A `for var I := 1 to 10` loop variable infers the same way, and a single-character literal (`var LChar := 'a';`) infers `Char`, as the compiler does.
+- **Code completion, `Char` and `Currency` members** - a `Char` or `Currency` variable now offers its type-helper members (`ToUpper`, `ToString`, …); previously nothing was suggested. `TCharHelper` lives in `System.Character`, so that unit has to be in the `uses` clause.
+- **LSP, hexadecimal literals with an `E` digit** - a hex literal such as `$FE` or `$1E5` was read as a floating-point value, which could match the wrong overload of a routine on hover and Go to Definition; it is now integral.
+- **Code completion, built-in types** - a type position (e.g. `var LValue: |`) now offers Delphi's built-in simple types - `Integer`, `Double`, `Boolean`, `Char`, `Variant` and the rest. They are compiler intrinsics with no declaration in any source, so they could never be suggested before; 
+- **Unused variable detection, same-named inline variables in sibling blocks** - an uninitialized inline `var` (e.g. `var nValue: Integer;`) declared under the same name in two sibling blocks, such as separate `case` branches, is no longer flagged as *declared but never used* when each block uses its own. One that genuinely is unused is also no longer missed when a later block reuses the name. Inline `const` behaves the same.
+- **Find All References, uninitialized inline `var`** - a search from an uninitialized inline `var` now finds the uses in its own block. Previously, when the same name was declared in more than one block of a routine, every reference was attributed to the first declaration and a search from any later one found nothing.
+- **Source Files panel, Unicode filenames** - a unit whose filename is made up entirely of non-ASCII characters now appears in the **Source Files** panel, and **Remove from Project** and **Rename Unit…** work on it; previously it was missing from the panel altogether. 
+- **Outline and breadcrumbs, Unicode declarations** - a unit, class, record, interface, method, property or routine named with non-ASCII letters now appears in the Outline view and breadcrumbs; previously such declarations were missing.
+- **Add Existing File, Unicode form classes** - adding a `.pas` whose companion `.dfm`/`.fmx` declares a non-ASCII class name now keeps its `{Name: TDataModule}` comment in the `.dpr`; a `.dproj` generated for a `library` or `program` with a non-ASCII name is also no longer typed as a plain application.
+- **Class completion, shadowed routines** - a routine declared in the interface no longer misses out on its stub when another routine contains a local routine of the same name; Ctrl+Shift+C now generates its body as well.
+- **Class completion, caret in an interface** - with the caret inside an `interface` type declaration, Ctrl+Shift+C generated the missing bodies of every other type in the unit. It now does nothing there, since an interface's methods are implemented by the classes that support it.
+- **LSP, syntax errors while typing** - an unfinished routine (e.g. `begin` just typed, so the unit's closing `end.` is momentarily taken as the routine's own `end`) marked the entire file as one syntax error from the first line to the last. The errors now stay at the typing point - `';' expected but '.' found` and `'end.' expected` - hover, outline and code completion keep working for the rest of the unit.
 
 ## [1.1.11] - 2026-07-14
 
 ### Added
-- **Code completion, context-aware** — the suggestion list now fits the cursor's position: it offers the Delphi keywords valid there and, in places like a type reference or a declaration, narrows the symbols to those that belong. Entries are grouped and ordered like the Delphi IDE — by scope (locals, `Self` members, the current unit, other units, then the implicit `System` symbols) — and each is labelled with its kind (`var`, `const`, `type`, `keyword`, …) as text, not by icon alone. New **Completion** settings toggle the keyword suggestions and the context filtering, and set whether keywords lead the list or sit among the members.
+- **Code completion, context-aware** - the suggestion list now fits the cursor's position: it offers the Delphi keywords valid there and, in places like a type reference or a declaration, narrows the symbols to those that belong. Entries are grouped and ordered like the Delphi IDE - by scope (locals, `Self` members, the current unit, other units, then the implicit `System` symbols) - and each is labelled with its kind (`var`, `const`, `type`, `keyword`, …) as text, not by icon alone. New **Completion** settings toggle the keyword suggestions and the context filtering, and set whether keywords lead the list or sit among the members.
 
 ### Changed
-- **Unused variable detection, loop variables** — an inline loop variable (`for var i := 0 to 10 do`, or `for var x in …`) whose loop body never uses it is no longer flagged as unused by default, matching the Delphi compiler. A new **Report unused loop variables** option in the detection **Options** dialog turns it back on.
+- **Unused variable detection, loop variables** - an inline loop variable (`for var i := 0 to 10 do`, or `for var x in …`) whose loop body never uses it is no longer flagged as unused by default, matching the Delphi compiler. A new **Report unused loop variables** option in the detection **Options** dialog turns it back on.
 
 ### Fixed
-- **LSP, crash on inline `var` named like a routine** — a file declaring an inline `var` whose initializer refers back to its own name — typically because it's named like the function it calls (e.g. `var signData := SignData('');`), or a plain self-reference (`var x := x.Trim;`) — crashed the language server on open; it now opens normally.
-- **LSP, inline `var` scope** — an inline `var` now follows Delphi scope rules: it is visible only after its declaration and within its enclosing block, and a name redeclared in a nested block resolves to the innermost declaration. Previously, hovering the call in `var signData := SignData('');` showed the variable instead of the function, and members of a name redeclared in sibling blocks could be flagged with false *Unknown identifier* errors.
-- **LSP, inline `var` from a routine call** — a variable initialized from a routine call (e.g. `var Data := SignData('');`, with or without parentheses) or from an unqualified method or property of the enclosing class (e.g. `var R := GetClientRect;`) now infers its type, so its members are recognized on hover and in code completion.
-- **LSP, inline `var` from `Result`** — a variable declared with inline `var` and initialized from a function's `Result` (e.g. `var Rec := Result;` or `var X := Result.Field;`) now infers its type, so its members are recognized on hover and in code completion; previously member access on such a variable was flagged as a false *Unknown member* error.
-- **Find All Implementations, results panel** — when the results list was long enough to scroll, the summary header overlapped the top entries; it now stays cleanly above the list.
+- **LSP, crash on inline `var` named like a routine** - a file declaring an inline `var` whose initializer refers back to its own name - typically because it's named like the function it calls (e.g. `var signData := SignData('');`), or a plain self-reference (`var x := x.Trim;`) - crashed the language server on open; it now opens normally.
+- **LSP, inline `var` scope** - an inline `var` now follows Delphi scope rules: it is visible only after its declaration and within its enclosing block, and a name redeclared in a nested block resolves to the innermost declaration. Previously, hovering the call in `var signData := SignData('');` showed the variable instead of the function, and members of a name redeclared in sibling blocks could be flagged with false *Unknown identifier* errors.
+- **LSP, inline `var` from a routine call** - a variable initialized from a routine call (e.g. `var Data := SignData('');`, with or without parentheses) or from an unqualified method or property of the enclosing class (e.g. `var R := GetClientRect;`) now infers its type, so its members are recognized on hover and in code completion.
+- **LSP, inline `var` from `Result`** - a variable declared with inline `var` and initialized from a function's `Result` (e.g. `var Rec := Result;` or `var X := Result.Field;`) now infers its type, so its members are recognized on hover and in code completion; previously member access on such a variable was flagged as a false *Unknown member* error.
+- **Find All Implementations, results panel** - when the results list was long enough to scroll, the summary header overlapped the top entries; it now stays cleanly above the list.
 
 ## [1.1.10] - 2026-07-13
 
 ### Added
-- **Class completion (Ctrl+Shift+C)** — declare a method on a class or record — or a routine in the unit's interface — then press **Ctrl+Shift+C** (or right-click → **Complete Class at Cursor**) to generate its empty implementation body and jump straight to it. It completes every unimplemented method of the type at the cursor at once — class methods, constructors, destructors, operators, overloads and generic types included — and works for global routines too, while leaving already-implemented methods untouched.
+- **Class completion (Ctrl+Shift+C)** - declare a method on a class or record - or a routine in the unit's interface - then press **Ctrl+Shift+C** (or right-click → **Complete Class at Cursor**) to generate its empty implementation body and jump straight to it. It completes every unimplemented method of the type at the cursor at once - class methods, constructors, destructors, operators, overloads and generic types included - and works for global routines too, while leaving already-implemented methods untouched.
 
 ### Fixed
-- **LSP, helper members** — a method or constant added to a type by a `record`/`class helper` is now recognized on hover and in code completion, including helpers declared in a unit's implementation section and constants on built-in types such as `Integer.MaxValue`; previously these produced a false *Unknown member*.
-- **LSP, inline `var` from `Default(T)`** — a variable declared with inline `var` and initialized from `Default(T)` (e.g. `var LArticle := Default(TArticle);`) now infers its type, so its members are recognized on hover, in code completion, and inside a `with` block; previously they were flagged as false *Unknown member* / *Unknown identifier* errors.
-- **LSP, interface GUID from a constant** — an interface whose GUID is a named constant (e.g. `[SID_IIdentityName]`) rather than a string literal no longer triggers a false *Syntax error*.
-- **LSP, `dispinterface` properties** — a property with a `readonly` or `writeonly` directive (e.g. `property nodeName: WideString readonly dispid 2;`) no longer triggers a false *Syntax error*.
-- **LSP, record alignment directive** — a record with an `align(N)` alignment directive (e.g. `end align(16);`) no longer triggers a false *Syntax error*.
-- **LSP, comment between a method name and its parameters** — a method declaration with a comment between the name and its parameter list (e.g. `procedure Test { note } (ANumber: Integer);`, split across lines) no longer triggers a false *Syntax error*.
+- **LSP, helper members** - a method or constant added to a type by a `record`/`class helper` is now recognized on hover and in code completion, including helpers declared in a unit's implementation section and constants on built-in types such as `Integer.MaxValue`; previously these produced a false *Unknown member*.
+- **LSP, inline `var` from `Default(T)`** - a variable declared with inline `var` and initialized from `Default(T)` (e.g. `var LArticle := Default(TArticle);`) now infers its type, so its members are recognized on hover, in code completion, and inside a `with` block; previously they were flagged as false *Unknown member* / *Unknown identifier* errors.
+- **LSP, interface GUID from a constant** - an interface whose GUID is a named constant (e.g. `[SID_IIdentityName]`) rather than a string literal no longer triggers a false *Syntax error*.
+- **LSP, `dispinterface` properties** - a property with a `readonly` or `writeonly` directive (e.g. `property nodeName: WideString readonly dispid 2;`) no longer triggers a false *Syntax error*.
+- **LSP, record alignment directive** - a record with an `align(N)` alignment directive (e.g. `end align(16);`) no longer triggers a false *Syntax error*.
+- **LSP, comment between a method name and its parameters** - a method declaration with a comment between the name and its parameter list (e.g. `procedure Test { note } (ANumber: Integer);`, split across lines) no longer triggers a false *Syntax error*.
 
 ## [1.1.9] - 2026-07-12
 
 ### Added
-- **Find All Implementations (Ctrl+F12)** — place the cursor on an interface, class, interface method or virtual method and press **Ctrl+F12** (or right-click → **Find All Implementations**) to see every concrete implementer in a dedicated, keyboard-operable panel: the classes that implement an interface, a class's descendants, the methods implementing an interface method, and the overrides of a virtual or abstract method. Results are grouped by implementing type and show the unit each one lives in; a symbol with nothing to implement shows a short message.
-- **Find All References, keyboard navigation** — the results view now takes focus when a search starts, so you can drive it from the keyboard: arrow keys move through the entries, Space collapses or expands a group, and Enter jumps to the selected match.
+- **Find All Implementations (Ctrl+F12)** - place the cursor on an interface, class, interface method or virtual method and press **Ctrl+F12** (or right-click → **Find All Implementations**) to see every concrete implementer in a dedicated, keyboard-operable panel: the classes that implement an interface, a class's descendants, the methods implementing an interface method, and the overrides of a virtual or abstract method. Results are grouped by implementing type and show the unit each one lives in; a symbol with nothing to implement shows a short message.
+- **Find All References, keyboard navigation** - the results view now takes focus when a search starts, so you can drive it from the keyboard: arrow keys move through the entries, Space collapses or expands a group, and Enter jumps to the selected match.
 
 ### Fixed
-- **LSP, false syntax errors in different units** — opening an unit such as `System.Rtti.pas` could show hundreds of phantom syntax errors caused by a stale cache.
-- **LSP, member resolution after a reference search** — Find All References or Rename could subtly degrade hover/completion for types declared in files the search scanned but that were not open in the editor.
-- **LSP, multi-level pointer dereference** — member access now resolves through a double pointer dereference (e.g. `AInfo^.PropType^^.Kind`); previously a pointer-to-pointer flagged a false *Unknown member* error.
-- **LSP, members of nested types** — a field, method or property of a type nested inside a class — or of a pointer to such a type — now resolves while the unit is open, clearing many false *Unknown member* / *Unknown identifier* errors in units such as `System.Rtti.pas`.
-- **LSP, members through a generic alias** — a member reached through an alias of a generic specialization (e.g. `TInts = TList<Integer>`) now resolves instead of a false *Unknown member* error.
-- **LSP, generic-qualified nested types** — a nested type referenced through a generic instantiation (e.g. `TList<THeapItem>.ParrayofT`) is no longer flagged as a false *Unknown type* error.
+- **LSP, false syntax errors in different units** - opening an unit such as `System.Rtti.pas` could show hundreds of phantom syntax errors caused by a stale cache.
+- **LSP, member resolution after a reference search** - Find All References or Rename could subtly degrade hover/completion for types declared in files the search scanned but that were not open in the editor.
+- **LSP, multi-level pointer dereference** - member access now resolves through a double pointer dereference (e.g. `AInfo^.PropType^^.Kind`); previously a pointer-to-pointer flagged a false *Unknown member* error.
+- **LSP, members of nested types** - a field, method or property of a type nested inside a class - or of a pointer to such a type - now resolves while the unit is open, clearing many false *Unknown member* / *Unknown identifier* errors in units such as `System.Rtti.pas`.
+- **LSP, members through a generic alias** - a member reached through an alias of a generic specialization (e.g. `TInts = TList<Integer>`) now resolves instead of a false *Unknown member* error.
+- **LSP, generic-qualified nested types** - a nested type referenced through a generic instantiation (e.g. `TList<THeapItem>.ParrayofT`) is no longer flagged as a false *Unknown type* error.
 
 ### Changed
-- **LSP, occurrence highlighting** — placing the cursor on an identifier no longer triggers a project-wide reference scan; the gray occurrence highlights are computed from the current file only.
-- **Find All References / Rename, conditional code** — matches are now consistently found in active `{$IFDEF}` branches only; previously occurrences in inactive branches were sometimes included for files not open in the editor.
-- **Sidebar, section header buttons** — the header actions in the Projects and Source Files sections (add project, add from folder, add group, refresh) are now always visible, instead of appearing only while hovering the section header.
+- **LSP, occurrence highlighting** - placing the cursor on an identifier no longer triggers a project-wide reference scan; the gray occurrence highlights are computed from the current file only.
+- **Find All References / Rename, conditional code** - matches are now consistently found in active `{$IFDEF}` branches only; previously occurrences in inactive branches were sometimes included for files not open in the editor.
+- **Sidebar, section header buttons** - the header actions in the Projects and Source Files sections (add project, add from folder, add group, refresh) are now always visible, instead of appearing only while hovering the section header.
 
 ## [1.1.8] - 2026-07-10
 
 ### Added
-- **Unused variable, constant & parameter detection** — a new diagnostic flags local variables and constants that are declared but never used within a routine — shown faded in the editor and listed in the Problems panel. It can additionally report symbols that are only ever assigned and never read (flagged as *unnecessary*), and unused parameters — parameters of overrides, interface implementations and published event handlers are never flagged.
-- **Settings, Unused Variables, Constants, Parameter Detection** — a dedicated section on the Settings page controls it: on by default at Information severity, with a dropdown to change the severity or switch it off, and an **Options** dialog for the two opt-ins (report assigned-but-never-read, and check parameters).
-- **Settings, Find All References scope** — a new **Find All References Scope** dropdown in the **LSP Server** section lets you set a default scope: keep *Always ask* (the default) to show the scope picker on every search, or choose **Project** or **All indexed sources** to skip the picker and always search that scope.
+- **Unused variable, constant & parameter detection** - a new diagnostic flags local variables and constants that are declared but never used within a routine - shown faded in the editor and listed in the Problems panel. It can additionally report symbols that are only ever assigned and never read (flagged as *unnecessary*), and unused parameters - parameters of overrides, interface implementations and published event handlers are never flagged.
+- **Settings, Unused Variables, Constants, Parameter Detection** - a dedicated section on the Settings page controls it: on by default at Information severity, with a dropdown to change the severity or switch it off, and an **Options** dialog for the two opt-ins (report assigned-but-never-read, and check parameters).
+- **Settings, Find All References scope** - a new **Find All References Scope** dropdown in the **LSP Server** section lets you set a default scope: keep *Always ask* (the default) to show the scope picker on every search, or choose **Project** or **All indexed sources** to skip the picker and always search that scope.
 
 ### Fixed
-- **LSP, Go to Definition on a qualified type alias** — Ctrl+Click / F12 on the qualified right-hand side of a type alias (e.g. `System.TTypeKind` in `TTypeKind = System.TTypeKind;`) now navigates to the referenced type; previously the unit qualifier was ignored, so it jumped to the same-named local alias instead of the real type.
+- **LSP, Go to Definition on a qualified type alias** - Ctrl+Click / F12 on the qualified right-hand side of a type alias (e.g. `System.TTypeKind` in `TTypeKind = System.TTypeKind;`) now navigates to the referenced type; previously the unit qualifier was ignored, so it jumped to the same-named local alias instead of the real type.
 
 ## [1.1.7] - 2026-07-09
 
 ### Fixed
-- **Build Toolbar, Cancel Build** — when converting debug symbols fails after a build, the Cancel button now aborts the build immediately; previously it did nothing and the build stayed stuck until you opened the error notification and answered it.
-- **Rename, Unicode names in ANSI files** — renaming a symbol or unit to a name containing non-ASCII characters (e.g. `Prüfung`) now converts the affected ANSI-encoded files to UTF-8 with BOM, so the new name is stored intact everywhere; previously it was saved mangled (`Pr?fung`). A notification lists the converted files.
-- **Add Existing File / Remove from Project, ANSI project sources** — adding or removing a unit in an ANSI `.dpr`/`.dpk` that contains umlauts or other special characters no longer corrupts those characters.
-- **New Delphi-File, Unicode unit names** — the dialog now accepts unit names with non-ASCII letters (e.g. `единица1`, `Prüfung`); previously it rejected them as invalid. When such a unit is added to an ANSI-encoded `.dpr`/`.dpk`, that file is converted to UTF-8 with BOM so the name is stored intact.
-- **Convert to UTF-8 with BOM, special characters** — the `€` sign, typographic quotes, dashes and similar characters are now preserved during conversion; previously they were silently corrupted.
-- **Encoding warning, convert link** — the *Convert to UTF-8 with BOM* link in the hover on line 1 of an ANSI file works again.
-- **LSP, `strict private` nested types** — a type declared in a class's `strict private type` (or `strict protected type`) section is no longer flagged as an unknown type when referenced from a sibling nested type; previously it was recognized only without `strict`.
-- **LSP, conditionally-compiled routines in System.pas** — the `Set8087CW` / `Get8087CW` family and other FPU/assembler routines guarded by compiler conditionals now resolve on Ctrl+Click / F12 and hover, and System.pas is highlighted correctly; previously they couldn't be found and a large part of the unit was flagged as errors.
-- **LSP, very large units** — computing the grayed-out inactive regions of a huge unit such as System.pas is now near-instant, instead of taking many seconds.
-- **LSP, chained directives on a procedure type** — a procedural type that stacks two directives without a semicolon between them (e.g. `procedure(p: Pointer); cdecl varargs;`) no longer triggers a false *Syntax error*.
+- **Build Toolbar, Cancel Build** - when converting debug symbols fails after a build, the Cancel button now aborts the build immediately; previously it did nothing and the build stayed stuck until you opened the error notification and answered it.
+- **Rename, Unicode names in ANSI files** - renaming a symbol or unit to a name containing non-ASCII characters (e.g. `Prüfung`) now converts the affected ANSI-encoded files to UTF-8 with BOM, so the new name is stored intact everywhere; previously it was saved mangled (`Pr?fung`). A notification lists the converted files.
+- **Add Existing File / Remove from Project, ANSI project sources** - adding or removing a unit in an ANSI `.dpr`/`.dpk` that contains umlauts or other special characters no longer corrupts those characters.
+- **New Delphi-File, Unicode unit names** - the dialog now accepts unit names with non-ASCII letters (e.g. `единица1`, `Prüfung`); previously it rejected them as invalid. When such a unit is added to an ANSI-encoded `.dpr`/`.dpk`, that file is converted to UTF-8 with BOM so the name is stored intact.
+- **Convert to UTF-8 with BOM, special characters** - the `€` sign, typographic quotes, dashes and similar characters are now preserved during conversion; previously they were silently corrupted.
+- **Encoding warning, convert link** - the *Convert to UTF-8 with BOM* link in the hover on line 1 of an ANSI file works again.
+- **LSP, `strict private` nested types** - a type declared in a class's `strict private type` (or `strict protected type`) section is no longer flagged as an unknown type when referenced from a sibling nested type; previously it was recognized only without `strict`.
+- **LSP, conditionally-compiled routines in System.pas** - the `Set8087CW` / `Get8087CW` family and other FPU/assembler routines guarded by compiler conditionals now resolve on Ctrl+Click / F12 and hover, and System.pas is highlighted correctly; previously they couldn't be found and a large part of the unit was flagged as errors.
+- **LSP, very large units** - computing the grayed-out inactive regions of a huge unit such as System.pas is now near-instant, instead of taking many seconds.
+- **LSP, chained directives on a procedure type** - a procedural type that stacks two directives without a semicolon between them (e.g. `procedure(p: Pointer); cdecl varargs;`) no longer triggers a false *Syntax error*.
 
 ## [1.1.6] - 2026-07-05
 
 ### Added
-- **EurekaLog post-processing** — Vallenta Studio can now run EurekaLog's `ecc32` on the built executable after a successful build, injecting its exception tracking and compressed debug info without editing any project file. Enable it under **EurekaLog** on the Settings page, where `ecc32.exe` is auto-detected per installed Delphi version (with a manual override); only projects that have EurekaLog enabled are processed. A **Post-process now** button runs it against the current build on demand, and the `ecc32` command and output appear in the Build Output panel.
-- **Unused unit detection** — an optional diagnostic flags units in a `uses` clause (interface or implementation) that are never referenced in the file — shown faded in the editor like an unused import, and listed in the Problems panel. On by default at Information severity; change the severity, switch it off, or manage the ignore list for side-effect-only units (e.g. `FastMM4`) under **Unused Units Detection** on the Settings page.
-- **Build Output panel, auto-scroll** — the **Output**, **Warnings** and **Errors** tabs now have an **Auto-scroll** checkbox that keeps the view pinned to the newest entry as a build runs; each tab remembers its own setting.
+- **EurekaLog post-processing** - Vallenta Studio can now run EurekaLog's `ecc32` on the built executable after a successful build, injecting its exception tracking and compressed debug info without editing any project file. Enable it under **EurekaLog** on the Settings page, where `ecc32.exe` is auto-detected per installed Delphi version (with a manual override); only projects that have EurekaLog enabled are processed. A **Post-process now** button runs it against the current build on demand, and the `ecc32` command and output appear in the Build Output panel.
+- **Unused unit detection** - an optional diagnostic flags units in a `uses` clause (interface or implementation) that are never referenced in the file - shown faded in the editor like an unused import, and listed in the Problems panel. On by default at Information severity; change the severity, switch it off, or manage the ignore list for side-effect-only units (e.g. `FastMM4`) under **Unused Units Detection** on the Settings page.
+- **Build Output panel, auto-scroll** - the **Output**, **Warnings** and **Errors** tabs now have an **Auto-scroll** checkbox that keeps the view pinned to the newest entry as a build runs; each tab remembers its own setting.
 
 ### Changed
-- **LSP, faster diagnostics on large units** — semantic diagnostics for a big unit now finish in less than half the time.
+- **LSP, faster diagnostics on large units** - semantic diagnostics for a big unit now finish in less than half the time.
 
 ### Fixed
-- **LSP, sporadic wrong diagnostics with several files open** — a file could briefly get diagnostics computed from another open file's content.
-- **LSP, `{$IFDEF}` regions used the wrong platform on auto-start** — a language server that started automatically (e.g. after switching to a project) evaluated conditional regions against the project's first-listed platform instead of the one selected in the Build toolbar, so platform-specific code could be grayed out the wrong way. It now follows the selected platform and configuration.
-- **LSP, types in the `implementation` section** — Ctrl+Click / F12 and hover now resolve a class declared in a unit's `implementation` section — on its name in a method implementation header (`procedure TFoo.Bar;`) and on members inherited from an implementation-section base class; previously these were not found.
-- **LSP, `{$IF}` with source constants** — a condition that references a constant declared in the unit or an include file (e.g. `{$IF TEST_VERSION >= 5}`) now evaluates correctly.
+- **LSP, sporadic wrong diagnostics with several files open** - a file could briefly get diagnostics computed from another open file's content.
+- **LSP, `{$IFDEF}` regions used the wrong platform on auto-start** - a language server that started automatically (e.g. after switching to a project) evaluated conditional regions against the project's first-listed platform instead of the one selected in the Build toolbar, so platform-specific code could be grayed out the wrong way. It now follows the selected platform and configuration.
+- **LSP, types in the `implementation` section** - Ctrl+Click / F12 and hover now resolve a class declared in a unit's `implementation` section - on its name in a method implementation header (`procedure TFoo.Bar;`) and on members inherited from an implementation-section base class; previously these were not found.
+- **LSP, `{$IF}` with source constants** - a condition that references a constant declared in the unit or an include file (e.g. `{$IF TEST_VERSION >= 5}`) now evaluates correctly.
 
 ## [1.1.5] - 2026-07-02
 
 ### Added
-- **Rename Unit** — renaming a unit now updates everything in one step: the `.pas` file and its companion `.dfm`/`.fmx`, the `unit X;` header, every `uses` reference across your `.pas`/`.dpr`/`.dpk` (including the `in '…pas'` path). Trigger it three ways: **F2** on a unit name in the editor, from the **Source Files** view (right-click → **Rename Unit…**), or by renaming the `.pas` in the Explorer. Each reference keeps its own spelling — a short `Logging` stays short, a qualified `Acme.Core.Logging` stays qualified.
-- **Dproj Editor, unit scope names** — a project's **Unit Scope Names** (namespaces) are now editable per configuration and platform in the Project Options editor, with the same list editor and parent-inheritance as Conditional Defines.
-- **Code completion, identifiers and members** — completion now suggests in-scope identifiers as you type — global routines, variables, constants, types and enum values, plus the current routine's locals and parameters and the enclosing class's members — and member suggestions open automatically after you type `.`, like the Delphi IDE. Previously only member completion after a `.`, triggered with `Ctrl+Space`, was available.
+- **Rename Unit** - renaming a unit now updates everything in one step: the `.pas` file and its companion `.dfm`/`.fmx`, the `unit X;` header, every `uses` reference across your `.pas`/`.dpr`/`.dpk` (including the `in '…pas'` path). Trigger it three ways: **F2** on a unit name in the editor, from the **Source Files** view (right-click → **Rename Unit…**), or by renaming the `.pas` in the Explorer. Each reference keeps its own spelling - a short `Logging` stays short, a qualified `Acme.Core.Logging` stays qualified.
+- **Dproj Editor, unit scope names** - a project's **Unit Scope Names** (namespaces) are now editable per configuration and platform in the Project Options editor, with the same list editor and parent-inheritance as Conditional Defines.
+- **Code completion, identifiers and members** - completion now suggests in-scope identifiers as you type - global routines, variables, constants, types and enum values, plus the current routine's locals and parameters and the enclosing class's members - and member suggestions open automatically after you type `.`, like the Delphi IDE. Previously only member completion after a `.`, triggered with `Ctrl+Space`, was available.
 
 ### Fixed
-- **Dproj Editor, Runtime Packages dialog** — editing **Runtime Packages** now opens a correctly titled dialog instead of one labelled "Conditional Defines".
-- **New Delphi-File** — a newly created file now shows in the **Source Files** panel and is picked up by Find All References straight away, instead of only after reopening the project.
-- **LSP, anonymous methods** — a parameter of an anonymous method (an inline `procedure`/`function`) used in its body is no longer flagged as an unknown identifier, and hover and Go to Definition now resolve it.
-- **LSP, Go to Definition on a unit** — Ctrl+Click / F12 on a unit in a `uses` clause now opens its file with the correct on-disk capitalization in the editor tab, instead of an all-lowercase filename.
-- **LSP** — a few valid Delphi constructs no longer trigger a false *Syntax error*: a procedure/function-type field with a calling convention (`procedure(); cdecl;`), a variable with a hint directive and a value (`Integer platform = 2`), a `/` inside an `asm` block, and a label on an `if`/`else` branch.
+- **Dproj Editor, Runtime Packages dialog** - editing **Runtime Packages** now opens a correctly titled dialog instead of one labelled "Conditional Defines".
+- **New Delphi-File** - a newly created file now shows in the **Source Files** panel and is picked up by Find All References straight away, instead of only after reopening the project.
+- **LSP, anonymous methods** - a parameter of an anonymous method (an inline `procedure`/`function`) used in its body is no longer flagged as an unknown identifier, and hover and Go to Definition now resolve it.
+- **LSP, Go to Definition on a unit** - Ctrl+Click / F12 on a unit in a `uses` clause now opens its file with the correct on-disk capitalization in the editor tab, instead of an all-lowercase filename.
+- **LSP** - a few valid Delphi constructs no longer trigger a false *Syntax error*: a procedure/function-type field with a calling convention (`procedure(); cdecl;`), a variable with a hint directive and a value (`Integer platform = 2`), a `/` inside an `asm` block, and a label on an `if`/`else` branch.
 
 ## [1.1.4] - 2026-06-27
 
 ### Added
-- **Debugger, local variables in optimized builds** — local variables, parameters and `Self` now show in the **Variables** and **Watch** views when debugging optimization-compiled builds; previously many reported "An unspecified error has occurred".
+- **Debugger, local variables in optimized builds** - local variables, parameters and `Self` now show in the **Variables** and **Watch** views when debugging optimization-compiled builds; previously many reported "An unspecified error has occurred".
 
 ### Changed
-- **Project symbol cache, vsdcache folder** — the per-project cache files now sit in a single hidden `.vsdcache/` folder beside the `.dproj` instead of scattering several files into the project folder; an existing cache moves there automatically on the next start. If you track a Delphi project in git or svn, ignore `.vsdcache/`.
+- **Project symbol cache, vsdcache folder** - the per-project cache files now sit in a single hidden `.vsdcache/` folder beside the `.dproj` instead of scattering several files into the project folder; an existing cache moves there automatically on the next start. If you track a Delphi project in git or svn, ignore `.vsdcache/`.
 
 ### Removed
-- **Settings, three unused entries** — *Compiler Path*, *BPL Output Path* and *DCP Output Path* had no effect on builds and are no longer shown on the Settings page.
+- **Settings, three unused entries** - *Compiler Path*, *BPL Output Path* and *DCP Output Path* had no effect on builds and are no longer shown on the Settings page.
 
 ### Fixed
-- **Source Files panel, scrollbar** — the panel's scrollbar now follows the color theme instead of staying white on dark themes, matching the other sidebar scrollbars.
+- **Source Files panel, scrollbar** - the panel's scrollbar now follows the color theme instead of staying white on dark themes, matching the other sidebar scrollbars.
 
 ## [1.1.3] - 2026-06-24
 
 ### Added
-- **Find All References, units** — `Shift+F12` (or the right-click menu) on a unit name now finds every place that unit is used across the project — whether the cursor is on a `uses`-clause entry, the `unit`/`program`/`library`/`package` header, or a `.dpr`/`.dpk` `uses`/`contains`/`requires` entry. All spellings of the same unit match (e.g. `Forms` and `Vcl.Forms`), and a same-named unit on a different search path is not included.
+- **Find All References, units** - `Shift+F12` (or the right-click menu) on a unit name now finds every place that unit is used across the project - whether the cursor is on a `uses`-clause entry, the `unit`/`program`/`library`/`package` header, or a `.dpr`/`.dpk` `uses`/`contains`/`requires` entry. All spellings of the same unit match (e.g. `Forms` and `Vcl.Forms`), and a same-named unit on a different search path is not included.
 
 ### Fixed
-- **Semantic highlighting, `uses` clause** — the final segment of a dotted unit name (e.g. `SysUtils` in `System.SysUtils`) is now colored as a unit rather than as a namespace.
-- **Indexing scope, multi-program folders** — a project no longer indexes sibling programs' `.dpr`s or third-party `.dpk` packages that happen to sit on its search path; Find All References stays scoped to the active project and indexing is leaner.
-- **LSP, legacy `begin` initialization** — a unit using a `begin … end.` block in place of an `initialization` section (the old Turbo Pascal form) now parses correctly; previously the whole unit failed to parse, breaking hover, navigation and highlighting.
+- **Semantic highlighting, `uses` clause** - the final segment of a dotted unit name (e.g. `SysUtils` in `System.SysUtils`) is now colored as a unit rather than as a namespace.
+- **Indexing scope, multi-program folders** - a project no longer indexes sibling programs' `.dpr`s or third-party `.dpk` packages that happen to sit on its search path; Find All References stays scoped to the active project and indexing is leaner.
+- **LSP, legacy `begin` initialization** - a unit using a `begin … end.` block in place of an `initialization` section (the old Turbo Pascal form) now parses correctly; previously the whole unit failed to parse, breaking hover, navigation and highlighting.
 
 ## [1.1.2] - 2026-06-23
 
 ### Fixed
-- **LSP, hover shows textDocument failure** — while editing and the mouse pointer is on a symbol, an error could occure.
+- **LSP, hover shows textDocument failure** - while editing and the mouse pointer is on a symbol, an error could occure.
 
 ## [1.1.1] - 2026-06-21
 
 ### Fixed
-- **VSIX Package** — wrong deployment option triggered a LSP startup failure.
+- **VSIX Package** - wrong deployment option triggered a LSP startup failure.
 
 ## [1.1.0] - 2026-06-21
 
 ### Added
-- **Rename Symbol (key "F2")** — rename a Delphi symbol and every use of it across the project — its declaration, implementation, and all references. Covers locals and inline `var`s, unit-level types, routines, variables and constants, and type members (methods, fields, properties, constructors, destructors, helper members).
-- **Rename, clear refusals** — a rename that would clash with an existing name, or that can't be applied safely (interface methods, RTL/library overrides, or symbols declared outside your project), is blocked with a short explanation and a button that jumps to the conflicting symbol.
-- **Rename, one-time backup reminder** — the first rename shows a one-time reminder to keep your source backed up or under version control.
-- **Project explorer, add a project from its `.dpr`/`.dpk`** — you can now add a project by selecting its `.dpr`/`.dpk` source even when it has no `.dproj` yet; a default `.dproj` is created next to the source.
+- **Rename Symbol (key "F2")** - rename a Delphi symbol and every use of it across the project - its declaration, implementation, and all references. Covers locals and inline `var`s, unit-level types, routines, variables and constants, and type members (methods, fields, properties, constructors, destructors, helper members).
+- **Rename, clear refusals** - a rename that would clash with an existing name, or that can't be applied safely (interface methods, RTL/library overrides, or symbols declared outside your project), is blocked with a short explanation and a button that jumps to the conflicting symbol.
+- **Rename, one-time backup reminder** - the first rename shows a one-time reminder to keep your source backed up or under version control.
+- **Project explorer, add a project from its `.dpr`/`.dpk`** - you can now add a project by selecting its `.dpr`/`.dpk` source even when it has no `.dproj` yet; a default `.dproj` is created next to the source.
 
 ### Fixed
-- **Debugger, object properties** — expanding the `[Properties]` node on a form or component no longer pops a “… has not been registered as a COM class” error or briefly freezes; a few properties that act on the running program when read (`ComObject`, `Handle`, `Canvas`) are no longer listed.
-- **LSP, members inside a `with` block** — hover and member resolution now work for a member reached through a `with` whose target type is declared in the unit's `implementation` section (e.g. a local type alias); previously the member couldn't be resolved.
-- **Dproj Editor, build events** — build events now run reliably for every configuration and platform, with Delphi macros such as `$(PROJECTPATH)` resolved (some previously ran empty).
+- **Debugger, object properties** - expanding the `[Properties]` node on a form or component no longer pops a “… has not been registered as a COM class” error or briefly freezes; a few properties that act on the running program when read (`ComObject`, `Handle`, `Canvas`) are no longer listed.
+- **LSP, members inside a `with` block** - hover and member resolution now work for a member reached through a `with` whose target type is declared in the unit's `implementation` section (e.g. a local type alias); previously the member couldn't be resolved.
+- **Dproj Editor, build events** - build events now run reliably for every configuration and platform, with Delphi macros such as `$(PROJECTPATH)` resolved (some previously ran empty).
 
 ## [1.0.10] - 2026-06-16
 
 ### Added
-- **Add Existing File** — Right-click a project (**Projects** sidebar) or a unit folder (**Source Files**) to add an existing `.pas` to the `.dpr`/`.dpk`, with a project-relative path and a `{FormName}` comment when a matching `.dfm`/`.fmx` exists.
-- **Remove from Project** — Right-click a unit in the **Source Files** view to remove it from the `.dpr`/`.dpk`, fixing the surrounding comma or semicolon.
+- **Add Existing File** - Right-click a project (**Projects** sidebar) or a unit folder (**Source Files**) to add an existing `.pas` to the `.dpr`/`.dpk`, with a project-relative path and a `{FormName}` comment when a matching `.dfm`/`.fmx` exists.
+- **Remove from Project** - Right-click a unit in the **Source Files** view to remove it from the `.dpr`/`.dpk`, fixing the surrounding comma or semicolon.
 
 ### Fixed
-- **Debugger, Watch — interface properties** — a property whose value is an interface now shows the object behind it instead of `nil`, including through multi-step property chains (`a.b.c`). On 64-bit and 32-bit.
-- **Debugger, Watch/hover (32-bit) — properties of your own classes** — properties backed by a getter method now resolve on 32-bit (in the `[Properties]` node, Watch, and on hover); several previously showed no value.
-- **Debugger, Watch/hover — fields of by-reference record parameters** — reading a field of a record passed as a `var`, `out` or `const` parameter (e.g. `Test.SomeField`, including nested records) now resolves instead of reporting the field as not available. On 64-bit and 32-bit.
-- **LSP, inline `var` in a program body** — hover and member resolution now work for an inline `var` declared in a `.dpr`/`.dpk` main `begin…end` block; previously this only worked inside a unit's routines.
-- **LSP, empty record constant** — a typed constant with an empty `()` value (a record with no fields, e.g. one that only has methods) no longer shows a false “missing token” error.
-- **LSP, member access through a typecast** — hover and Go to Definition now resolve an identifier inside a typecast or parenthesized expression.
-- **Dproj Editor, build events** — build events added or edited in the project editor now run reliably, including multi-command events; a command was previously truncated or dropped. 
-- **Dproj Editor, “inherit parent build events”** — turning this off now sticks: the unchecked state persists when you reopen the editor, and the configuration grid shows the level's own value instead of the inherited one.
+- **Debugger, Watch - interface properties** - a property whose value is an interface now shows the object behind it instead of `nil`, including through multi-step property chains (`a.b.c`). On 64-bit and 32-bit.
+- **Debugger, Watch/hover (32-bit) - properties of your own classes** - properties backed by a getter method now resolve on 32-bit (in the `[Properties]` node, Watch, and on hover); several previously showed no value.
+- **Debugger, Watch/hover - fields of by-reference record parameters** - reading a field of a record passed as a `var`, `out` or `const` parameter (e.g. `Test.SomeField`, including nested records) now resolves instead of reporting the field as not available. On 64-bit and 32-bit.
+- **LSP, inline `var` in a program body** - hover and member resolution now work for an inline `var` declared in a `.dpr`/`.dpk` main `begin…end` block; previously this only worked inside a unit's routines.
+- **LSP, empty record constant** - a typed constant with an empty `()` value (a record with no fields, e.g. one that only has methods) no longer shows a false “missing token” error.
+- **LSP, member access through a typecast** - hover and Go to Definition now resolve an identifier inside a typecast or parenthesized expression.
+- **Dproj Editor, build events** - build events added or edited in the project editor now run reliably, including multi-command events; a command was previously truncated or dropped. 
+- **Dproj Editor, “inherit parent build events”** - turning this off now sticks: the unchecked state persists when you reopen the editor, and the configuration grid shows the level's own value instead of the inherited one.
 
 ## [1.0.9] - 2026-06-13
 
 ### Added
-- **Dproj Editor, Delphi default values** — options not stored in the `.dproj` now show Delphi's built-in default (e.g. *Optimization* checked on Base), marked as `default`.
+- **Dproj Editor, Delphi default values** - options not stored in the `.dproj` now show Delphi's built-in default (e.g. *Optimization* checked on Base), marked as `default`.
 
 ### Changed
-- **Sidebar redesign** — the Vallenta Studio sidebar now has a permanent header showing the logo, version, subscription status and quick access to Settings and Account. The Projects, Build and Source Files sections below look and work as before, with individually adjustable heights.
+- **Sidebar redesign** - the Vallenta Studio sidebar now has a permanent header showing the logo, version, subscription status and quick access to Settings and Account. The Projects, Build and Source Files sections below look and work as before, with individually adjustable heights.
 
 ### Fixed
-- **Debugger, Delphi array indices** — static arrays with a non-zero lower bound (e.g. `array[1..8] of Char`) now show their declared Delphi indices in the **Variables** and **Watch** views — `[1]…[8]` instead of zero-based `[0]…[7]`.
-- **Build Toolbar, Cancel Build** — cancelling during the "Converting debug symbols…" phase now also stops the symbol converter; previously only the MSBuild process was cancelled.
-- **LSP, pointer member access** — member resolution (hover, completion, navigation) now works through pointer dereferences, e.g. `P[0].Field` on a pointer-to-array, `P^[0].Field`, and `PRec^.Field`.
-- **Structural highlighting, nesting-level colors** — an `else if` chain without `begin`/`end` now stays one flat color instead of stepping a color deeper at each `else if`; an `if` nested inside a `begin`/`end` block still steps to the next color.
+- **Debugger, Delphi array indices** - static arrays with a non-zero lower bound (e.g. `array[1..8] of Char`) now show their declared Delphi indices in the **Variables** and **Watch** views - `[1]…[8]` instead of zero-based `[0]…[7]`.
+- **Build Toolbar, Cancel Build** - cancelling during the "Converting debug symbols…" phase now also stops the symbol converter; previously only the MSBuild process was cancelled.
+- **LSP, pointer member access** - member resolution (hover, completion, navigation) now works through pointer dereferences, e.g. `P[0].Field` on a pointer-to-array, `P^[0].Field`, and `PRec^.Field`.
+- **Structural highlighting, nesting-level colors** - an `else if` chain without `begin`/`end` now stays one flat color instead of stepping a color deeper at each `else if`; an `if` nested inside a `begin`/`end` block still steps to the next color.
 
 ## [1.0.8] - 2026-06-09
 
 ### Added
-- **Source Highlight Enhancements** — symbol-type and nesting-level colors are now edited with visual color-picker dialogs (with a live code preview) instead of JSON.
-- **Source highlighting, unit names** — dotted unit names in a `uses` clause are now fully colored, with a separate **unit** color (new picker entry) for the unit and its namespace prefix.
-- **Source highlighting, constants** — `const` values now get their own **constant** color (new picker entry), distinct from regular variables.
+- **Source Highlight Enhancements** - symbol-type and nesting-level colors are now edited with visual color-picker dialogs (with a live code preview) instead of JSON.
+- **Source highlighting, unit names** - dotted unit names in a `uses` clause are now fully colored, with a separate **unit** color (new picker entry) for the unit and its namespace prefix.
+- **Source highlighting, constants** - `const` values now get their own **constant** color (new picker entry), distinct from regular variables.
 
 ### Fixed
-- **Semantic coloring** — fixed a language-server error when a Copilot inline suggestion is inserted while typing, which could briefly drop the semantic colors.
-- **Structural highlighting, nesting-level colors** — `begin`/`end` in an `if`/`else` branch now take the color of that `if`, and a nested or `else if` `if` steps to the next color instead of repeating its parent's.
-- **Debugger, Call Stack on an exception (32-bit)** — when the debugger stops on an exception and unwinds the Delphi stack, sometimes a frame resolved to a wrong source unit.
+- **Semantic coloring** - fixed a language-server error when a Copilot inline suggestion is inserted while typing, which could briefly drop the semantic colors.
+- **Structural highlighting, nesting-level colors** - `begin`/`end` in an `if`/`else` branch now take the color of that `if`, and a nested or `else if` `if` steps to the next color instead of repeating its parent's.
+- **Debugger, Call Stack on an exception (32-bit)** - when the debugger stops on an exception and unwinds the Delphi stack, sometimes a frame resolved to a wrong source unit.
 
 ## [1.0.7] - 2026-06-08
 
 ### Added
-- **Semantic source coloring** — the language server now colors identifiers by meaning: types, classes, interfaces, enum members, methods, properties, fields and parameters each get a distinct color.
-- **Structural keyword highlighting** — block keywords (begin/end, if, for, case, try, …) are tinted by nesting level, the whole construct lights up when the cursor is on one of its keywords, and control-flow keywords (exit, break, continue, raise, …) can be shown in bold.
-- **Source Highlight Enhancements settings** — a new section on the extension's settings page switches each highlight on or off and adjusts its colors. A visual color picker and further refinements are on the way.
+- **Semantic source coloring** - the language server now colors identifiers by meaning: types, classes, interfaces, enum members, methods, properties, fields and parameters each get a distinct color.
+- **Structural keyword highlighting** - block keywords (begin/end, if, for, case, try, …) are tinted by nesting level, the whole construct lights up when the cursor is on one of its keywords, and control-flow keywords (exit, break, continue, raise, …) can be shown in bold.
+- **Source Highlight Enhancements settings** - a new section on the extension's settings page switches each highlight on or off and adjusts its colors. A visual color picker and further refinements are on the way.
 
 ### Fixed
-- **Find All References** — references in units that use the symbol's unit from their `implementation` section (typically forms) are now found; many were previously missed.
-- **Run/Debug, working directory** — a launched program now starts in the build output folder (e.g. `Win32\Debug`), instead of the project root.
+- **Find All References** - references in units that use the symbol's unit from their `implementation` section (typically forms) are now found; many were previously missed.
+- **Run/Debug, working directory** - a launched program now starts in the build output folder (e.g. `Win32\Debug`), instead of the project root.
 
 ## [1.0.6] - 2026-06-05
 
 ### Added
-- **Find All References, form-file values** — searching a component or an enum value now also finds where it's used as a property value in a `.dfm`/`.fmx` form (e.g. `Action = MyAction`, `Speed = spSlow`, including set and scoped values).
+- **Find All References, form-file values** - searching a component or an enum value now also finds where it's used as a property value in a `.dfm`/`.fmx` form (e.g. `Action = MyAction`, `Speed = spSlow`, including set and scoped values).
 
 ### Fixed
-- **Find All References, form files** — symbol references inside `.dfm`/`.fmx` forms are now found reliably; some were previously missed.
-- **LSP** — false *Syntax error* on Delphi 13 inline `if` (conditional/ternary) expressions, e.g. `X := if Cond then A else B`.
+- **Find All References, form files** - symbol references inside `.dfm`/`.fmx` forms are now found reliably; some were previously missed.
+- **LSP** - false *Syntax error* on Delphi 13 inline `if` (conditional/ternary) expressions, e.g. `X := if Cond then A else B`.
 
 ## [1.0.5] - 2026-06-04
 
 ### Added
-- **Debugger, Variables/Watch — object properties in the tree** — expanding a Delphi object now shows a `[Properties]` node listing its properties backed by a getter method (numbers, strings, enums, sets, Booleans, object references and `Variant`)
+- **Debugger, Variables/Watch - object properties in the tree** - expanding a Delphi object now shows a `[Properties]` node listing its properties backed by a getter method (numbers, strings, enums, sets, Booleans, object references and `Variant`)
 
 ### Fixed
-- **Debugger, hover on a property getter (64-bit)** — hovering a method-backed property such as `widget.Count` now shows its value
-- **Project explorer, active project from a group** — a project activated from inside a project group is now restored as the active project, and revealed in its group, when you reopen the workspace.
-- **LSP** — false *Syntax error* on identifiers containing non-Latin Unicode letters (e.g. Greek `α`, Cyrillic, CJK); only Latin letters were recognized before.
-- **LSP, code completion on inline constants** — autocomplete now works after an inline `const c = …;` (typing `c.` lists the type's members), matching inline `var`.
-- **LSP, overloaded method return types** — code completion and hover now infer the return type from the overload matching the call's arguments (e.g. `obj.Make(b)` picks the overload that takes `b`'s type)
+- **Debugger, hover on a property getter (64-bit)** - hovering a method-backed property such as `widget.Count` now shows its value
+- **Project explorer, active project from a group** - a project activated from inside a project group is now restored as the active project, and revealed in its group, when you reopen the workspace.
+- **LSP** - false *Syntax error* on identifiers containing non-Latin Unicode letters (e.g. Greek `α`, Cyrillic, CJK); only Latin letters were recognized before.
+- **LSP, code completion on inline constants** - autocomplete now works after an inline `const c = …;` (typing `c.` lists the type's members), matching inline `var`.
+- **LSP, overloaded method return types** - code completion and hover now infer the return type from the overload matching the call's arguments (e.g. `obj.Make(b)` picks the overload that takes `b`'s type)
 
 ## [1.0.4] - 2026-06-03
 
@@ -807,31 +889,31 @@ Additional files required by your program can be deployed per build configuratio
 ## [1.0.3] - 2026-06-03
 
 ### Added
-- **Debugger, readable exception popup** — stopping on a Delphi exception now shows the exception class and message (e.g. `EConvertError: '12x' is not a valid integer value`) instead of the raw `0x0EEDFADE` code and parameter dump. Works on 64-bit and 32-bit.
-- **Debugger, exception ignore list** — a new **Delphi Exception Filters** view in the Run and Debug sidebar selects which exception types the debugger skips, by name or `*` pattern (e.g. `EAbort`, `E*`); when stopped, an **Ignore this type** button adds the current one and continues. `EAbort` is skipped by default.
+- **Debugger, readable exception popup** - stopping on a Delphi exception now shows the exception class and message (e.g. `EConvertError: '12x' is not a valid integer value`) instead of the raw `0x0EEDFADE` code and parameter dump. Works on 64-bit and 32-bit.
+- **Debugger, exception ignore list** - a new **Delphi Exception Filters** view in the Run and Debug sidebar selects which exception types the debugger skips, by name or `*` pattern (e.g. `EAbort`, `E*`); when stopped, an **Ignore this type** button adds the current one and continues. `EAbort` is skipped by default.
 
 ### Fixed
-- **Search paths, environment-variable overrides** — Delphi *Environment Variables* overrides (e.g. `$(WEATHERLIBS)`) used in library and project search paths are now resolved, so units in those folders are found by the LSP and included in debug symbols.
-- **Find All References, overloaded methods** — searching one overload of a method now returns only that overload's references and its descendant overrides, instead of also listing the other overloads' sites.
-- **Find All References, enums and interface delegation** — a reference to an enum value is no longer confused with a same-named value in a different enum, and method-resolution clauses (`procedure IFoo.Bar = MyBar;`) are now found from both the interface method and its implementation.
-- **Debugger, exception at the end of a procedure** — an exception raised by a procedure's last statement was shown on the procedure's closing `end`; it now points to the raising statement.
-- **Debugger, Watch panel — overridden property getters** — inspecting a property whose getter is overridden in a derived class now shows the derived class's value instead of the base class's, on 64-bit and 32-bit.
-- **Debugger, Watch panel — property chains through class getters** — a multi-step property chain whose links are class getters now resolves at every step (previously only interface chains did), and a plain field hop inside such a chain that used to report "not available" now reads correctly, on 64-bit and 32-bit.
+- **Search paths, environment-variable overrides** - Delphi *Environment Variables* overrides (e.g. `$(WEATHERLIBS)`) used in library and project search paths are now resolved, so units in those folders are found by the LSP and included in debug symbols.
+- **Find All References, overloaded methods** - searching one overload of a method now returns only that overload's references and its descendant overrides, instead of also listing the other overloads' sites.
+- **Find All References, enums and interface delegation** - a reference to an enum value is no longer confused with a same-named value in a different enum, and method-resolution clauses (`procedure IFoo.Bar = MyBar;`) are now found from both the interface method and its implementation.
+- **Debugger, exception at the end of a procedure** - an exception raised by a procedure's last statement was shown on the procedure's closing `end`; it now points to the raising statement.
+- **Debugger, Watch panel - overridden property getters** - inspecting a property whose getter is overridden in a derived class now shows the derived class's value instead of the base class's, on 64-bit and 32-bit.
+- **Debugger, Watch panel - property chains through class getters** - a multi-step property chain whose links are class getters now resolves at every step (previously only interface chains did), and a plain field hop inside such a chain that used to report "not available" now reads correctly, on 64-bit and 32-bit.
 
 ## [1.0.2] - 2026-06-02
 
 ### Fixed
-- **Build** — the `NoDefaultCurrentDirectoryInExePath` environment variable is no longer passed to spawned Delphi build, run, and debug processes, so it no longer reaches build events.
+- **Build** - the `NoDefaultCurrentDirectoryInExePath` environment variable is no longer passed to spawned Delphi build, run, and debug processes, so it no longer reaches build events.
 
 ## [1.0.1] - 2026-06-01
 
 ### Changed
-- **Project explorer** — the active project and recent projects list now save to a separate `projects.local.json`, so a shared `projects.json` no longer carries per-machine state; existing files are read and migrated automatically.
+- **Project explorer** - the active project and recent projects list now save to a separate `projects.local.json`, so a shared `projects.json` no longer carries per-machine state; existing files are read and migrated automatically.
 
 ### Fixed
-- **LSP** — false *Unknown member* error on `TArray` static generic methods (e.g. `TArray.Contains<Int64>`, `TArray.IndexOf<…>`).
-- **LSP** — false *Syntax error* on binary integer literals (`%`), including with `_` digit separators (e.g. `%0000_0001`).
-- **Build panel** — failures from post-build steps (MSBuild `MSBxxxx` errors, e.g. a failing build event) now appear in the **Errors** tab instead of leaving it empty on a failed build.
+- **LSP** - false *Unknown member* error on `TArray` static generic methods (e.g. `TArray.Contains<Int64>`, `TArray.IndexOf<…>`).
+- **LSP** - false *Syntax error* on binary integer literals (`%`), including with `_` digit separators (e.g. `%0000_0001`).
+- **Build panel** - failures from post-build steps (MSBuild `MSBxxxx` errors, e.g. a failing build event) now appear in the **Errors** tab instead of leaving it empty on a failed build.
 
 ## [1.0.0] - 2026-05-31
 - **Release**
@@ -839,128 +921,128 @@ Additional files required by your program can be deployed per build configuratio
 ## [0.9.17] - 2026-05-30
 
 ### Added
-- **Dproj Editor, visual option-set editor** — referenced option sets are now editable directly inside the Project Options editor. Click one in the tree and its settings open in the same grid — and the same Conditional Defines / Search Path / Environment Variables / build-event dialogs — used for build configurations. Because an option set is a flat bundle of values with no platform dimension (mirroring the Delphi IDE, where the option-set **Target** dropdown is empty), it's shown as a single **Property / Value** column. A banner names the file, lists the configurations that reference it, and offers **Open raw XML**. Properties the editor doesn't surface — and any hand-authored platform-specific groups — are preserved untouched on save.
-- **LSP, Go to Definition target (interface or implementation)** — Ctrl+Click / F12 on a procedure or method can now jump straight to its **implementation body** instead of the interface declaration. Choose the behavior with the new Vallenta Studio settings page under **LSP Server**. Symbols with no implementation (types, fields, constants, abstract/external methods) always go to the declaration.
-- **Debugger, show a value as a date/time** — `TDate`, `TTime` and `TDateTime` are stored as plain floating-point numbers, and **the debugger currently can't tell them apart from an ordinary `double`**, so they show as a raw number (e.g. `37622`). When you know a number is really a date, right-click it in the **Variables** or **Watch** view and choose **Show as Date/Time** ▸ **Date** / **Time** / **Date + Time** — the row reformats in place using your Windows regional format and stays converted as you step; **Show as Raw** switches it back. Works on both 64-bit and 32-bit. ⚠️ This is a manual, temporary solution until the type can be detected automatically.
+- **Dproj Editor, visual option-set editor** - referenced option sets are now editable directly inside the Project Options editor. Click one in the tree and its settings open in the same grid - and the same Conditional Defines / Search Path / Environment Variables / build-event dialogs - used for build configurations. Because an option set is a flat bundle of values with no platform dimension (mirroring the Delphi IDE, where the option-set **Target** dropdown is empty), it's shown as a single **Property / Value** column. A banner names the file, lists the configurations that reference it, and offers **Open raw XML**. Properties the editor doesn't surface - and any hand-authored platform-specific groups - are preserved untouched on save.
+- **LSP, Go to Definition target (interface or implementation)** - Ctrl+Click / F12 on a procedure or method can now jump straight to its **implementation body** instead of the interface declaration. Choose the behavior with the new Vallenta Studio settings page under **LSP Server**. Symbols with no implementation (types, fields, constants, abstract/external methods) always go to the declaration.
+- **Debugger, show a value as a date/time** - `TDate`, `TTime` and `TDateTime` are stored as plain floating-point numbers, and **the debugger currently can't tell them apart from an ordinary `double`**, so they show as a raw number (e.g. `37622`). When you know a number is really a date, right-click it in the **Variables** or **Watch** view and choose **Show as Date/Time** ▸ **Date** / **Time** / **Date + Time** - the row reformats in place using your Windows regional format and stays converted as you step; **Show as Raw** switches it back. Works on both 64-bit and 32-bit. ⚠️ This is a manual, temporary solution until the type can be detected automatically.
 
 ### Changed
-- **Dproj Editor, clicking an option set** — now opens the inline visual editor instead of the raw `.optset` XML; the raw file is still one click away via the banner's **Open raw XML** link.
+- **Dproj Editor, clicking an option set** - now opens the inline visual editor instead of the raw `.optset` XML; the raw file is still one click away via the banner's **Open raw XML** link.
 
 ## [0.9.16] - 2026-05-28
 
 ### Added
-- **Debugger, Watch panel — helper members & string length** — Helper members on records, classes and simple types (e.g. `IntVal.Doubled` on an `Integer`), plus `.Length` on any string kind (`string`, `AnsiString`, `WideString`, `ShortString`), now resolve from the Watch panel and on hover, on both 64-bit and 32-bit. A member the linker optimized out reports a clear "not available" message instead of a cryptic type error.
+- **Debugger, Watch panel - helper members & string length** - Helper members on records, classes and simple types (e.g. `IntVal.Doubled` on an `Integer`), plus `.Length` on any string kind (`string`, `AnsiString`, `WideString`, `ShortString`), now resolve from the Watch panel and on hover, on both 64-bit and 32-bit. A member the linker optimized out reports a clear "not available" message instead of a cryptic type error.
 
 ### Changed
-- **New Delphi-File dialog, redesigned** — the **New Delphi-File** dialog now matches the Account page, with a logo header and card-based sections. The file-type choice is shown as two clearly selectable tiles (**Unit** / **Form**) with an unmistakable selected state, and a live preview shows the file(s) that will be created.
+- **New Delphi-File dialog, redesigned** - the **New Delphi-File** dialog now matches the Account page, with a logo header and card-based sections. The file-type choice is shown as two clearly selectable tiles (**Unit** / **Form**) with an unmistakable selected state, and a live preview shows the file(s) that will be created.
 
 ### Fixed
-- **New Delphi-File, file extension typed into the unit name** — entering a name that already ends in `.pas`, `.dfm` or `.fmx` (e.g. `Unit1.pas`) no longer creates a file with a doubled extension (`Unit1.pas.pas`); the extension is removed and the correct one is applied. Namespaced names such as `QuickLib.Forms.Types` are preserved.
-- **Debugger, inline `for` loop variables missing from Watch/Locals** — inline loop variables (`for var i := …`) and inline variables whose value is inferred from them were generated without a usable type, so they didn't appear while debugging. They now resolve to their real type (e.g. `Integer`).
-- **Debugger, inline variables sometimes missing / shown out of scope** — local variables declared with inline `var` weren't always resolved while debugging, especially ones declared after a nested `begin … end` block. They now show reliably, and the debugger takes their scope into account — a variable appears only while execution is inside the block where it's declared.
+- **New Delphi-File, file extension typed into the unit name** - entering a name that already ends in `.pas`, `.dfm` or `.fmx` (e.g. `Unit1.pas`) no longer creates a file with a doubled extension (`Unit1.pas.pas`); the extension is removed and the correct one is applied. Namespaced names such as `QuickLib.Forms.Types` are preserved.
+- **Debugger, inline `for` loop variables missing from Watch/Locals** - inline loop variables (`for var i := …`) and inline variables whose value is inferred from them were generated without a usable type, so they didn't appear while debugging. They now resolve to their real type (e.g. `Integer`).
+- **Debugger, inline variables sometimes missing / shown out of scope** - local variables declared with inline `var` weren't always resolved while debugging, especially ones declared after a nested `begin … end` block. They now show reliably, and the debugger takes their scope into account - a variable appears only while execution is inside the block where it's declared.
 
 ## [0.9.15] - 2026-05-26
 
 **A milestone release for the debugger.** You can now inspect far more right from the **Watch panel and on hover**, call methods on your objects, read their properties (including inherited ones), drill into interface or class references, and see sets, enums and Booleans.
 
 ### Added
-- **Debugger, Watch panel — call Delphi methods** — Calling methods directly from the Watch panel, including ones that return a `string` or a `Variant`, on both 64-bit and 32-bit targets. Calls resolve against the actual type of the variable you're inspecting, so an unrelated class that declares a same-named method can't misroute them.
-- **Debugger, Watch panel — read properties** — Properties backed by a getter method now resolve and call their getter automatically, including properties **inherited** from a base class or interface — for the common property types (numbers, strings, enums, sets, object references, `Variant`) on 64-bit and 32-bit.
-- **Debugger, Watch panel — inspect interfaces** — Interface references now show the actual object behind them (with their real fields), and you can follow a property chain through interfaces such as `WeatherReport.ShortName.Value`.
-- **Debugger — values shown in Delphi form** — Sets, enums and Booleans appear the way they look in code (`[fsBold, fsItalic]`, `fsBold`, `True` / `False`), whether read directly or returned by a getter.
+- **Debugger, Watch panel - call Delphi methods** - Calling methods directly from the Watch panel, including ones that return a `string` or a `Variant`, on both 64-bit and 32-bit targets. Calls resolve against the actual type of the variable you're inspecting, so an unrelated class that declares a same-named method can't misroute them.
+- **Debugger, Watch panel - read properties** - Properties backed by a getter method now resolve and call their getter automatically, including properties **inherited** from a base class or interface - for the common property types (numbers, strings, enums, sets, object references, `Variant`) on 64-bit and 32-bit.
+- **Debugger, Watch panel - inspect interfaces** - Interface references now show the actual object behind them (with their real fields), and you can follow a property chain through interfaces such as `WeatherReport.ShortName.Value`.
+- **Debugger - values shown in Delphi form** - Sets, enums and Booleans appear the way they look in code (`[fsBold, fsItalic]`, `fsBold`, `True` / `False`), whether read directly or returned by a getter.
 
 ### Changed
-- **Dproj Editor, option sets** — option sets are now listed above their build configurations in the tree and rendered in a smaller font.
-- **Build Toolbar, configuration dropdown** — build configurations are now listed in hierarchical (treeview) order with child configurations indented; referenced option sets are no longer listed inside the open dropdown, but are still shown in brackets on the collapsed field (e.g. `Release (OptionSet_Lib)`).
+- **Dproj Editor, option sets** - option sets are now listed above their build configurations in the tree and rendered in a smaller font.
+- **Build Toolbar, configuration dropdown** - build configurations are now listed in hierarchical (treeview) order with child configurations indented; referenced option sets are no longer listed inside the open dropdown, but are still shown in brackets on the collapsed field (e.g. `Release (OptionSet_Lib)`).
 
 ### Fixed
-- **Option Sets, base option set ignored** — search paths from a base-level option set (`'$(Base)'`, applied to all configurations) were dropped and never reached the LSP; they are now resolved and shown in the Dproj Editor tree and Configuration dropdown.
-- **Dproj Editor** — clicking an option set now opens its `.optset` file as XML; previously nothing happened.
+- **Option Sets, base option set ignored** - search paths from a base-level option set (`'$(Base)'`, applied to all configurations) were dropped and never reached the LSP; they are now resolved and shown in the Dproj Editor tree and Configuration dropdown.
+- **Dproj Editor** - clicking an option set now opens its `.optset` file as XML; previously nothing happened.
 
 ## [0.9.14] - 2026-05-22
 
 ### Added
-- **Settings, Custom Delphi Settings mode** — pick "Custom Delphi Settings" in the version dropdown to manually enter installation and library paths the LSP will use, with no Delphi installation required.
-- **Option Set (`.optset`) support** — referenced option sets are shown in the Configuration dropdown and the Dproj Editor tree, and their values are merged into resolved properties used by the build, debug, and symbol-converter paths.
-- **Debugger, Watch panel for Delphi method calls and procedure locals** (preview) — you can now call most Delphi methods directly from the Watch panel while debugging, including methods that take `string`, `AnsiString`, `WideString` or `Variant` parameters, using either `"…"` or Pascal `'…'` quotes. Local variables inside plain procedures (not just class methods) are also visible in the Watch panel now. ⚠️ **Pre-release:** calling a method that returns a complex type (a `Variant`, an interface, a dynamic array, or a record with managed fields) will most likely crash the debugged program - stick to methods returning simple types (numbers, strings, class references) for now.
+- **Settings, Custom Delphi Settings mode** - pick "Custom Delphi Settings" in the version dropdown to manually enter installation and library paths the LSP will use, with no Delphi installation required.
+- **Option Set (`.optset`) support** - referenced option sets are shown in the Configuration dropdown and the Dproj Editor tree, and their values are merged into resolved properties used by the build, debug, and symbol-converter paths.
+- **Debugger, Watch panel for Delphi method calls and procedure locals** (preview) - you can now call most Delphi methods directly from the Watch panel while debugging, including methods that take `string`, `AnsiString`, `WideString` or `Variant` parameters, using either `"…"` or Pascal `'…'` quotes. Local variables inside plain procedures (not just class methods) are also visible in the Watch panel now. ⚠️ **Pre-release:** calling a method that returns a complex type (a `Variant`, an interface, a dynamic array, or a record with managed fields) will most likely crash the debugged program - stick to methods returning simple types (numbers, strings, class references) for now.
 
 ### Changed
-- **Build Toolbar** — Run/Debug/Build/Rebuild/Clean buttons (and the F5 / Ctrl+F5 keybindings) are disabled when no Delphi installation is configured; the Configuration and Platform dropdowns stay active so .dproj selections can still be edited.
+- **Build Toolbar** - Run/Debug/Build/Rebuild/Clean buttons (and the F5 / Ctrl+F5 keybindings) are disabled when no Delphi installation is configured; the Configuration and Platform dropdowns stay active so .dproj selections can still be edited.
 
 ### Fixed
-- **Debug** — pressing Debug after editing a source file no longer skips the build with a wrong "Up-to-date" status.
-- **LSP** — guard at the spawn site blocks a second LSP child for a project that already has one (fixes doubled hover/completion responses).
+- **Debug** - pressing Debug after editing a source file no longer skips the build with a wrong "Up-to-date" status.
+- **LSP** - guard at the spawn site blocks a second LSP child for a project that already has one (fixes doubled hover/completion responses).
 
 ## [0.9.13] - 2026-05-19
 
 ### Added
-- **`with` statement support** — Hover, Goto Definition, diagnostics, code completion, and Find All References now understand unqualified identifiers inside `with` blocks, including multi-target, nested, inherited-member, and Delphi shadowing semantics (with-target shadows routine locals; block-locals shadow the with-target).
-- **Find All References, scope picker** — `Shift+F12` now asks whether to search the project closure (recommended; only files your project transitively uses) or every indexed source, so symbols like `TSearchRec` no longer surface hits inside library units (e.g. FireDAC) the project never references.
-- **Find All References, redesigned sidebar** — results are now grouped in three levels (directory path → source file → match), with the code-line preview on the left and the line number rendered as a right-aligned pill. Path groups show file and match counts; expand/collapse state is preserved across streaming updates and re-runs.
-- **Build panel, project defaults** — a new save button next to the Platform dropdown writes the current selection back to the `.dproj` as the project default.
+- **`with` statement support** - Hover, Goto Definition, diagnostics, code completion, and Find All References now understand unqualified identifiers inside `with` blocks, including multi-target, nested, inherited-member, and Delphi shadowing semantics (with-target shadows routine locals; block-locals shadow the with-target).
+- **Find All References, scope picker** - `Shift+F12` now asks whether to search the project closure (recommended; only files your project transitively uses) or every indexed source, so symbols like `TSearchRec` no longer surface hits inside library units (e.g. FireDAC) the project never references.
+- **Find All References, redesigned sidebar** - results are now grouped in three levels (directory path → source file → match), with the code-line preview on the left and the line number rendered as a right-aligned pill. Path groups show file and match counts; expand/collapse state is preserved across streaming updates and re-runs.
+- **Build panel, project defaults** - a new save button next to the Platform dropdown writes the current selection back to the `.dproj` as the project default.
 
 ### Fixed
-- **Build, command-line too long on large projects (MSB6002 / MSB6003)** — passes `/p:DCC_ForceExecute=true` so the Delphi compiler reads search paths from a `.cmds` file instead of the 32K-limited command line.
+- **Build, command-line too long on large projects (MSB6002 / MSB6003)** - passes `/p:DCC_ForceExecute=true` so the Delphi compiler reads search paths from a `.cmds` file instead of the 32K-limited command line.
 
 ## [0.9.12] - 2026-05-17
 
 ### Added
-- **LSP, redesigned hover popup** — kind badges, colored title with inheritance/return-type suffix, modifier badges, clickable `file.pas:line` link, inline **Other overloads** / **Inherited** sections, and a Go-to-Def / Find References / Peek action row. New setting `vallenta.studio.hover.colorize` (`auto` / `off`).
+- **LSP, redesigned hover popup** - kind badges, colored title with inheritance/return-type suffix, modifier badges, clickable `file.pas:line` link, inline **Other overloads** / **Inherited** sections, and a Go-to-Def / Find References / Peek action row. New setting `vallenta.studio.hover.colorize` (`auto` / `off`).
 
 ### Fixed
-- **LSP, Find All References on a type** — clicking a parameter type identifier (e.g. `const A: TMyType`) returned only the clicked position; all uses across the project are now found.
-- **LSP, code completion inside a `uses` clause** — typing a unit prefix like `System.` or `Generics.` now lists matching units (`Classes`, `Collections`, `Defaults`, …) 
+- **LSP, Find All References on a type** - clicking a parameter type identifier (e.g. `const A: TMyType`) returned only the clicked position; all uses across the project are now found.
+- **LSP, code completion inside a `uses` clause** - typing a unit prefix like `System.` or `Generics.` now lists matching units (`Classes`, `Collections`, `Defaults`, …) 
 
 ## [0.9.11] - 2026-05-12
 
 ### Added
-- **Find Symbol** — workspace symbol picker via `Ctrl+T` and editor right-click "Find Symbol…". Lists classes, records, interfaces, methods, properties, and unit-level symbols across the indexed project.
-- **Find All References, DFM/FMX form files** — `Shift+F12` now includes matches inside `.dfm`/`.fmx` form files (component type names, property values, event handler bindings) with cross-form indexing.
+- **Find Symbol** - workspace symbol picker via `Ctrl+T` and editor right-click "Find Symbol…". Lists classes, records, interfaces, methods, properties, and unit-level symbols across the indexed project.
+- **Find All References, DFM/FMX form files** - `Shift+F12` now includes matches inside `.dfm`/`.fmx` form files (component type names, property values, event handler bindings) with cross-form indexing.
 
 ### Fixed
-- **LSP, race condition when switching projects during server startup** — clicking another project while the active project's LSP was still in its `Starting` phase could spawn a phantom replacement process and leave the new project unable to initialize. Switches now abort the in-flight startup cleanly.
-- **Build, race condition on quick project switch** — pressing Build right after selecting a new project while the editor was still restoring the previous session's files would build the previously-active project. Project state and build-toolbar update now happen before file restoration.
+- **LSP, race condition when switching projects during server startup** - clicking another project while the active project's LSP was still in its `Starting` phase could spawn a phantom replacement process and leave the new project unable to initialize. Switches now abort the in-flight startup cleanly.
+- **Build, race condition on quick project switch** - pressing Build right after selecting a new project while the editor was still restoring the previous session's files would build the previously-active project. Project state and build-toolbar update now happen before file restoration.
 
 ## [0.9.10] - 2026-05-08
 
 ### Added
-- **Project-specific debugger environment variables** — `Debugger_EnvVars` and `Debugger_IncludeSystemVars` are now editable per build configuration and platform in the project editor's new **Environment Variables** row (two-column Name/Value editor with parent-inheritance)
+- **Project-specific debugger environment variables** - `Debugger_EnvVars` and `Debugger_IncludeSystemVars` are now editable per build configuration and platform in the project editor's new **Environment Variables** row (two-column Name/Value editor with parent-inheritance)
 
 ### Fixed
-- **Debugger, dynamic-array visualization for primitive and pointer element types** — `TArray<Int64>`, `<UInt64>`, `<Word>`, `<SmallInt>`, `<ShortInt>`, `<Boolean>`, `<Char>`, `<AnsiChar>`, `<AnsiString>`, `<Pointer>`, `<Extended>`, typed pointers (`PChar`, `PInteger`, …), procedural types, and nested `TArray<TArray<…>>` now render with length and elements instead of just a pointer address.
-- **Debugger, named static-array elements** — `TArray<TByteBuf>` style arrays now render via `DynArrayRec<…>`; static-array element types are emitted as PDB UDTs so the natvis cast can resolve them.
-- **Debugger, field-backed properties in watch and hover** — `property Name: string read FName write FName;` style properties now resolve to their backing field's value in watch expressions and hover tooltips.
+- **Debugger, dynamic-array visualization for primitive and pointer element types** - `TArray<Int64>`, `<UInt64>`, `<Word>`, `<SmallInt>`, `<ShortInt>`, `<Boolean>`, `<Char>`, `<AnsiChar>`, `<AnsiString>`, `<Pointer>`, `<Extended>`, typed pointers (`PChar`, `PInteger`, …), procedural types, and nested `TArray<TArray<…>>` now render with length and elements instead of just a pointer address.
+- **Debugger, named static-array elements** - `TArray<TByteBuf>` style arrays now render via `DynArrayRec<…>`; static-array element types are emitted as PDB UDTs so the natvis cast can resolve them.
+- **Debugger, field-backed properties in watch and hover** - `property Name: string read FName write FName;` style properties now resolve to their backing field's value in watch expressions and hover tooltips.
 
 ## [0.9.9] - 2026-05-05
 
 ### Added
-- **Update notification** — on activation after an extension update, a toast announces the new version and offers a **View Changelog** button that opens the Marketplace changelog page.
+- **Update notification** - on activation after an extension update, a toast announces the new version and offers a **View Changelog** button that opens the Marketplace changelog page.
 
 ### Changed
-- **Subscription gate notifications** — UI-triggered locked actions (Debug, Open Project Options, Build Group, LSP start, New File, …) now show a reason-specific toast (not signed in / Trial expired / status not retrieved / offline-stale) and open the Account page automatically.
+- **Subscription gate notifications** - UI-triggered locked actions (Debug, Open Project Options, Build Group, LSP start, New File, …) now show a reason-specific toast (not signed in / Trial expired / status not retrieved / offline-stale) and open the Account page automatically.
 
 ## [0.9.8] - 2026-05-04
 
 ### Added
-- **LSP, overload resolution for hover and Go-to-Definition** — when calling an overloaded routine, hover and `Ctrl-Click` now narrow to the specific overload by matching argument types (typed identifiers, literals, `nil`, implicit conversions, `var`/`out`/`const` modifiers, default values, open arrays, `class of`, set constructors). Falls back to showing all overloads when arguments cannot be inferred.
-- **LSP, declaration hovers narrow to the single declared symbol** — hovering on a class-body declaration or implementation header (`constructor TFoo.Create;`) shows only that one method, not every same-named overload.
-- **Find All References (`Shift+F12` or via Popupmenu)** — semantic, scope-aware reference search for local variables/parameters, unit-level types/functions/vars/consts/enum members, and type members (methods, fields, properties, constructors, destructors, helpers, interface methods) with polymorphism-aware override matching and per-overload precision. While a search runs, a progress notification with a **Cancel** button lets you abort long lookups;
+- **LSP, overload resolution for hover and Go-to-Definition** - when calling an overloaded routine, hover and `Ctrl-Click` now narrow to the specific overload by matching argument types (typed identifiers, literals, `nil`, implicit conversions, `var`/`out`/`const` modifiers, default values, open arrays, `class of`, set constructors). Falls back to showing all overloads when arguments cannot be inferred.
+- **LSP, declaration hovers narrow to the single declared symbol** - hovering on a class-body declaration or implementation header (`constructor TFoo.Create;`) shows only that one method, not every same-named overload.
+- **Find All References (`Shift+F12` or via Popupmenu)** - semantic, scope-aware reference search for local variables/parameters, unit-level types/functions/vars/consts/enum members, and type members (methods, fields, properties, constructors, destructors, helpers, interface methods) with polymorphism-aware override matching and per-overload precision. While a search runs, a progress notification with a **Cancel** button lets you abort long lookups;
 
 ### Fixed
-- **LSP, duplicate signatures from overridden virtual methods** — `Create(AOwner: TComponent)` etc. inherited through multiple ancestors no longer appear as N identical entries; deduplication runs after `{$IFDEF}` filtering so condition-mismatched overrides collapse correctly.
+- **LSP, duplicate signatures from overridden virtual methods** - `Create(AOwner: TComponent)` etc. inherited through multiple ancestors no longer appear as N identical entries; deduplication runs after `{$IFDEF}` filtering so condition-mismatched overrides collapse correctly.
 - **LSP, method references via `@Foo`** are no longer narrowed (the address-of operator yields a procedural value, not a call).
-- **LSP, duplicate server process during sign-in** — for Premium users, two feature-availability events fired in quick succession (`None→Free`, then `Free→Premium` once subscription data arrived) could spawn two LSP processes for the active project.
+- **LSP, duplicate server process during sign-in** - for Premium users, two feature-availability events fired in quick succession (`None→Free`, then `Free→Premium` once subscription data arrived) could spawn two LSP processes for the active project.
 
 ## [0.9.7] - 2026-04-28
 
 ### Added
-- **ProjectExplorer, DFM/FMX form indicator in Source Files** — `.pas` units with a sibling `.dfm`/`.fmx` form file now show an inline `[DFM]`/`[FMX]` tag on the same row; click the tag to open the form, or right-click the `.pas` for a new "Open Form" entry
-- **Toggle Form / Source** — press **F12** inside a `.pas` editor to open the matching `.dfm`/`.fmx` (and vice versa); also available as a CodeLens link at the top of the file
+- **ProjectExplorer, DFM/FMX form indicator in Source Files** - `.pas` units with a sibling `.dfm`/`.fmx` form file now show an inline `[DFM]`/`[FMX]` tag on the same row; click the tag to open the form, or right-click the `.pas` for a new "Open Form" entry
+- **Toggle Form / Source** - press **F12** inside a `.pas` editor to open the matching `.dfm`/`.fmx` (and vice versa); also available as a CodeLens link at the top of the file
 
 ## [0.9.6] - 2026-04-25
 
 ### Fixed
-- LSP, hover and type inference for generic method calls in expressions (e.g., `obj.method<T>`) — hover/CTRL-Click on the type argument now resolves, and inline `var x := obj.method<T>` infers the method's return type
+- LSP, hover and type inference for generic method calls in expressions (e.g., `obj.method<T>`) - hover/CTRL-Click on the type argument now resolves, and inline `var x := obj.method<T>` infers the method's return type
 - LSP, hover on a top-level function/procedure declaration no longer shows duplicate signatures when the same name exists in an imported unit 
 - LSP, hover on a Delphi parameter-omission implementation header (`function Foo;` paired with a forward declaration) now shows the full signature from the interface declaration
 
@@ -983,11 +1065,11 @@ Additional files required by your program can be deployed per build configuratio
 ## [0.9.3] - 2026-04-20
 
 ### Added
-- **Copy Variable as Tree** — new right-click action in the debugger **Variables** and **Watch** views. Copies the full expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes). Useful for inspecting complex records and objects without the 256-character truncation of "Copy Value".
+- **Copy Variable as Tree** - new right-click action in the debugger **Variables** and **Watch** views. Copies the full expanded variable hierarchy to the clipboard (up to 2 levels deep, 2000 nodes). Useful for inspecting complex records and objects without the 256-character truncation of "Copy Value".
 
 ### Fixed
-- **Debug builds on older Delphi versions (XE2–XE4)** — the `DCC_DebugInformation` MSBuild parameter is now passed in the correct form per Delphi version (boolean for BDS < 12.0, integer enum for BDS ≥ 12.0). Previously, debug builds on XE2/XE3/XE4 could fail or produce no debug symbols.
-- **Go to Definition no longer jumps to unrelated local variables** — when a symbol at the cursor shared its name with a local variable in a different procedure, navigation could land on the wrong declaration. Resolution now uses the proper scoped lookup.
+- **Debug builds on older Delphi versions (XE2-XE4)** - the `DCC_DebugInformation` MSBuild parameter is now passed in the correct form per Delphi version (boolean for BDS < 12.0, integer enum for BDS ≥ 12.0). Previously, debug builds on XE2/XE3/XE4 could fail or produce no debug symbols.
+- **Go to Definition no longer jumps to unrelated local variables** - when a symbol at the cursor shared its name with a local variable in a different procedure, navigation could land on the wrong declaration. Resolution now uses the proper scoped lookup.
 
 ## [0.9.2] - 2026-04-18
 
