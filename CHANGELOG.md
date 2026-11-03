@@ -21,6 +21,9 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Record helpers for generic instantiations** - a record helper for `TArray<TMyItem>` applies to `TArray<TMyItem>` only, and code completion lists its members after a value of that type.
 - **Generic methods with explicit type arguments** - a call such as `Log.FindItems<TMyItem>` binds to the generic overload, and its result type has the type argument in place of `T`, such as `TArray<TMyItem>` for `TArray<T>`.
 - **Nested types of record helpers** - a type declared in a record helper resolves through the helped type, such as `TMyKind.TGroup.First`.
+- **Record helpers of distinct types** - a distinct type such as `TMyDocument = type TMyObject` binds to its own record helper, and code completion lists that helper's members.
+- **Class helpers nested in a class** - in a method of a helper declared inside a class, `Self` and unqualified identifiers reach the members of the helped type, such as `Count` and `Add` of `TList<TMyItem>`.
+- **for-in over TArray<T> with System.Generics.Collections** - the loop variable of `for var x in A` has the element type of `A: TArray<TMyItem>` in a unit that uses `System.Generics.Collections`.
 
 ## [1.2.13] 
 
