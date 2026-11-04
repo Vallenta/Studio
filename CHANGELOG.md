@@ -9,11 +9,16 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Reindexing over MCP (Pro)** - an AI agent rebuilds the index of a project from the files on disk with the `reindex_project` tool, as Reindex in the LSP menu of the build output panel does.
 - **Projects sidebar, new project group** - New Project Group in the Add menu of the Projects section creates an empty `.groupproj` and lists it, with a choice of standalone projects to move into it.
 - **Projects sidebar, projects between groups** - dragging a project onto a project group or out of one moves it there and updates the `.groupproj` files; with Ctrl held, the project is copied.
+- **Projects sidebar and build panel, adding a platform** - Add Platform in the context menu of a project and in the platform dropdown of the build panel adds a platform to an existing project, such as Win64 to a Win32 application.
+- **Project Options, Hints and Warnings (Pro)** - the Hints and Warnings category sets compiler hints, compiler warnings and each single warning per configuration and platform, as the page of the same name in the Delphi IDE does.
+- **Project Options, finding a row (Pro)** - a filter field above the grid finds a row by its label or property name across all categories, and Expand All and Collapse All open or close every category.
 
 ### Changed
 - **New language server** - the LSP server is a new implementation written in Rust, highly optimized for faster indexing and faster responses in code completion, navigation and hover.
 
 ### Fixed
+- **Project Options, values with capitals (Pro)** - a value stored with capitals, such as `True` in a hand-edited project file, shows in its row like the same value in lower case.
+- **Project Options, option sets (Pro)** - a dropdown row of an option set shows `(not set)` for a value missing from the file, and selecting that entry removes the value.
 - **Indexing, Delphi sources in the Browsing Path** - a Delphi source directory listed in the Browsing Path, such as `$(BDS)\source\rtl\common`, is indexed with the Delphi sources only, and the library index holds the other directories, such as those of third-party components.
 - **Projects sidebar, removing a group member** - the context menu of a project inside a group offers Remove from Group, which removes the project from the `.groupproj`.
 - **Units changed by another program** - the language server and the MCP tools read the content on disk after another program rewrites a unit, also when the project folder lies outside the workspace folders.
@@ -24,6 +29,12 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Record helpers of distinct types** - a distinct type such as `TMyDocument = type TMyObject` binds to its own record helper, and code completion lists that helper's members.
 - **Class helpers nested in a class** - in a method of a helper declared inside a class, `Self` and unqualified identifiers reach the members of the helped type, such as `Count` and `Add` of `TList<TMyItem>`.
 - **for-in over TArray<T> with System.Generics.Collections** - the loop variable of `for var x in A` has the element type of `A: TArray<TMyItem>` in a unit that uses `System.Generics.Collections`.
+- **Aliases of generic classes** - signature help, hover and code completion show the type arguments of a member reached through an alias, such as `const Key: string` for `TMyMap = TObjectDictionary<string, TMyItem>`.
+- **Inline variables read from generic class members** - an inline variable or `for var` loop variable takes its type from the type arguments of the generic class, such as `string` for `for var S in MyTable.ValueList[0]` with `MyTable: TObjectOrderedDictionary<string, TStringList>`.
+- **Subscripts and same-named types** - a value read through a subscript has the element type of its container's declaration, such as the `TMyItem` of a used unit for `MyList[0]` in a unit with a `TMyItem` of its own.
+- **Code completion, order of the list** - names starting with the typed word are listed by scope, nearest first, such as a field of the class above a Windows API function.
+- **Code completion, `Result` and `Self`** - code completion offers `Result` in a function and `Self` in a method.
+- **Code completion, unfinished statements** - the fields, parameters and locals of the routine are offered inside an unclosed condition, such as `if (A <> nil) and (B[0].Name = `.
 
 ## [1.2.13] 
 
