@@ -35,6 +35,13 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Code completion, order of the list** - names starting with the typed word are listed by scope, nearest first, such as a field of the class above a Windows API function.
 - **Code completion, `Result` and `Self`** - code completion offers `Result` in a function and `Self` in a method.
 - **Code completion, unfinished statements** - the fields, parameters and locals of the routine are offered inside an unclosed condition, such as `if (A <> nil) and (B[0].Name = `.
+- **Generic class beside a non-generic class of the same name** - an expression of the constructed type reaches the members of the generic class, such as `TBox<string>(X).Value`.
+- **Hover, members of a generic class** - the hover names the generic class as the declaring class.
+- **`with` with several items** - an item resolves in the scope of the items before it, such as `with FParser, Check do`.
+- **Inline variable from a generic call chain** - the variable has the result type of the last call, such as `var X := Get<TFoo>.GetBar;`.
+- **`{$IF Declared(...)}` on a class member** - an existing member counts as declared, such as `Declared(TFoo.Bar)`.
+- **Include files without a section keyword** - the declarations of the include file resolve, such as `const {$I Version.inc}`.
+- **Nested types through an alias** - a nested type resolves through an alias of its enclosing type, such as `TMyAlias.PMyRec` for `TMyAlias = TMyGeneric<string, Int64>`.
 
 ## [1.2.13] 
 
