@@ -13,6 +13,7 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Project Options, Hints and Warnings (Pro)** - the Hints and Warnings category sets compiler hints, compiler warnings and each single warning per configuration and platform, as the page of the same name in the Delphi IDE does.
 - **Project Options, finding a row (Pro)** - a filter field above the grid finds a row by its label or property name across all categories, and Expand All and Collapse All open or close every category.
 - **Unit aliases of the project** - a name in a uses clause denotes the target unit of its alias for the active configuration and platform, and the Unit Aliases row of Project Options (Pro) edits the list.
+- **Build output, completion time** - the output of a finished build ends with its result and the local date and time, such as `Build succeeded at 2026-11-05 14:07:09`.
 
 ### Changed
 - **New language server** - the LSP server is a new implementation written in Rust, highly optimized for faster indexing and faster responses in code completion, navigation and hover.
@@ -43,7 +44,10 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **`{$IF Declared(...)}` on a class member** - an existing member counts as declared, such as `Declared(TFoo.Bar)`.
 - **Include files without a section keyword** - the declarations of the include file resolve, such as `const {$I Version.inc}`.
 - **Nested types through an alias** - a nested type resolves through an alias of its enclosing type, such as `TMyAlias.PMyRec` for `TMyAlias = TMyGeneric<string, Int64>`.
-- **Signature check, Go to Declaration and class completion, overloads differing only in a type argument** - each implementation pairs with the declaration of the same parameter types.
+- **Overloads differing only in a type argument** - each implementation pairs with the declaration of the same parameter types.
+- **Local variables named like a directive** - a variable such as `Message` resolves to its declaration.
+- **Subscripts after a cast or a call** - the expression has the element type, such as `TMyItems(P)[0].Kind` with a type declared in the routine.
+- **Problems view after a project switch** - the server of the new project checks the files with an editor tab, and the diagnostics of a file leave the Problems view when its last tab closes.
 
 ## [1.2.13] 
 
