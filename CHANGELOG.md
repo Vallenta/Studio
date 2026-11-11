@@ -2,6 +2,28 @@
 
 All notable changes to the **Vallenta Studio** extension will be documented in this file.
 
+## [1.2.15] 
+
+### Added
+- **Experimental debugger** - Debugger engine in Build & Debug selects the Vallenta debugger, which debugs Win32 and Win64 programs without cppvsdbg, also across runtime packages and DLLs built with debug information.
+- **Experimental debugger, Variables view, Watch and call stack** - values show in Delphi form, such as an object with its fields grouped by declaring class, and Object summary and Call stack parameters in Build & Debug select what is shown.
+- **Watch, members of TObject** - `ClassName`, `ClassType`, `ClassParent` and `InstanceSize` evaluate on any object without running code, such as `E.ClassName` in an exception handler.
+
+### Fixed
+- **Projects, remembered breakpoints on a switch** - a breakpoint set while the tabs of the new project are opening belongs to the new project, such as one set by an AI agent right after `set_active_project`.
+- **Projects, remembered breakpoints after a reload** - after a reload or restart of VS Code, the active project has the breakpoints it had when the window closed.
+- **Watch, large dynamic arrays** - `Length`, `High` and indexing work on dynamic arrays of any size, such as a `TBytes` of several megabytes.
+- **Variables view, Extended values** - an Extended shows the digits it stores, such as `3.14159265358979`.
+- **Variables view, subrange types** - a variable of a subrange type shows its value under its declared type, such as `TDigit`.
+- **Variables view, ShortString** - a `string[N]` shows its text, such as a `const` parameter of type `string[20]`.
+- **Variables view, method pointers** - a `procedure of object` variable shows its code and object addresses.
+- **Variables view, inline loop variables** - a `for var` variable is visible in the body of its loop.
+- **Variables view, with statements** - a routine holding a `with` statement shows the values of its parameters and locals.
+- **Variables view, Real48** - a `Real48` variable shows its value.
+- **Variables view, value parameters on Win64** - a record passed by value shows its fields, and every other local of the routine shows its value.
+- **Variables view, interfaces** - an interface value names the class of the object implementing it, such as `IInterface($...) as TComponent`.
+- **Syntax errors, full-width space** - a full-width space (U+3000) between two tokens counts as white space, such as one indenting a `begin` in a `case` branch.
+
 ## [1.2.14] 
 
 ### Added
@@ -19,7 +41,6 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **New language server** - the LSP server is a new implementation written in Rust, highly optimized for faster indexing and faster responses in code completion, navigation and hover.
 
 ### Fixed
-- **Project Options, values with capitals (Pro)** - a value stored with capitals, such as `True` in a hand-edited project file, shows in its row like the same value in lower case.
 - **Project Options, option sets (Pro)** - a dropdown row of an option set shows `(not set)` for a value missing from the file, and selecting that entry removes the value.
 - **Indexing, Delphi sources in the Browsing Path** - a Delphi source directory listed in the Browsing Path, such as `$(BDS)\source\rtl\common`, is indexed with the Delphi sources only, and the library index holds the other directories, such as those of third-party components.
 - **Projects sidebar, removing a group member** - the context menu of a project inside a group offers Remove from Group, which removes the project from the `.groupproj`.
@@ -47,7 +68,6 @@ All notable changes to the **Vallenta Studio** extension will be documented in t
 - **Overloads differing only in a type argument** - each implementation pairs with the declaration of the same parameter types.
 - **Local variables named like a directive** - a variable such as `Message` resolves to its declaration.
 - **Subscripts after a cast or a call** - the expression has the element type, such as `TMyItems(P)[0].Kind` with a type declared in the routine.
-- **Problems view after a project switch** - the server of the new project checks the files with an editor tab, and the diagnostics of a file leave the Problems view when its last tab closes.
 
 ## [1.2.13] 
 
